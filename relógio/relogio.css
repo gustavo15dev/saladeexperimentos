@@ -1,0 +1,327 @@
+h1 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 48px;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 20px;
+}
+
+h2 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 36px;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 10px;
+}
+
+h3 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 24px;
+    color: #ffffff;
+    text-align: center;
+    margin-top: 10px;
+}
+
+p {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 18px;
+    color: #ffffff;
+    text-align: justify;
+}
+
+#relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+body {
+    background-color: #000000;
+}
+
+#eua-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#japao-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#sp-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#noronha-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#manaus-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#acre-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#et-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#ct-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#mt-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+#pt-relogio {
+    font-family: 'Digital-7', sans-serif;
+    font-size: 96px;
+    color: #ff0000;
+    text-align: center;
+    margin-top: 40px;
+}
+
+img {
+    display: block; /* 1. Transforma a imagem em um elemento de bloco */
+    margin: 0 auto; /* 2. Aplica margem automática nas laterais para centralizar */
+    max-width: 100%; /* Boa prática: garante que a imagem não ultrapasse seu contêiner */
+    height: auto;
+}
+
+/* ---------------------------------------------------- */
+/* AJUSTE: MENU LATERAL FIXO (Flutuando e Centralizado) */
+/* ---------------------------------------------------- */
+#menu-lateral {
+    position: fixed;
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    width: 200px;
+    height: calc(100vh - 80px); /* Espaço de 40px em cima e 40px embaixo */
+    background-color: #1f1f1f;
+    overflow-x: hidden;
+    padding-top: 20px;
+    border-radius: 15px;
+    box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
+}
+
+/* ---------------------------------------------------- */
+/* ESTILO DOS LINKS NO MENU */
+/* ---------------------------------------------------- */
+#menu-lateral a {
+    display: block;
+    margin: 10px 15px;
+    padding: 12px 15px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #e0e0e0;
+    text-align: center;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+#menu-lateral a:hover {
+    color: #000000;
+    background-color: #ff5555;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.372);
+}
+
+/* ---------------------------------------------------- */
+/* CONTEÚDO PRINCIPAL */
+/* ---------------------------------------------------- */
+#conteudo-principal {
+    margin-left: 240px;
+    padding: 20px;
+    transition: margin-left 0.3s ease-in-out;
+}
+
+/* ---------------------------------------------------- */
+/* AJUSTE PARA OS 3 RELÓGIOS DA PÁGINA INICIAL (LADO A LADO) */
+/* ---------------------------------------------------- */
+#relogio, #eua-relogio, #japao-relogio {
+    /* SOBRESCRITA: Reduz o tamanho da fonte para que caiba mais de um por linha */
+    font-size: 48px !important; 
+    margin-top: 10px !important;
+    
+    /* Opcional: Adiciona um visual mais contido para o painel */
+    border: 2px solid #ff0000;
+    border-radius: 8px;
+    padding: 10px 15px;
+    display: inline-block;
+}
+
+/* ---------------------------------------------------- */
+/* NOVO: PAINEL FLEXBOX PARA HORÁRIOS LADO A LADO */
+/* ---------------------------------------------------- */
+#painel-horarios {
+    display: flex; /* Ativa o layout lado a lado */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    justify-content: space-around; /* Espaça os itens no contêiner */
+    gap: 30px; /* Espaçamento entre os itens */
+    margin-top: 30px;
+}
+
+/* Estilo para cada grupo de relógio (título + horário) */
+.relogio-item {
+    text-align: center;
+    padding: 10px;
+    min-width: 200px; /* Largura mínima para o relógio */
+    flex-grow: 1; /* Permite que ocupe o espaço disponível */
+}
+
+/* ---------------------------------------------------- */
+/* 6. MEDIA QUERIES RESPONSIVAS PARA RELÓGIOS */
+/* ---------------------------------------------------- */
+
+/* Tablet */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 36px;
+    }
+    
+    h2 {
+        font-size: 28px;
+    }
+    
+    h3 {
+        font-size: 20px;
+    }
+    
+    #relogio, #japao-relogio, #eua-relogio, [id$="-relogio"] {
+        font-size: 2em;
+        padding: 10px 20px;
+    }
+    
+    #menu-lateral {
+        width: 150px;
+        left: 10px;
+        top: 10px;
+        height: calc(100vh - 20px);
+    }
+    
+    #conteudo-principal {
+        margin-left: 170px;
+        padding: 15px;
+    }
+    
+    img {
+        max-width: 200px;
+        height: auto;
+    }
+}
+
+/* Celular */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 28px;
+    }
+    
+    h2 {
+        font-size: 24px;
+    }
+    
+    h3 {
+        font-size: 18px;
+    }
+    
+    #relogio, #japao-relogio, #eua-relogio, [id$="-relogio"] {
+        font-size: 1.5em;
+        padding: 8px 16px;
+        display: block;
+        margin: 5px auto;
+    }
+    
+    #menu-lateral {
+        position: relative;
+        width: 100%;
+        height: auto;
+        top: 0;
+        left: 0;
+        margin-bottom: 20px;
+        border-radius: 0;
+    }
+    
+    #conteudo-principal {
+        margin-left: 0;
+        padding: 10px;
+    }
+    
+    img {
+        max-width: 150px;
+        height: auto;
+    }
+    
+    #painel-horarios {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .relogio-item {
+        min-width: auto;
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+/* Pequenos celulares */
+@media (max-width: 320px) {
+    h1 {
+        font-size: 24px;
+    }
+    
+    h2 {
+        font-size: 20px;
+    }
+    
+    h3 {
+        font-size: 16px;
+    }
+    
+    #relogio, #japao-relogio, #eua-relogio, [id$="-relogio"] {
+        font-size: 1.2em;
+        padding: 6px 12px;
+    }
+}
+

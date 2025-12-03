@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compre como um Bilionário | Elon Edition</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
+            --text-main: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-green: #30d158;
+            --accent-red: #ff453a;
+            --font-main: 'Inter', sans-serif;
+            --font-receipt: 'Courier Prime', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body {
+            font-family: var(--font-main);
+            background: #000;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .background-mesh {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: radial-gradient(circle at 15% 50%, #2e1065, transparent 25%),
+                        radial-gradient(circle at 85% 30%, #be123c, transparent 25%),
+                        radial-gradient(circle at 50% 80%, #0f766e, transparent 40%);
+            background-color: #050505;
+            filter: blur(90px);
+            animation: breathe 15s ease-in-out infinite alternate;
+        }
+        @keyframes breathe { 0% { transform: scale(1); } 100% { transform: scale(1.1); } }
+
+        /* --- Header Compacto --- */
+        header {
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            width: 95%;
+            max-width: 900px;
+            padding: 15px 25px; /* Padding reduzido */
+            margin-top: 10px;
+            border-radius: 20px;
+            background: rgba(10, 10, 10, 0.8); /* Um pouco mais escuro para contraste */
+            backdrop-filter: blur(50px) saturate(180%);
+            -webkit-backdrop-filter: blur(50px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.8;
+        }
+
+        .avatar {
+            width: 32px; /* Avatar bem menor */
+            height: 32px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg');
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        h1 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .balance {
+            font-size: 2.5rem; /* Fonte reduzida (era 3.5rem) */
+            font-weight: 800;
+            letter-spacing: -1.5px; /* Letras mais juntas (estilo Inter) */
+            line-height: 1;
+            background: linear-gradient(180deg, #fff, #bbb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        /* Tabs mais compactas */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        .tab-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 6px 14px; /* Botões menores */
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.3s;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: #fff; color: #000;
+        }
+
+        /* --- Grid --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Cards levemente menores */
+            gap: 16px;
+            width: 95%;
+            max-width: 1200px;
+            padding: 20px 0 120px 0;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--glass-highlight);
+        }
+        .card-icon { font-size: 3rem; margin-bottom: 10px; }
+        .card h2 { font-size: 1rem; font-weight: 600; text-align: center; line-height: 1.3; min-height: 40px; display: flex; align-items: center;}
+        .price { font-size: 0.9rem; color: var(--accent-green); font-weight: 600; margin-bottom: 15px; }
+        
+        .controls { display: grid; grid-template-columns: 1fr 30px 1fr; gap: 8px; width: 100%; align-items: center; }
+        .btn { border: none; padding: 8px 0; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: var(--font-main); font-size: 0.9rem;}
+        .btn-sell { background: rgba(255, 69, 58, 0.15); color: var(--accent-red); }
+        .btn-sell:hover:not(:disabled) { background: var(--accent-red); color: white; }
+        .btn-sell:disabled { opacity: 0.2; cursor: default; }
+        .btn-buy { background: rgba(255, 255, 255, 0.1); color: white; }
+        .btn-buy:hover:not(:disabled) { background: white; color: black; }
+        .btn-buy:disabled { opacity: 0.2; cursor: default; }
+        .quantity { text-align: center; font-weight: 600; font-size: 0.9rem;}
+
+        /* --- Footer --- */
+        .footer-fixed {
+            position: fixed; bottom: 0; width: 100%; padding: 15px;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(20px);
+            display: flex; justify-content: center; gap: 10px;
+            border-top: 1px solid var(--glass-border); z-index: 200;
+        }
+        .action-btn {
+            padding: 10px 20px; border-radius: 100px; border: none;
+            font-weight: 600; cursor: pointer; font-family: var(--font-main);
+            transition: transform 0.2s; font-size: 0.9rem;
+        }
+        .action-btn:hover { transform: scale(1.05); }
+        .btn-receipt { background: #fff; color: #000; }
+        .btn-reset { background: #333; color: #fff; border: 1px solid #555; }
+        .btn-back { background: transparent; color: #aaa; border: 1px solid #444; }
+        .btn-back:hover { color: #fff; border-color: #fff; }
+
+        /* --- Modal Receipt (Igual ao anterior) --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 1000;
+            display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .receipt-container {
+            width: 100%; max-width: 380px; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
+            animation: slideUp 0.4s ease-out; position: relative; max-height: 90vh;
+            display: flex; flex-direction: column;
+        }
+        @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .receipt-paper {
+            background-color: #fffdf0; color: #2a2a2a; font-family: var(--font-receipt);
+            padding: 20px; position: relative; font-size: 12px; overflow-y: auto;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.03'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        .jagged-top {
+            width: 100%; height: 15px; background: #fffdf0;
+            background-image: linear-gradient(135deg, #000 50%, transparent 55%), linear-gradient(225deg, #000 50%, transparent 55%);
+            background-position: top left, top left; background-size: 20px 20px; background-repeat: repeat-x;
+            transform: rotate(180deg); margin-bottom: -1px;
+        }
+        .jagged-bottom {
+            width: 100%; height: 15px; background: #fffdf0;
+            background-image: linear-gradient(135deg, rgba(0,0,0,0.85) 50%, transparent 55%), linear-gradient(225deg, rgba(0,0,0,0.85) 50%, transparent 55%);
+            background-position: top left, top left; background-size: 20px 20px; background-repeat: repeat-x;
+            margin-top: -1px;
+        }
+        .receipt-header { text-align: center; border-bottom: 1px dashed #aaa; padding-bottom: 15px; margin-bottom: 15px; }
+        .barcode {
+            height: 40px; width: 100%; opacity: 0.8; margin: 10px 0;
+            background: repeating-linear-gradient(90deg, #000, #000 2px, transparent 2px, transparent 4px, #000 4px, #000 5px, transparent 5px, transparent 7px);
+        }
+        .receipt-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .receipt-table th { text-align: left; border-bottom: 1px solid #aaa; padding: 5px 0; }
+        .receipt-table td { padding: 5px 0; vertical-align: top; }
+        .col-qty { width: 30px; text-align: center; }
+        .col-price { text-align: right; white-space: nowrap; }
+        .receipt-total { border-top: 1px dashed #aaa; padding-top: 10px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: space-between; }
+        .close-receipt { position: absolute; top: -40px; right: 0; color: #fff; background: none; border: none; font-size: 2rem; cursor: pointer; }
+        .receipt-paper::-webkit-scrollbar { width: 6px; }
+        .receipt-paper::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <div class="background-mesh"></div>
+
+    <header>
+        <div class="header-top">
+            <div class="avatar"></div>
+            <h1>Carteira de Elon Musk</h1>
+        </div>
+        <div class="balance" id="balanceDisplay">$476,400,000,000</div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="filterCategory('all')">Tudo</button>
+            <button class="tab-btn" onclick="filterCategory('products')">Produtos</button>
+            <button class="tab-btn" onclick="filterCategory('companies')">Empresas</button>
+        </div>
+    </header>
+
+    <main class="grid-container" id="productGrid">
+        </main>
+
+    <div class="footer-fixed">
+        <button class="action-btn btn-receipt" onclick="showReceipt()">📄 Nota Fiscal</button>
+        <button class="action-btn btn-reset" onclick="resetApp()">↻ Reset</button>
+        <button class="action-btn btn-back" onclick="window.location.href='../index.html'">← Sair</button>
+    </div>
+
+    <div class="modal-overlay" id="receiptModal">
+        <div class="receipt-container">
+            <button class="close-receipt" onclick="closeReceipt()">&times;</button>
+            <div class="jagged-top"></div>
+            <div class="receipt-paper">
+                <div class="receipt-header">
+                    <h3>DANFE SIMPLIFICADO</h3>
+                    <p>1 - Saída</p>
+                    <p><strong>NÚMERO 000.666 SÉRIE 1</strong></p>
+                    <div class="barcode"></div>
+                    <p style="font-size: 10px; margin-top:5px">CHAVE: 420694206942069</p>
+                    <br>
+                    <p style="text-align:left"><strong>EMITENTE:</strong> ELON MUSK SIMULATOR<br>MARTE, COLONIA 1 - SPACE X</p>
+                    <br>
+                    <p style="text-align:left"><strong>DESTINATÁRIO:</strong> VOCÊ<br>TERRA</p>
+                </div>
+                <table class="receipt-table">
+                    <thead>
+                        <tr><th class="col-qty">QTD</th><th>DESCRIÇÃO</th><th class="col-price">$$$</th></tr>
+                    </thead>
+                    <tbody id="receiptItems"></tbody>
+                </table>
+                <div class="receipt-total">
+                    <span>TOTAL:</span>
+                    <span id="receiptTotalValue">$0</span>
+                </div>
+                <p style="margin-top: 20px; text-align: center; font-size: 10px;">Documento sem valor fiscal.</p>
+            </div>
+            <div class="jagged-bottom"></div>
+        </div>
+    </div>
+
+    <script>
+        const INITIAL_MONEY = 476400000000;
+        let money = INITIAL_MONEY;
+        let cart = {};
+
+        // MESMA BASE DE DADOS (DB) DO ANTERIOR, INCLUINDO TUDO
+        const db = [
+            { id: 1, name: "Pastel de Feira", price: 2, icon: "🥟", type: "product" },
+            { id: 2, name: "Coca-Cola (Lata)", price: 3, icon: "🥤", type: "product" },
+            { id: 3, name: "Big Mac Combo", price: 8, icon: "🍔", type: "product" },
+            { id: 4, name: "Spotify Premium", price: 12, icon: "🎵", type: "product" },
+            { id: 5, name: "Livro Kindle", price: 15, icon: "📚", type: "product" },
+            { id: 6, name: "Pizza Grande", price: 20, icon: "🍕", type: "product" },
+            { id: 7, name: "Jogo na Steam", price: 60, icon: "🎮", type: "product" },
+            { id: 8, name: "Tênis Nike Air", price: 120, icon: "👟", type: "product" },
+            { id: 9, name: "AirPods Pro", price: 250, icon: "🎧", type: "product" },
+            { id: 10, name: "Jantar Michelin", price: 400, icon: "🍽️", type: "product" },
+            { id: 11, name: "PlayStation 5 Pro", price: 700, icon: "🕹️", type: "product" },
+            { id: 12, name: "iPhone 16 Pro Max", price: 1500, icon: "📱", type: "product" },
+            { id: 13, name: "MacBook Pro M4", price: 4000, icon: "💻", type: "product" },
+            { id: 14, name: "TV 8K 85 Pol", price: 6000, icon: "📺", type: "product" },
+            { id: 15, name: "Câmera Leica", price: 8500, icon: "📷", type: "product" },
+            { id: 16, name: "Robô Spot", price: 75000, icon: "🤖", type: "product" },
+            { id: 17, name: "Bolsa Birkin", price: 25000, icon: "👜", type: "product" },
+            { id: 18, name: "Rolex Daytona", price: 45000, icon: "⌚", type: "product" },
+            { id: 19, name: "Diamante 5ct", price: 150000, icon: "💍", type: "product" },
+            { id: 20, name: "Vestido Alta Costura", price: 80000, icon: "👗", type: "product" },
+            { id: 21, name: "Tesla Model S", price: 110000, icon: "⚡", type: "product" },
+            { id: 22, name: "Porsche 911 GT3", price: 220000, icon: "🏎️", type: "product" },
+            { id: 23, name: "Ferrari SF90", price: 600000, icon: "🐎", type: "product" },
+            { id: 24, name: "Lamborghini", price: 550000, icon: "🐂", type: "product" },
+            { id: 25, name: "Rolls-Royce", price: 600000, icon: "🎩", type: "product" },
+            { id: 26, name: "Bugatti Chiron", price: 3500000, icon: "🚀", type: "product" },
+            { id: 27, name: "Helicóptero", price: 1500000, icon: "🚁", type: "product" },
+            { id: 28, name: "Tanque de Guerra", price: 4000000, icon: "🛡️", type: "product" },
+            { id: 29, name: "Super Iate", price: 25000000, icon: "🛥️", type: "product" },
+            { id: 30, name: "Jatinho G700", price: 75000000, icon: "✈️", type: "product" },
+            { id: 31, name: "Ouro (1kg)", price: 70000, icon: "🥇", type: "product" },
+            { id: 32, name: "Casa Hamptons", price: 5000000, icon: "🏠", type: "product" },
+            { id: 33, name: "Cobertura NYC", price: 60000000, icon: "🏙️", type: "product" },
+            { id: 34, name: "Ilha no Caribe", price: 120000000, icon: "🏝️", type: "product" },
+            { id: 35, name: "Rancho Skywalker", price: 100000000, icon: "🤠", type: "product" },
+            { id: 36, name: "Palácio Europa", price: 200000000, icon: "🏰", type: "product" },
+            { id: 37, name: "Fóssil T-Rex", price: 32000000, icon: "🦖", type: "product" },
+            { id: 38, name: "Picasso Original", price: 150000000, icon: "🎨", type: "product" },
+            { id: 39, name: "Diamante Pink", price: 71000000, icon: "💎", type: "product" },
+            { id: 40, name: "Viagem à Lua", price: 150000000, icon: "🌝", type: "product" },
+            { id: 41, name: "Equipe F1", price: 900000000, icon: "🏁", type: "product" },
+            { id: 42, name: "Estádio Futebol", price: 1200000000, icon: "⚽", type: "product" },
+            { id: 43, name: "Falcon 9", price: 67000000, icon: "🚀", type: "product" },
+            { id: 44, name: "Satélite Espião", price: 400000000, icon: "🛰️", type: "product" },
+            { id: 45, name: "Cavalo Corrida", price: 5000000, icon: "🐎", type: "product" },
+            { id: 46, name: "Adega Vinhos", price: 200000, icon: "🍷", type: "product" },
+            { id: 47, name: "Submarino", price: 2500000, icon: "🌊", type: "product" },
+            { id: 48, name: "Bunker", price: 15000000, icon: "☢️", type: "product" },
+            { id: 49, name: "Direitos Filme", price: 200000000, icon: "🎬", type: "product" },
+            { id: 50, name: "Emissora TV", price: 50000000, icon: "📡", type: "product" },
+            { id: 101, name: "Twitter (X)", price: 44000000000, icon: "❌", type: "company" },
+            { id: 102, name: "Dropbox", price: 9000000000, icon: "📦", type: "company" },
+            { id: 103, name: "Snapchat", price: 18000000000, icon: "👻", type: "company" },
+            { id: 104, name: "Pinterest", price: 20000000000, icon: "📌", type: "company" },
+            { id: 105, name: "Spotify Inc.", price: 60000000000, icon: "🟢", type: "company" },
+            { id: 106, name: "Roblox Corp", price: 25000000000, icon: "🧱", type: "company" },
+            { id: 107, name: "EA Games", price: 35000000000, icon: "🎮", type: "company" },
+            { id: 108, name: "Nintendo", price: 55000000000, icon: "🍄", type: "company" },
+            { id: 109, name: "Ford", price: 48000000000, icon: "🚙", type: "company" },
+            { id: 110, name: "Honda", price: 50000000000, icon: "🚗", type: "company" },
+            { id: 111, name: "Ferrari", price: 70000000000, icon: "🐎", type: "company" },
+            { id: 112, name: "eBay", price: 22000000000, icon: "🛍️", type: "company" },
+            { id: 113, name: "HP", price: 28000000000, icon: "🖨️", type: "company" },
+            { id: 114, name: "Delta Airlines", price: 30000000000, icon: "✈️", type: "company" },
+            { id: 115, name: "Marriott", price: 65000000000, icon: "🏨", type: "company" },
+            { id: 116, name: "Heineken", price: 55000000000, icon: "🍺", type: "company" },
+            { id: 117, name: "Adidas", price: 35000000000, icon: "👟", type: "company" },
+            { id: 118, name: "Lululemon", price: 50000000000, icon: "🧘", type: "company" },
+            { id: 119, name: "Chipotle", price: 70000000000, icon: "🌮", type: "company" },
+            { id: 120, name: "Coinbase", price: 40000000000, icon: "🪙", type: "company" }
+        ];
+
+        db.forEach(p => cart[p.id] = 0);
+        const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const productGrid = document.getElementById('productGrid');
+        const receiptModal = document.getElementById('receiptModal');
+        let currentFilter = 'all';
+
+        function render() {
+            productGrid.innerHTML = "";
+            const filtered = db.filter(item => {
+                if (currentFilter === 'all') return true;
+                return item.type === currentFilter;
+            });
+            filtered.sort((a,b) => b.price - a.price);
+
+            filtered.forEach(product => {
+                const qty = cart[product.id];
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-icon">${product.icon}</div>
+                    <h2>${product.name}</h2>
+                    <div class="price">${formatter.format(product.price)}</div>
+                    <div class="controls">
+                        <button class="btn btn-sell" ${qty === 0 ? 'disabled' : ''} onclick="updateCart(${product.id}, -1)">Vender</button>
+                        <span class="quantity">${qty}</span>
+                        <button class="btn btn-buy" ${money < product.price ? 'disabled' : ''} onclick="updateCart(${product.id}, 1)">Comprar</button>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+            balanceDisplay.innerText = formatter.format(money);
+        }
+
+        function updateCart(id, change) {
+            const product = db.find(p => p.id === id);
+            if (change === 1 && money >= product.price) {
+                money -= product.price; cart[id]++;
+            } else if (change === -1 && cart[id] > 0) {
+                money += product.price; cart[id]--;
+            }
+            render();
+        }
+
+        function filterCategory(cat) {
+            currentFilter = cat;
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(cat === 'all' ? 'tudo' : (cat === 'products' ? 'produtos' : 'empresas'))) {
+                    btn.classList.add('active');
+                }
+            });
+            render();
+        }
+
+        function resetApp() {
+            money = INITIAL_MONEY; db.forEach(p => cart[p.id] = 0); render();
+        }
+
+        function showReceipt() {
+            const tbody = document.getElementById('receiptItems');
+            tbody.innerHTML = '';
+            let total = 0; let hasItems = false;
+            db.forEach(p => {
+                if (cart[p.id] > 0) {
+                    hasItems = true; const itemTotal = p.price * cart[p.id]; total += itemTotal;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td class="col-qty">${cart[p.id]}</td><td>${p.name.toUpperCase()}</td><td class="col-price">${formatter.format(itemTotal)}</td>`;
+                    tbody.appendChild(tr);
+                }
+            });
+            if (!hasItems) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px;">NENHUM ITEM</td></tr>';
+            document.getElementById('receiptTotalValue').innerText = formatter.format(total);
+            receiptModal.style.display = 'flex';
+        }
+
+        function closeReceipt() { receiptModal.style.display = 'none'; }
+        receiptModal.addEventListener('click', (e) => { if (e.target === receiptModal) closeReceipt(); });
+
+        render();
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Cores | Sala de Experimentos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="cor.css">
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <header class="header-section">
+            <div class="badge">Gerador Inteligente</div>
+            <h1>Gerador de <span class="gradient-text">Cores</span></h1>
+            <p class="subtitle">Responda às perguntas e deixe a IA gerar sua paleta perfeita</p>
+        </header>
+
+        <div class="main-content">
+            <!-- FASE 1: QUESTIONÁRIO -->
+            <div id="questionario-fase" class="fase-container">
+                <div class="questoes-wrapper">
+                    <div class="progresso-bar">
+                        <div id="progresso-fill" class="progresso-fill"></div>
+                    </div>
+
+                    <div id="questoes-container" class="questoes-container">
+                        <!-- Perguntas inseridas dinamicamente via JS -->
+                    </div>
+
+                    <div class="button-group">
+                        <button id="btn-anterior" class="btn btn-secondary" style="display: none;">
+                            <i class="fas fa-arrow-left"></i> Anterior
+                        </button>
+                        <button id="btn-proximo" class="btn btn-primary">
+                            Próximo <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FASE 2: GERANDO -->
+            <div id="gerando-fase" class="fase-container" style="display: none;">
+                <div class="gerando-card">
+                    <div class="spinner"></div>
+                    <h2>Gerando sua paleta...</h2>
+                    <p>Analisando suas respostas e criando cores perfeitas</p>
+                </div>
+            </div>
+
+            <!-- FASE 3: RESULTADO -->
+            <div id="resultado-fase" class="fase-container" style="display: none;">
+                <div class="resultado-header">
+                    <h2>Sua Paleta Perfeita</h2>
+                    <p id="resultado-descricao" class="resultado-desc"></p>
+                </div>
+
+                <div id="cores-container" class="cores-container">
+                    <!-- Cards de cores inseridas dinamicamente -->
+                </div>
+
+                <div class="button-group">
+                    <button id="btn-copiar-todos" class="btn btn-secondary">
+                        <i class="fas fa-copy"></i> Copiar Todos (JSON)
+                    </button>
+                    <button id="btn-regenerar" class="btn btn-primary">
+                        <i class="fas fa-redo"></i> Regenerar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scripts/icons.js"></script>
+    <script src="cor.js"></script>
+</body>
+</html>

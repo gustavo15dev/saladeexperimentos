@@ -1,0 +1,641 @@
+[
+  {
+    "tema": "educação",
+    "topicos": {
+      "introducao": [
+        "Definição de educação como ferramenta de transformação social.",
+        "A importância histórica da educação para a evolução das civilizações.",
+        "O papel da educação na formação do cidadão crítico e consciente.",
+        "Desafios atuais da educação no Brasil (acesso, qualidade, tecnologia).",
+        "Tese: A educação é o principal motor para a redução das desigualdades sociais."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: Acesso desigual à educação de qualidade como perpetuador da pobreza.",
+        "Argumento 2: O impacto da tecnologia na sala de aula (benefícios e malefícios).",
+        "Argumento 3: A valorização (ou desvalorização) do professor na sociedade brasileira.",
+        "Exemplos de países que transformaram sua realidade através da educação (ex: Coreia do Sul, Finlândia).",
+        "A necessidade de currículos mais modernos e alinhados às competências do século XXI."
+      ],
+      "conclusao": [
+        "Retomada da tese: reafirmar a educação como solução estrutural.",
+        "Proposta de intervenção: Ações do Governo para universalizar o acesso e a qualidade (investimento, políticas públicas).",
+        "Proposta de intervenção: O papel da sociedade e da família no processo educacional.",
+        "Reflexão sobre o futuro: como será a educação daqui a 50 anos?",
+        "Frase de impacto sobre o poder transformador do conhecimento."
+      ]
+    }
+  },
+  {
+    "tema": "meio ambiente",
+    "topicos": {
+      "introducao": [
+        "A relação entre o desenvolvimento humano e a degradação ambiental.",
+        "Apresentação da crise climática como o maior desafio da nossa geração.",
+        "O conceito de desenvolvimento sustentável e sua importância.",
+        "Impactos visíveis do desequilíbrio ecológico no cotidiano (secas, enchentes).",
+        "Tese: A preservação do meio ambiente é uma responsabilidade coletiva e urgente."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: As consequências do desmatamento (perda de biodiversidade, alteração do clima).",
+        "Argumento 2: A poluição de rios e oceanos pelo plástico e esgoto.",
+        "Argumento 3: O papel do agronegócio e da indústria na emissão de gases de efeito estufa.",
+        "A importância de fontes de energia limpa e renovável (solar, eólica).",
+        "O consumismo como um dos motores da exploração insustentável de recursos."
+      ],
+      "conclusao": [
+        "Retomada da tese: a urgência de uma mudança de paradigma.",
+        "Proposta de intervenção: Ações governamentais (fiscalização, leis mais rígidas, acordos internacionais).",
+        "Proposta de intervenção: O papel do cidadão (reciclagem, consumo consciente, cobrança política).",
+        "Reflexão sobre o legado que deixaremos para as futuras gerações.",
+        "Frase de impacto sobre a interdependência entre o ser humano e a natureza."
+      ]
+    }
+  },
+  {
+    "tema": "tecnologia",
+    "topicos": {
+      "introducao": [
+        "A definição da tecnologia como ferramenta que molda a sociedade contemporânea.",
+        "A dualidade da tecnologia: progresso e novos desafios éticos.",
+        "O impacto da internet e das redes sociais nas relações humanas.",
+        "A velocidade das inovações e a dificuldade de adaptação.",
+        "Tese: A tecnologia é uma força poderosa que exige uso consciente e regulamentação."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: A inteligência artificial e seus impactos no mercado de trabalho (automação, novas profissões).",
+        "Argumento 2: A questão da privacidade e do uso de dados por grandes empresas (Big Techs).",
+        "Argumento 3: O vício em telas e os efeitos na saúde mental (ansiedade, depressão).",
+        "A exclusão digital como uma nova forma de desigualdade social.",
+        "O papel da tecnologia na aceleração da ciência e da medicina."
+      ],
+      "conclusao": [
+        "Retomada da tese: a necessidade de equilibrar inovação e humanidade.",
+        "Proposta de intervenção: O papel do Estado na criação de leis que regulem a IA e a privacidade.",
+        "Proposta de intervenção: A importância da educação digital para o uso crítico das ferramentas.",
+        "Reflexão sobre o futuro: seremos mestres ou escravos da tecnologia?",
+        "Frase de impacto sobre o uso da tecnologia para o bem comum."
+      ]
+    }
+  },
+  {
+    "tema": "saúde",
+    "topicos": {
+      "introducao": [
+        "Definição de saúde pela OMS (bem-estar físico, mental e social) e não apenas ausência de doença.",
+        "A importância do SUS como sistema universal de saúde no Brasil.",
+        "O contraste entre a saúde pública e a privada.",
+        "O impacto do estilo de vida moderno na saúde (sedentarismo, estresse).",
+        "Tese: Garantir saúde de qualidade para todos é um pilar para uma sociedade justa."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: A importância da saúde mental e o combate ao estigma.",
+        "Argumento 2: A obesidade como epidemia global e suas consequências.",
+        "Argumento 3: A necessidade da medicina preventiva em vez da curativa.",
+        "O papel da alimentação saudável e da atividade física na prevenção de doenças.",
+        "O desafio do envelhecimento da população para os sistemas de saúde."
+      ],
+      "conclusao": [
+        "Retomada da tese: saúde como direito e não como mercadoria.",
+        "Proposta de intervenção: Ações do governo para fortalecer o SUS e a atenção primária.",
+        "Proposta de intervenção: Campanhas de conscientização sobre saúde mental e hábitos saudáveis.",
+        "Reflexão sobre a responsabilidade individual e coletiva com a saúde.",
+        "Frase de impacto sobre a valorização da vida e do bem-estar."
+      ]
+    }
+  },
+  {
+    "tema": "desigualdade social",
+    "topicos": {
+      "introducao": [
+        "Apresentação da desigualdade social como uma característica histórica do Brasil.",
+        "Diferença entre pobreza (falta de recursos) e desigualdade (distribuição injusta).",
+        "O impacto da desigualdade no acesso a direitos básicos (saúde, educação, segurança).",
+        "A concentração de renda no topo da pirâmide social.",
+        "Tese: A desigualdade social é o principal entrave para o desenvolvimento pleno do país."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: O racismo estrutural como um dos pilares da desigualdade no Brasil.",
+        "Argumento 2: A desigualdade de gênero e seu impacto no mercado de trabalho e na renda.",
+        "Argumento 3: A má qualidade da educação pública como perpetuadora do ciclo de pobreza.",
+        "A questão da tributação: o sistema tributário brasileiro aprofunda ou combate a desigualdade?",
+        "O contraste entre a realidade das periferias e dos bairros nobres nas grandes cidades."
+      ],
+      "conclusao": [
+        "Retomada da tese: superar a desigualdade é uma condição para a democracia.",
+        "Proposta de intervenção: Políticas de distribuição de renda (ex: Bolsa Família).",
+        "Proposta de intervenção: Reforma tributária para que os mais ricos paguem mais impostos.",
+        "O papel de ações afirmativas (cotas) na reparação histórica.",
+        "Frase de impacto sobre a busca por uma sociedade mais justa e equitativa."
+      ]
+    }
+  },
+  {
+    "tema": "redes sociais",
+    "topicos": {
+      "introducao": [
+        "As redes sociais como palco principal da vida contemporânea.",
+        "A dualidade das redes: conexão e isolamento.",
+        "O conceito de 'bolha social' e polarização política.",
+        "A busca por validação através de curtidas e seguidores.",
+        "Tese: As redes sociais transformaram as interações humanas, trazendo benefícios e perigos que precisam ser gerenciados."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: O impacto das redes na saúde mental (ansiedade, comparação, depressão).",
+        "Argumento 2: A disseminação de Fake News e seus efeitos na democracia.",
+        "Argumento 3: A cultura do cancelamento e a falta de espaço para o diálogo.",
+        "O uso de algoritmos para manter o usuário 'preso' na plataforma.",
+        "O lado positivo: ativismo digital, reencontro de amigos e novas oportunidades de negócio."
+      ],
+      "conclusao": [
+        "Retomada da tese: a necessidade de um uso mais consciente e crítico das redes.",
+        "Proposta de intervenção: Ações de educação midiática nas escolas.",
+        "Proposta de intervenção: Regulação das plataformas para combater desinformação.",
+        "Reflexão sobre a responsabilidade individual ao compartilhar conteúdo.",
+        "Frase de impacto sobre a diferença entre a vida real e a vida 'postada'."
+      ]
+    }
+  },
+  {
+    "tema": "leitura",
+    "topicos": {
+      "introducao": [
+        "A importância da leitura para o desenvolvimento intelectual e da empatia.",
+        "O baixo índice de leitura no Brasil como um problema crônico.",
+        "A competição do livro com outras formas de entretenimento (streaming, redes sociais).",
+        "A leitura como uma forma de viajar sem sair do lugar.",
+        "Tese: Incentivar o hábito da leitura é fundamental para a formação de uma sociedade mais crítica e criativa."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: A leitura amplia o vocabulário e a capacidade de interpretação de texto.",
+        "Argumento 2: O papel da literatura em nos fazer entender diferentes realidades e pontos de vista (empatia).",
+        "Argumento 3: A falta de bibliotecas públicas e de incentivo na família e na escola.",
+        "O impacto dos livros digitais (e-books) e audiolivros no mercado editorial.",
+        "A leitura como um refúgio contra o estresse e a ansiedade do mundo moderno."
+      ],
+      "conclusao": [
+        "Retomada da tese: um país de leitores é um país mais desenvolvido.",
+        "Proposta de intervenção: Políticas públicas de incentivo à leitura e de valorização das bibliotecas.",
+        "Proposta de intervenção: O papel dos pais e professores em apresentar o mundo dos livros às crianças.",
+        "Reflexão sobre como a leitura pode transformar uma vida.",
+        "Frase de impacto de um grande autor sobre a importância dos livros."
+      ]
+    }
+  },
+  {
+    "tema": "segurança pública",
+    "topicos": {
+      "introducao": [
+        "A segurança pública como um direito fundamental do cidadão e dever do Estado.",
+        "O sentimento de insegurança e medo nas grandes cidades brasileiras.",
+        "A complexidade do problema da violência, que envolve fatores sociais e econômicos.",
+        "O debate entre políticas de repressão (mais polícia) e de prevenção (mais educação e oportunidade).",
+        "Tese: A solução para a segurança pública no Brasil exige uma abordagem integrada, que vá além da simples ação policial."
+      ],
+      "desenvolvimento": [
+        "Argumento 1: A relação entre desigualdade social, falta de oportunidades e o aumento da criminalidade.",
+        "Argumento 2: A falência do sistema prisional brasileiro, que funciona como 'escola do crime'.",
+        "Argumento 3: A violência policial e o racismo estrutural nas abordagens.",
+        "A questão da guerra às drogas e seu impacto nas comunidades pobres.",
+        "A importância do investimento em inteligência e tecnologia para combater o crime organizado."
+      ],
+      "conclusao": [
+        "Retomada da tese: a necessidade de atacar as causas da violência, não apenas os efeitos.",
+        "Proposta de intervenção: Ações do Estado na reforma do sistema prisional e na valorização da polícia.",
+        "Proposta de intervenção: Investimento em educação, cultura e esporte nas áreas mais vulneráveis.",
+        "O papel da sociedade na ressocialização de ex-detentos.",
+        "Frase de impacto sobre a paz como uma construção social diária."
+      ]
+    }
+  },
+  {
+    "tema": "trabalho e futuro profissional",
+    "topicos": {
+      "introducao": [
+        "Transformações no mercado de trabalho causadas pela tecnologia.",
+        "A ascensão do trabalho remoto e híbrido.",
+        "A importância das soft skills no século XXI.",
+        "A competitividade crescente entre jovens profissionais.",
+        "Tese: O futuro do trabalho exige adaptação contínua e aprendizagem permanente."
+      ],
+      "desenvolvimento": [
+        "Automação substituindo funções repetitivas e operacionais.",
+        "Novas profissões surgindo com a digitalização.",
+        "Trabalho informal e precarização como desafios sociais.",
+        "A importância da formação técnica e profissionalizante.",
+        "A globalização permitindo trabalho para empresas estrangeiras sem sair de casa."
+      ],
+      "conclusao": [
+        "Retomada da tese sobre adaptação contínua.",
+        "Proposta: incentivo governamental à capacitação profissional.",
+        "Proposta: empresas investirem em treinamento interno.",
+        "Reflexão sobre a carreira como um processo em constante mutação.",
+        "Frase de impacto sobre reinventar-se profissionalmente."
+      ]
+    }
+  },
+
+  {
+    "tema": "economia",
+    "topicos": {
+      "introducao": [
+        "A economia como base organizadora das sociedades.",
+        "A importância do consumo para movimentar o mercado.",
+        "O papel do governo na regulação econômica.",
+        "Crises econômicas e seus impactos sociais.",
+        "Tese: Uma economia equilibrada depende de políticas responsáveis e participação cidadã."
+      ],
+      "desenvolvimento": [
+        "Inflação e perda do poder de compra.",
+        "Desemprego e desigualdade.",
+        "A importância de investimentos públicos.",
+        "O mercado financeiro e seu impacto no cotidiano.",
+        "A relação entre política econômica e bem-estar social."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: políticas de estabilidade.",
+        "Proposta: incentivo ao empreendedorismo.",
+        "Reflexão sobre o equilíbrio entre crescimento e justiça social.",
+        "Frase de impacto sobre a importância da economia para o país."
+      ]
+    }
+  },
+
+  {
+    "tema": "psicologia e comportamento humano",
+    "topicos": {
+      "introducao": [
+        "A mente humana como objeto de estudo complexo.",
+        "A influência do ambiente na formação da personalidade.",
+        "O impacto do estresse moderno na saúde mental.",
+        "As relações humanas e seus desafios.",
+        "Tese: Entender o comportamento humano é essencial para promover uma sociedade mais saudável."
+      ],
+      "desenvolvimento": [
+        "Importância da psicoterapia.",
+        "O efeito das redes sociais na autoimagem.",
+        "O papel das emoções nas decisões.",
+        "Como traumas moldam comportamentos.",
+        "A influência da família na saúde psicológica."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: ampliar acesso ao cuidado psicológico.",
+        "Proposta: educação emocional nas escolas.",
+        "Reflexão sobre autoconhecimento.",
+        "Frase de impacto sobre cuidar da mente."
+      ]
+    }
+  },
+
+  {
+    "tema": "ética e moral",
+    "topicos": {
+      "introducao": [
+        "Diferença entre ética e moral.",
+        "A importância da ética para a convivência social.",
+        "Casos recentes de comportamentos antiéticos no país.",
+        "A influência da educação no desenvolvimento ético.",
+        "Tese: A ética é fundamental para garantir justiça e confiança nas relações."
+      ],
+      "desenvolvimento": [
+        "Corrupção política como exemplo de falta de ética.",
+        "Ética profissional e responsabilidades sociais.",
+        "Fake news e ética na comunicação.",
+        "Conflitos morais na tecnologia (IA, privacidade).",
+        "A ética no consumo e no meio ambiente."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: educação ética desde a infância.",
+        "Proposta: transparência institucional.",
+        "Reflexão sobre escolhas pessoais.",
+        "Frase de impacto sobre integridade."
+      ]
+    }
+  },
+
+  {
+    "tema": "violência e sociedade",
+    "topicos": {
+      "introducao": [
+        "A violência como fenômeno histórico e social.",
+        "O impacto emocional e psicológico causado pela violência urbana.",
+        "Desigualdade e exclusão como causas de conflitos.",
+        "A sensação de insegurança crescente.",
+        "Tese: O combate à violência deve envolver prevenção, políticas públicas e inclusão social."
+      ],
+      "desenvolvimento": [
+        "Ausência do Estado em áreas vulneráveis.",
+        "Tráfico de drogas e facções.",
+        "Armas de fogo e sua circulação.",
+        "Violência doméstica e seus ciclos.",
+        "O papel da mídia na percepção da violência."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: políticas sociais.",
+        "Proposta: segurança comunitária.",
+        "Reflexão sobre responsabilidade coletiva.",
+        "Frase de impacto sobre paz social."
+      ]
+    }
+  },
+
+  {
+    "tema": "inclusão e acessibilidade",
+    "topicos": {
+      "introducao": [
+        "O conceito de inclusão social e suas dimensões.",
+        "A realidade de pessoas com deficiência no Brasil.",
+        "A falta de acessibilidade em espaços públicos.",
+        "A importância da representatividade.",
+        "Tese: A acessibilidade é condição básica para garantir cidadania plena."
+      ],
+      "desenvolvimento": [
+        "Leis brasileiras e sua aplicação falha.",
+        "Desafios de mobilidade urbana.",
+        "Inclusão digital para pessoas com deficiência.",
+        "Preconceitos invisíveis e capacitismo.",
+        "A importância de materiais acessíveis (libras, audiodescrição)."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: investimentos municipais em acessibilidade.",
+        "Proposta: capacitação de profissionais.",
+        "Reflexão sobre empatia.",
+        "Frase de impacto sobre inclusão."
+      ]
+    }
+  },
+
+  {
+    "tema": "consumismo",
+    "topicos": {
+      "introducao": [
+        "O consumismo como fenômeno do capitalismo moderno.",
+        "A influência da publicidade no comportamento do consumidor.",
+        "A cultura do 'ter' acima do 'ser'.",
+        "O aumento das dívidas entre jovens.",
+        "Tese: O consumismo desenfreado gera impactos sociais, psicológicos e ambientais."
+      ],
+      "desenvolvimento": [
+        "Marketing manipulador.",
+        "Obsolescência programada.",
+        "Impacto ambiental do consumo excessivo.",
+        "Endividamento.",
+        "Minimalismo como alternativa."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: educação financeira.",
+        "Proposta: incentivos a produtos sustentáveis.",
+        "Reflexão sobre consumo consciente.",
+        "Frase de impacto sobre equilíbrio."
+      ]
+    }
+  },
+
+  {
+    "tema": "globalização",
+    "topicos": {
+      "introducao": [
+        "O mundo interconectado pela globalização.",
+        "Avanços tecnológicos possibilitando trocas instantâneas.",
+        "Impacto econômico da globalização.",
+        "Diversidade cultural em circulação.",
+        "Tese: A globalização gera oportunidades, mas também desafios."
+      ],
+      "desenvolvimento": [
+        "Empregos migrando entre países.",
+        "A homogeneização cultural.",
+        "Poder das multinacionais.",
+        "Benefícios ao comércio internacional.",
+        "Fake news circulando com mais velocidade."
+      ],
+      "conclusao": [
+        "Retomada da tese.",
+        "Proposta: políticas culturais e econômicas equilibradas.",
+        "Proposta: educação internacional.",
+        "Reflexão sobre colaboração global.",
+        "Frase de impacto sobre planetariedade."
+      ]
+    }
+  },
+
+  {
+    "tema": "cultura e identidade",
+    "topicos": {
+      "introducao": [
+        "A cultura como elemento formador da identidade.",
+        "A diversidade cultural brasileira.",
+        "A importância das tradições.",
+        "A influência da mídia na construção cultural.",
+        "Tese: Valorizar a cultura é essencial para preservar a identidade nacional."
+      ],
+      "desenvolvimento": [
+        "Globalização e perda cultural.",
+        "A importância das comunidades tradicionais.",
+        "Cultura digital.",
+        "Preconceito contra manifestações culturais populares.",
+        "Cultura como forma de resistência."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: financiamento cultural.",
+        "Proposta: valorização educacional.",
+        "Reflexão sobre memória cultural.",
+        "Frase de impacto sobre identidade."
+      ]
+    }
+  },
+
+  {
+    "tema": "família moderna",
+    "topicos": {
+      "introducao": [
+        "Transformações da estrutura familiar ao longo do século.",
+        "Famílias diversas e novas configurações.",
+        "Impacto da era digital nas relações familiares.",
+        "Desafios da educação dos filhos no mundo atual.",
+        "Tese: A família continua sendo uma base essencial, mas em constante transformação."
+      ],
+      "desenvolvimento": [
+        "Pais ausentes por excesso de trabalho.",
+        "Influência das telas na infância.",
+        "Divórcio e guarda compartilhada.",
+        "Famílias monoparentais.",
+        "O papel dos avós."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: apoio social às famílias.",
+        "Proposta: campanhas educativas.",
+        "Reflexão sobre amor e responsabilidade.",
+        "Frase de impacto sobre laços familiares."
+      ]
+    }
+  },
+
+  {
+    "tema": "política e cidadania",
+    "topicos": {
+      "introducao": [
+        "O papel do cidadão em uma democracia.",
+        "A importância do voto consciente.",
+        "Desinformação política nas redes.",
+        "Participação social.",
+        "Tese: A cidadania ativa é fundamental para fortalecer a democracia."
+      ],
+      "desenvolvimento": [
+        "Corrupção e descrença política.",
+        "Movimentos sociais.",
+        "Transparência governamental.",
+        "Poder das redes sociais nas eleições.",
+        "Políticas públicas e impacto social."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: educação política nas escolas.",
+        "Proposta: combate à desinformação.",
+        "Reflexão sobre responsabilidade.",
+        "Frase de impacto sobre democracia."
+      ]
+    }
+  },
+
+  {
+    "tema": "ciência",
+    "topicos": {
+      "introducao": [
+        "O papel da ciência no avanço da humanidade.",
+        "Avanços recentes e impacto cotidiano.",
+        "Negacionismo científico.",
+        "Importância da pesquisa.",
+        "Tese: A ciência é base para progresso."
+      ],
+      "desenvolvimento": [
+        "Tecnologia médica.",
+        "Pesquisa acadêmica.",
+        "Ciência e governo.",
+        "Fake news científicas.",
+        "Importância da vacinação."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: financiamento científico.",
+        "Proposta: divulgação científica.",
+        "Reflexão sobre conhecimento.",
+        "Frase impacto sobre ciência."
+      ]
+    }
+  },
+
+  {
+    "tema": "arte",
+    "topicos": {
+      "introducao": [
+        "A arte como forma de expressão humana.",
+        "Diversidade artística.",
+        "Arte como resistência cultural.",
+        "A importância da arte na educação.",
+        "Tese: A arte é elemento essencial para desenvolvimento emocional e intelectual."
+      ],
+      "desenvolvimento": [
+        "Cortes em cultura.",
+        "Valorização do artista.",
+        "Arte urbana.",
+        "Museus e memória histórica.",
+        "A arte na sociedade digital."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: incentivo cultural.",
+        "Proposta: acesso à arte para todos.",
+        "Reflexão sobre sensibilidade humana.",
+        "Frase de impacto sobre criatividade."
+      ]
+    }
+  },
+
+  {
+    "tema": "esportes",
+    "topicos": {
+      "introducao": [
+        "O esporte como ferramenta de inclusão.",
+        "Benefícios para saúde física e mental.",
+        "Esporte profissional x amador.",
+        "Cultura do futebol no Brasil.",
+        "Tese: O esporte transforma vidas e comunidades."
+      ],
+      "desenvolvimento": [
+        "Falta de investimento em esporte escolar.",
+        "Atletas como inspiração.",
+        "Corrupção em entidades esportivas.",
+        "Esporte feminino e desigualdade.",
+        "Megaeventos e impactos sociais."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: projetos esportivos públicos.",
+        "Proposta: investimento em atletas de base.",
+        "Reflexão sobre disciplina.",
+        "Frase de impacto sobre superação."
+      ]
+    }
+  },
+
+  {
+    "tema": "inteligência artificial",
+    "topicos": {
+      "introducao": [
+        "A IA como tecnologia disruptiva.",
+        "Crescimento acelerado da automação.",
+        "IA no cotidiano.",
+        "Debates éticos sobre IA.",
+        "Tese: A IA exige uso responsável e regulamentação adequada."
+      ],
+      "desenvolvimento": [
+        "Automação e empregos.",
+        "Deepfakes e fake news.",
+        "IA na medicina.",
+        "Vieses algorítmicos.",
+        "Privacidade e dados."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: leis para IA.",
+        "Proposta: educação digital.",
+        "Reflexão sobre limites da tecnologia.",
+        "Frase de impacto sobre futuro da IA."
+      ]
+    }
+  },
+
+  {
+    "tema": "escola e juventude",
+    "topicos": {
+      "introducao": [
+        "Desafios enfrentados pelos jovens na escola.",
+        "Pressão por resultados.",
+        "Problemas emocionais e sociais.",
+        "Ambiente escolar como espaço de formação social.",
+        "Tese: A escola precisa acompanhar as transformações da juventude moderna."
+      ],
+      "desenvolvimento": [
+        "Bullying e exclusão.",
+        "Falta de preparo emocional.",
+        "Uso do celular em sala.",
+        "Falta de professores.",
+        "Conteúdos pouco conectados ao mundo real."
+      ],
+      "conclusao": [
+        "Retomada.",
+        "Proposta: aulas de educação emocional.",
+        "Proposta: modernização curricular.",
+        "Reflexão sobre juventude.",
+        "Frase de impacto motivacional."
+      ]
+    }
+  }
+]

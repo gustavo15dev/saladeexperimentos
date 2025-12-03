@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Experimentos - Contador de Mosquitos</title>
+    <style>
+        /* Reset e base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #d2b48c; /* marrom claro */
+            color: #333;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Mosquitos de fundo */
+        .mosquito {
+            position: absolute;
+            z-index: 1;
+            animation: float 8s infinite ease-in-out;
+            width: 32px; /* Aumentei o tamanho de 24px para 32px */
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mosquito img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(20px, 10px); }
+            50% { transform: translate(10px, 20px); }
+            75% { transform: translate(30px, 15px); }
+        }
+
+        /* Container principal */
+        .container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Tela de login */
+        .login-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            color: #8b4513;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 15px 0;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #d2b48c;
+            border-radius: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #8b4513;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin: 10px 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Tela de jogo */
+        .jogo-container {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .contador {
+            font-size: 48px;
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .botao-matar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            border: none;
+            cursor: pointer;
+            font-size: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            transition: all 0.2s;
+            margin: 0 auto 20px;
+        }
+
+        .botao-matar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.6);
+        }
+
+        .botao-matar:active {
+            transform: scale(0.95);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #6a5acd, #4b0082);
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela de Login -->
+        <div id="login-container" class="login-container">
+            <h2>🪰 Contador de Mosquitos 🪰</h2>
+            <p>Crie sua conta ou faça login para salvar seu progresso</p>
+            
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="senha" placeholder="Senha" required>
+            </div>
+            
+            <button class="btn" onclick="fazerLogin()">Login</button>
+            <button class="btn" onclick="criarConta()">Criar Conta</button><br><br>
+            <a href="../index.html" class="btn"> 🠈Voltar</a>
+        </div>
+
+        <!-- Tela de Jogo -->
+        <div id="jogo-container" class="jogo-container">
+            <div class="contador" id="contador">0</div>
+            <button class="botao-matar" onclick="matarMosquito()">🪰</button>
+            <button class="btn logout-btn" onclick="fazerLogout()">Sair</button>
+        </div>
+    </div>
+
+    <script>
+        let usuarioAtual = null;
+
+        // Fazer login
+        function fazerLogin() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if (!email || !senha) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            // Carrega os dados do localStorage
+            let dados = localStorage.getItem('contaMosquitos');
+            if (dados) {
+                dados = JSON.parse(dados);
+            } else {
+                dados = {};
+            }
+
+            if (dados[email] && dados[email].senha === senha) {
+                usuarioAtual = email;
+                document.getElementById('contador').textContent = dados[email].contagem || 0;
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('jogo-container').style.display = 'block';
+            } else {
+                alert('Email ou senha incorretos!');
+            }
+        }
+
+        // Criar conta
+        function criarConta() {
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if (!email || !senha) {
+                alert('Preencha todos os campos!');
+                return;
+            }
+
+            // Carrega os dados do localStorage
+            let dados = localStorage.getItem('contaMosquitos');
+            if (dados) {
+                dados = JSON.parse(dados);
+            } else {
+                dados = {};
+            }
+
+            if (dados[email]) {
+                alert('Conta já existe!');
+                return;
+            }
+
+            dados[email] = {
+                senha: senha,
+                contagem: 0
+            };
+
+            localStorage.setItem('contaMosquitos', JSON.stringify(dados));
+
+            usuarioAtual = email;
+            document.getElementById('contador').textContent = 0;
+            document.getElementById('login-container').style.display = 'none';
+            document.getElementById('jogo-container').style.display = 'block';
+        }
+
+        // Matar mosquito
+        function matarMosquito() {
+            if (!usuarioAtual) {
+                alert('Faça login primeiro!');
+                return;
+            }
+
+            // Carrega os dados do localStorage
+            let dados = localStorage.getItem('contaMosquitos');
+            if (dados) {
+                dados = JSON.parse(dados);
+            } else {
+                dados = {};
+            }
+
+            // Atualiza a contagem do usuário
+            if (dados[usuarioAtual]) {
+                dados[usuarioAtual].contagem = (dados[usuarioAtual].contagem || 0) + 1;
+            } else {
+                dados[usuarioAtual] = { contagem: 1 };
+            }
+
+            // Salva no localStorage
+            localStorage.setItem('contaMosquitos', JSON.stringify(dados));
+
+            // Atualiza o contador na tela
+            document.getElementById('contador').textContent = dados[usuarioAtual].contagem;
+        }
+
+        // Fazer logout
+        function fazerLogout() {
+            usuarioAtual = null;
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('jogo-container').style.display = 'none';
+            document.getElementById('email').value = '';
+            document.getElementById('senha').value = '';
+        }
+
+        // Cria mosquitos de fundo com imagem (maiores)
+        function criarMosquitos() {
+            const quantidade = 50;
+            for (let i = 0; i < quantidade; i++) {
+                const mosquito = document.createElement('div');
+                mosquito.className = 'mosquito';
+                mosquito.innerHTML = '<img src="../imagens/mosquito.png" alt="Mosquito">';
+                mosquito.style.left = Math.random() * 100 + '%';
+                mosquito.style.top = Math.random() * 100 + '%';
+                mosquito.style.animationDelay = Math.random() * 8 + 's';
+                document.body.appendChild(mosquito);
+            }
+        }
+
+        // Inicia o jogo
+        window.addEventListener('load', () => {
+            criarMosquitos();
+        });
+    </script>
+</body>
+</html>

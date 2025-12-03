@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipe</title>
+    <style>
+        /* Reset e base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background: radial-gradient(
+    125% 125% at -2% 101%,
+    rgba(245, 87, 2, 1) 10.5%,
+    rgba(245, 120, 2, 1) 16%,
+    rgba(245, 140, 2, 1) 17.5%,
+    rgba(245, 170, 100, 1) 25%,
+    rgba(238, 174, 202, 1) 40%,
+    rgba(202, 179, 214, 1) 65%,
+    rgba(148, 201, 233, 1) 100%
+  );          
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Título */
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            color: #ffffff;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(106, 90, 205, 0.3);
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* Conteúdo da equipe */
+        .equipe-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        /* Card de equipe */
+        .equipe-card {
+            display: flex;
+            align-items: center;
+            background: rgba(30, 30, 50, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid #555;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideIn 0.6s ease-out;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        .equipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(106, 90, 205, 0.4);
+        }
+
+        .perfil-imagem {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+            border: 3px solid #6a5acd;
+        }
+
+        .perfil-info {
+            flex: 1;
+        }
+
+        .equipe-card h3 {
+            font-size: 24px;
+            color: #6a5acd;
+            margin: 0 0 10px 0;
+        }
+
+        .equipe-card p {
+            font-size: 16px;
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        /* Contatos */
+        .contato {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .contato a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6a5acd, #4b0082);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(106, 90, 205, 0.3);
+            font-size: 14px;
+        }
+
+        .contato a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(106, 90, 205, 0.5);
+            background: linear-gradient(135deg, #5a4cb0, #3a006a);
+        }
+
+        /* Botão de voltar */
+        .botao-voltar {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #000000, #000000);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4)
+        }
+
+        .botao-voltar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(50, 50, 50, 0.6);
+            background: linear-gradient(135deg, #3a3a3a, #3a006a);
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Scroll personalizado */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: rgba(30, 30, 40, 0.5);
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background: #6a5acd;
+            border-radius: 4px;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: #4b0082;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👥 Equipe da Sala de Experimentos</h1>
+
+        <div class="equipe-content">
+            <!-- Card 1: Gustavo -->
+            <div class="equipe-card">
+                <img src="../imagens/gustavo.png" alt="Foto de Gustavo" class="perfil-imagem">
+                <div class="perfil-info">
+                    <h3>Gustavo</h3>
+                    <p>Criador e Desenvolvedor Principal</p>
+                    <div class="contato">
+                        <a href="https://github.com/gustavo15dev" target="_blank">GitHub</a>
+                        <a href="mailto:gustavo15dev@gmail.com">Email</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Rafaela -->
+            <div class="equipe-card">
+                <img src="../imagens/rafaela.png" alt="Foto de Rafaela" class="perfil-imagem">
+                <div class="perfil-info">
+                    <h3>Rafaela de Oliveira</h3>
+                    <p>Criadora e Avaliadora da Interface do Site</p>
+                    <div class="contato">
+                        <a href="../falha.html" target="_blank">GitHub</a>
+                        <a href="../falha.html">Email</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="botao-voltar" onclick="window.location.href = '../index.html'">Voltar</button>
+    </div>
+</body>
+</html>

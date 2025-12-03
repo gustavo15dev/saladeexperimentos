@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Experimentos | Hub Criativo</title>
+
+    <meta name="google-site-verification" content="ErVEI6PSCLIOVNvi7emQAXDZy1ymBm5hgW7NwRxecoY" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+
+    <div class="main-wrapper">
+        <header>
+            <div class="badge">v2.4</div>
+            <h1>Sala de <span class="text-gradient">Experimentos</span></h1>
+            <h2>Onde a criatividade encontra a <span class="text-highlight">tecnologia</span>.</h2>
+        </header>
+
+        <nav id="categorias-container">
+            <button class="filter-btn active" onclick="filtrarPorCategoria('todos')"><i class="fa-solid fa-layer-group"></i> Todos</button>
+            <button class="filter-btn" onclick="filtrarPorCategoria('ferramentas')"><i class="fa-solid fa-screwdriver-wrench"></i> Ferramentas</button>
+            <button class="filter-btn" onclick="filtrarPorCategoria('jogos')"><i class="fa-solid fa-gamepad"></i> Jogos</button>
+            <button class="filter-btn" onclick="filtrarPorCategoria('ia')"><i class="fa-solid fa-robot"></i> IA</button>
+            <button class="filter-btn" onclick="filtrarPorCategoria('diversao')"><i class="fa-regular fa-face-laugh-beam"></i> Diversão</button>
+            <button class="filter-btn special" onclick="window.location.href='equipe/equipe.html'"><i class="fa-solid fa-users"></i> Equipe</button>
+        </nav>
+
+        <div id="busca-container">
+            <div class="input-wrapper">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="busca-input" placeholder="O que você procura hoje?">
+            </div>
+        </div>
+
+        <div id="container-cards">
+            <div class="glass-card" data-projeto="gerador-cores" data-categoria="ferramentas">
+                <div class="card-image-wrapper">
+                    <img src="imagens/cor.png" alt="Gerador de Cores" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Gerador+de+Cores'">
+                    <span class="status-tag dev">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Gerador de Cores</h3>
+                        <span class="category-icon"><i class="fa-solid fa-palette"></i></span>
+                    </div>
+                    <p>Gere paletas perfeitas respondendo perguntas simples — design inteligente e exportável.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="gerador-cores-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="gerador-cores/cor.html" onclick="atualizarEstatistica('gerador-cores')" class="action-btn">Acessar Projeto</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="bilionario" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="imagens/elon-musk.png" alt="Bilionário" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Bilionario'">
+                    <span class="status-tag dev">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Compre como Elon Musk</h3>
+                        <span class="category-icon"><i class="fa-solid fa-rocket"></i></span>
+                    </div>
+                    <p>O que você faria com quase 500 bilhões de Dólares?</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="bilionario-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="bilionário/bilionario.html" onclick="atualizarEstatistica('bilionario')" class="action-btn">Simular Vida Luxuosa</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="conversa" data-categoria="ia">
+                <div class="card-image-wrapper">
+                    <img src="Dora-AI/img-IA/logo.png" alt="Dora AI" onerror="this.src='https://placehold.co/600x400/4b0082/FFF?text=Dora+AI'">
+                    <span class="status-tag dev">POPULAR<br>NOVA ATUALIZAÇÃO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Dora AI 1.3 Flash Pro</h3>
+                        <span class="category-icon"><i class="fa-solid fa-brain"></i></span>
+                    </div>
+                    <p>Inteligência artificial empática para conversas acolhedoras e suporte emocional.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="conversa-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="Dora-AI/conversa.html" onclick="atualizarEstatistica('conversa')" class="action-btn">Conversar</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="frases" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="imagens/frases.png" alt="Frases" onerror="this.src='https://placehold.co/600x400/ff6b6b/FFF?text=Motivacao'">
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Daily Motivation</h3>
+                        <span class="category-icon"><i class="fa-solid fa-bolt"></i></span>
+                    </div>
+                    <p>Gerador de doses diárias de energia e sabedoria para começar o seu dia.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="frases-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="frases/frases.html" onclick="atualizarEstatistica('frases')" class="action-btn">Inspirar-se</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="mosquito" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="imagens/mosquito.png" alt="Mosquito" onerror="this.src='https://placehold.co/600x400/333/FFF?text=Mosquito'">
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Contador de Mosquitos</h3>
+                        <span class="category-icon"><i class="fa-solid fa-crosshairs"></i></span>
+                    </div>
+                    <p>Ferramenta essencial (e cômica) para rastrear suas vitórias contra insetos locais.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="mosquito-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="contar_mosquitos/contar-mosquitos.html" onclick="atualizarEstatistica('mosquito')" class="action-btn">Iniciar Caçada</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="relogio" data-categoria="ferramentas">
+                <div class="card-image-wrapper">
+                    <img src="imagens/relogio.png" alt="Relógio Digital" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Relogio'">
+                    <span class="status-tag dev">Em Desenvolvimento</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Relógio Universal</h3>
+                        <span class="category-icon"><i class="fa-solid fa-globe"></i></span>
+                    </div>
+                    <p>Monitoramento global de fusos horários em tempo real com interface de alto contraste.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="relogio-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="relógio/relogio.html" onclick="atualizarEstatistica('relogio')" class="action-btn">Acessar Projeto</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Formatação de Números
+        function formatarNumero(num) {
+            return new Intl.NumberFormat('pt-BR', { notation: "compact", compactDisplay: "short" }).format(num);
+        }
+
+        // Atualizar Estatísticas
+        function atualizarEstatistica(projeto) {
+            let count = parseInt(localStorage.getItem(projeto) || 0) + 1;
+            localStorage.setItem(projeto, count);
+            atualizarDisplay(projeto, count);
+        }
+
+        function atualizarDisplay(projeto, valor) {
+            const el = document.getElementById(projeto + '-count');
+            if (el) el.textContent = formatarNumero(valor);
+        }
+
+        // Init
+        window.addEventListener('load', () => {
+            ['gerador-cores', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio'].forEach(proj => {
+                let count = localStorage.getItem(proj) || 0;
+                atualizarDisplay(proj, count);
+            });
+
+            // Notificação Suave
+            if ('Notification' in window && Notification.permission !== 'denied') {
+                Notification.requestPermission();
+            }
+        });
+
+        // Busca Inteligente
+        document.getElementById('busca-input').addEventListener('input', function (e) {
+            const termo = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.glass-card');
+
+            cards.forEach(card => {
+                const texto = card.innerText.toLowerCase();
+                card.style.display = texto.includes(termo) ? 'flex' : 'none';
+            });
+        });
+
+        // Filtros Ativos
+        function filtrarPorCategoria(categoria) {
+            // Atualiza classe ativa no botão
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-categoria');
+                if (categoria === 'todos' || cardCat === categoria) {
+                    card.style.display = 'flex';
+                    // Pequena animação de entrada
+                    card.animate([{ opacity: 0, transform: 'scale(0.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 300 });
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

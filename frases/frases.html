@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Experimentos - Frases Motivacionais</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            background: rgba(30, 30, 50, 0.8);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #6a5acd;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        #frase {
+            font-size: 22px;
+            margin: 30px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1.6;
+            transition: opacity 0.5s ease;
+        }
+
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #6a5acd, #4b0082);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.4);
+        }
+
+        .voltar-btn {
+            margin-top: 30px;
+            background: rgba(100, 100, 150, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .voltar-btn:hover {
+            background: rgba(100, 100, 150, 0.5);
+        }
+
+        /* Animação de entrada da frase */
+        @keyframes aparecer {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .frase-animada {
+            animation: aparecer 0.8s ease-out;
+        }
+
+        /* ---------------------------------------------------- */
+        /* 6. MEDIA QUERIES RESPONSIVAS PARA FRASES */
+        /* ---------------------------------------------------- */
+
+        /* Tablet */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px;
+                width: 90%;
+            }
+            
+            h1 {
+                font-size: 28px;
+            }
+            
+            #frase {
+                font-size: 18px;
+                min-height: 60px;
+            }
+            
+            button {
+                padding: 12px 24px;
+                font-size: 16px;
+            }
+            
+            .voltar-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+
+        /* Celular */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                width: 95%;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            #frase {
+                font-size: 16px;
+                min-height: 50px;
+            }
+            
+            button {
+                padding: 10px 20px;
+                font-size: 16px;
+                width: 90%;
+                max-width: 250px;
+            }
+            
+            .voltar-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Pequenos celulares */
+        @media (max-width: 320px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+            
+            #frase {
+                font-size: 14px;
+                min-height: 40px;
+            }
+            
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ Frases Motivacionais ✨</h1>
+        <div id="frase">Clique no botão abaixo para uma frase nova!</div>
+        <button onclick="gerarFrase()">Nova Frase</button>
+        <button class="voltar-btn" onclick="window.location.href = '../index.html'">← Voltar</button>
+    </div>
+
+    <script>
+    const frases = [
+        "A cada amanhecer, você recebe uma nova chance de brilhar.",
+        "Você é capaz de transformar qualquer desafio em força.",
+        "Não importa a velocidade — o importante é continuar.",
+        "A sua determinação abre portas que o medo tentou fechar.",
+        "Sonhe grande, comece pequeno, avance sempre.",
+        "A vida recompensa quem tem coragem de tentar.",
+        "Você não precisa ver o caminho inteiro para dar o primeiro passo.",
+        "Tudo o que você precisa já está em você.",
+        "Seja paciente com o seu processo.",
+        "Dias difíceis também passam — e você fica mais forte.",
+        "O mundo precisa do que só você pode oferecer.",
+        "Você não veio até aqui para desistir agora.",
+        "Cada escolha sua constrói o seu destino.",
+        "Permita-se brilhar sem pedir permissão.",
+        "Todo esforço vale a pena quando você acredita.",
+        "A sua energia atrai o que você vive.",
+        "Crescer exige coragem — e você tem muita.",
+        "Faça hoje o que seu futuro vai agradecer.",
+        "Você é a prova viva de que tudo pode dar certo.",
+        "Nada muda se você não mudar — mas você pode tudo.",
+        "A vida é mais leve quando você é gentil consigo.",
+        "Você é o único limite para sua própria grandeza.",
+        "Cada pequeno avanço é uma vitória.",
+        "Você merece oportunidades incríveis.",
+        "Não compare seu capítulo 1 com o capítulo 20 de alguém.",
+        "Seu valor não diminui por causa dos seus erros.",
+        "Aquilo que você busca também está buscando você.",
+        "O melhor ainda está por vir.",
+        "Você é capaz de superar qualquer tempestade.",
+        "Um novo começo é sempre possível.",
+        "Faça o seu melhor, mesmo nos dias ruins.",
+        "Seja constante, mesmo quando a motivação falhar.",
+        "Grandes sonhos pedem grandes atitudes.",
+        "Tudo acontece no tempo certo — confie.",
+        "Você tem um brilho que ninguém mais tem.",
+        "Persistir é a chave para criar milagres.",
+        "Cada passo fora da zona de conforto é uma vitória.",
+        "Há muito poder na forma como você escolhe pensar.",
+        "Seu coração sabe o caminho.",
+        "Continue — você está mais perto do que imagina.",
+        "Acredite na sua capacidade de recomeçar quantas vezes for preciso.",
+        "Foque no progresso, não na perfeição.",
+        "Você pode ser a inspiração que procura.",
+        "A vida fica mais bonita quando você se escolhe.",
+        "Seu esforço diário te leva longe.",
+        "Você é capaz de fazer história com pequenas ações.",
+        "Continue plantando — a colheita vem.",
+        "Você é digno de tudo que sonha.",
+        "Mesmo devagar, você está indo na direção certa.",
+        "Todo dia é uma oportunidade de ser melhor que ontem.",
+        "Seja corajoso o suficiente para tentar outra vez.",
+        "Acredite no que você ainda não viu.",
+        "O seu futuro começa no agora.",
+        "Você é mais resiliente do que imagina.",
+        "Nada pode parar alguém que não desiste.",
+        "Seu brilho é único — cuide dele.",
+        "Há sempre algo bom esperando por você no próximo passo.",
+        "Seja luz, mesmo quando estiver cansado.",
+        "Orgulhe-se do caminho que você está construindo.",
+        "Você é mais forte do que qualquer obstáculo.",
+        "A esperança é o combustível da sua jornada.",
+        "Cada sorriso que você dá ilumina o mundo.",
+        "Acredite: o impossível é apenas algo que ainda não foi feito.",
+        "Você é capaz de transformar dor em aprendizado.",
+        "A vida é feita de recomeços — e você pode sempre começar de novo.",
+        "Seja grato pelo que tem e confiante no que virá.",
+        "Você é uma obra-prima em constante evolução.",
+        "A sua coragem inspira quem está ao seu redor.",
+        "Nunca subestime o poder de um pequeno passo.",
+        "Você é capaz de escrever uma nova história todos os dias.",
+        "A vida floresce quando você cultiva pensamentos positivos.",
+        "Você é a mudança que deseja ver no mundo.",
+        "Cada queda é uma oportunidade de levantar mais forte.",
+        "Você é digno de paz, amor e sucesso.",
+        "Acredite: sua jornada é única e valiosa.",
+        "Você é capaz de transformar sonhos em realidade.",
+        "A vida sorri para quem não desiste.",
+        "Você é a prova de que milagres existem.",
+        "Cada dia é uma página em branco esperando por você.",
+        "Você é capaz de criar beleza a partir da simplicidade.",
+        "A sua fé move montanhas.",
+        "Você é mais brilhante do que imagina.",
+        "A vida é generosa com quem acredita.",
+        "Você é capaz de inspirar até nos seus silêncios.",
+        "Cada passo seu é uma vitória contra o medo.",
+        "Você é digno de todas as conquistas que sonha.",
+        "A vida é feita de coragem — e você tem de sobra.",
+        "Você é capaz de transformar lágrimas em força.",
+        "Cada amanhecer traz novas possibilidades.",
+        "Você é a esperança que o mundo precisa.",
+        "A vida é mais bonita quando você confia em si.",
+        "Você é capaz de transformar o ordinário em extraordinário.",
+        "Cada desafio é uma oportunidade de crescer.",
+        "Você é digno de amor e sucesso.",
+        "A vida recompensa quem não desiste.",
+        "Você é capaz de iluminar até os dias mais escuros.",
+        "Cada vitória sua inspira outras pessoas.",
+        "Você é a prova de que sonhos se realizam.",
+        "A vida é generosa com quem persiste.",
+        "Você é capaz de transformar o impossível em realidade.",
+        "Cada sorriso seu é uma vitória contra a tristeza.",
+        "Você é digno de todas as bênçãos que recebe.",
+        "A vida é feita de escolhas — e você pode escolher vencer.",
+        "Você é capaz de transformar o medo em coragem.",
+        "Cada passo seu é uma prova de força.",
+        "Você é a inspiração que o mundo precisa.",
+        "A vida é mais leve quando você acredita.",
+        "Você é capaz de transformar o hoje em um futuro brilhante.",
+        "Cada conquista sua é motivo de orgulho.",
+        "Você é digno de tudo que sonha e deseja.",
+        "A vida é feita de esperança — e você é cheio dela.",
+        "Você é capaz de transformar o silêncio em paz.",
+        "Cada desafio vencido é uma medalha invisível.",
+        "Você é a prova de que nada é impossível.",
+        "A vida é generosa com quem tem fé.",
+        "Você é capaz de transformar o simples em grandioso.",
+        "Cada passo seu é uma vitória contra a dúvida.",
+        "Você é digno de todas as oportunidades que surgem.",
+        "A vida é feita de recomeços — e você é mestre nisso.",
+        "Você é capaz de transformar o caos em ordem.",
+        "Cada vitória sua é uma inspiração para o mundo.",
+        "Você é a prova de que coragem muda destinos.",
+        "A vida é mais bonita quando você sorri.",
+        "Você é capaz de transformar o impossível em possível.",
+        "Cada desafio vencido é uma prova da sua força.",
+        "Você é digno de todas as conquistas que alcança.",
+        "A vida é feita de fé — e você tem muita.",
+        "Você é capaz de transformar o medo em motivação.",
+        "Cada passo seu é uma vitória contra a insegurança.",
+        "Você é a inspiração que move o mundo.",
+        "A vida é generosa com quem acredita em si.",
+        "Você é capaz de transformar o presente em futuro brilhante.",
+        "Cada conquista sua é uma prova de determinação.",
+        "Você é digno de todas as bênçãos que recebe.",
+        "A vida é feita de coragem — e você é cheio dela.",
+        "Você é capaz de transformar o impossível em realidade.",
+        "Cada sorriso seu é uma vitória contra a tristeza.",
+        "Você é a prova de que sonhos se realizam.",
+        "A vida é mais leve quando você confia em si.",
+        "Você é capaz de transformar o hoje em um amanhã melhor.",
+        "Cada vitória sua é motivo de celebração.",
+        "Você é digno de tudo que deseja alcançar.",
+        "A vida é feita de esperança — e você é cheio dela.",
+        "Você é capaz de transformar o silêncio em força.",
+        "Cada desafio vencido é uma medalha invisível.",
+        "Você é a prova de que nada é impossível.",
+        "A vida é generosa com quem tem fé.",
+        "Você é capaz de transformar o simples em grandioso.",
+        "Cada passo seu é uma vitória contra a dúvida.",
+        "Você é digno de todas as oportunidades que surgem.",
+        "A vida é feita de recomeços — e você é mestre nisso.",
+        "Você é capaz de transformar o caos em ordem.",
+        "Cada vitória sua é uma inspiração para o mundo.",
+        "Você é a prova de que coragem muda destinos."
+    ];
+
+        function gerarFrase() {
+            const fraseElement = document.getElementById('frase');
+            fraseElement.classList.remove('frase-animada');
+
+            // Força o reflow para reiniciar a animação
+            void fraseElement.offsetWidth;
+
+            const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
+            fraseElement.textContent = `"${fraseAleatoria}"`;
+            fraseElement.classList.add('frase-animada');
+        }
+    </script>
+</body>
+</html>
