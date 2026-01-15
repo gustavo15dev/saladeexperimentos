@@ -457,9 +457,10 @@ function enviarMensagem() {
     atualizarBotaoAudioEnviar();
 
     mostrarDigitando(true);
-    setTimeout(() => {
+    // 🆕 NOVO: Usa async/await para lidar com gerarResposta async
+    setTimeout(async () => {
         mostrarDigitando(false);
-        const resposta = isModoCorrecaoAtivo ? gerarCorrecao(mensagem) : gerarResposta(mensagem);
+        const resposta = isModoCorrecaoAtivo ? gerarCorrecao(mensagem) : await gerarResposta(mensagem);
         
         let imagemAssociada = null;
         
@@ -514,7 +515,7 @@ function enviarMensagem() {
 
 // ===== LÓGICA DE GERAÇÃO (RESPOSTAS, RESUMOS, CORREÇÕES) =====
 
-function gerarResposta(mensagemUsuario) {
+async function gerarResposta(mensagemUsuario) {
     const mensagemOriginal = mensagemUsuario;
     mensagemUsuario = mensagemUsuario.toLowerCase();
     const sentimento = detectarSentimento(mensagemUsuario);
@@ -522,6 +523,7 @@ function gerarResposta(mensagemUsuario) {
 
     let melhorResposta = null;
     const textoPrefixoRedacao = "pode me ajudar a escrever uma redação sobre ";
+    
     if (mensagemUsuario.startsWith("resumir: ")) {
         const textoParaResumir = mensagemOriginal.substring("resumir: ".length).trim();
         if (textoParaResumir.length < 50) { 
@@ -556,6 +558,38 @@ Aqui estão alguns tópicos e ideias para você começar sua redação sobre **$
         }
     }
 
+    // 🆕 NOVO: Primeiro tenta buscar no training.json com tolerância 0 (match exato)
+    if (buscaTrainamento && buscaTrainamento.estaCarregado()) {
+        melhorResposta = buscaTrainamento.buscarExato(mensagemUsuario);
+        
+        if (melhorResposta) {
+            // Encontrou resposta exata no training
+            if (sentimento === 'triste') melhorResposta += ' 😊 Vai ficar tudo bem!';
+            return formatarResposta(melhorResposta);
+        }
+        
+        // Se não achou match exato, tenta com variação mínima (remove pontuação)
+        melhorResposta = buscaTrainamento.buscarComVariacaoMinima(mensagemUsuario);
+        
+        if (melhorResposta) {
+            if (sentimento === 'triste') melhorResposta += ' 😊 Vai ficar tudo bem!';
+            return formatarResposta(melhorResposta);
+        }
+    }
+
+    // 🆕 NOVO: Se não achou no training.json, tenta API do Gemini
+    if (geminiAPI && geminiAPI.estaDisponivel()) {
+        try {
+            melhorResposta = await geminiAPI.obterResposta(mensagemOriginal);
+            if (sentimento === 'triste') melhorResposta += ' 😊 Vai ficar tudo bem!';
+            return formatarResposta(melhorResposta);
+        } catch (erro) {
+            console.error('Erro ao chamar API Gemini:', erro);
+            // Continua para fallback abaixo
+        }
+    }
+
+    // Fallback: volta ao método antigo (busca por palavras-chave)
     let maiorNumeroDePalavrasComuns = 0;
     treinamentos.forEach(t => {
         const palavrasTreinamento = t.pergunta.toLowerCase().split(/\W+/).filter(Boolean);
@@ -566,6 +600,7 @@ Aqui estão alguns tópicos e ideias para você começar sua redação sobre **$
             melhorResposta = t.resposta;
         }
     });
+    
     if (melhorResposta) {
         // Personalidade simples
         let personalidadeAtual = 'alegre';
