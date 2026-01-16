@@ -458,9 +458,13 @@ function enviarMensagem() {
 
     mostrarDigitando(true);
     // 🆕 NOVO: Usa async/await para lidar com gerarResposta async
-    setTimeout(async () => {
-        mostrarDigitando(false);
-        const resposta = isModoCorrecaoAtivo ? gerarCorrecao(mensagem) : await gerarResposta(mensagem);
+    mostrarDigitando(true);  // MANTÉM o indicador
+    
+    // Fazer requisição sem setTimeout para evitar delay visual
+    (async () => {
+        const resposta = isModoCorrecaoAtivo ? gerarCorrecao(mensagem) : await gerarResposta(mensagem, historicoConversa);
+        
+        mostrarDigitando(false);  // REMOVE o indicador quando resposta chegar
         
         let imagemAssociada = null;
         
@@ -510,12 +514,12 @@ function enviarMensagem() {
             btnEnviar.disabled = false;
             btnEnviar.classList.remove('sending');
         }
-    }, 1500);
+    })();  // Fecha o async IIFE (sem setTimeout)
 }
 
 // ===== LÓGICA DE GERAÇÃO (RESPOSTAS, RESUMOS, CORREÇÕES) =====
 
-async function gerarResposta(mensagemUsuario) {
+async function gerarResposta(mensagemUsuario, historicoConversa = []) {
     const mensagemOriginal = mensagemUsuario;
     mensagemUsuario = mensagemUsuario.toLowerCase();
     const sentimento = detectarSentimento(mensagemUsuario);
@@ -523,6 +527,22 @@ async function gerarResposta(mensagemUsuario) {
 
     let melhorResposta = null;
     const textoPrefixoRedacao = "pode me ajudar a escrever uma redação sobre ";
+    
+    // 🆕 NOVO: Detectar se está pedindo para gerar imagem
+    if (geminiImageAPI && geminiImageAPI.estasPedindoImagem(mensagemOriginal)) {
+        // Tentar gerar imagem com Gemini
+        const imagemURL = await geminiImageAPI.gerarImagem(mensagemOriginal);
+        if (imagemURL) {
+            // Retornar HTML com a imagem
+            const htmlComImagem = `<div style="text-align: center; margin: 10px 0;">
+                <img src="${imagemURL}" alt="Imagem gerada" style="max-width: 100%; border-radius: 8px;">
+                <p style="font-size: 12px; color: #999; margin-top: 5px;">✨ Gerada por Lhama AI 1</p>
+            </div>`;
+            return htmlComImagem;
+        } else {
+            return "Desculpe, não consegui gerar a imagem no momento. Tente novamente mais tarde! 🎨";
+        }
+    }
     
     if (mensagemUsuario.startsWith("resumir: ")) {
         const textoParaResumir = mensagemOriginal.substring("resumir: ".length).trim();
@@ -580,7 +600,8 @@ Aqui estão alguns tópicos e ideias para você começar sua redação sobre **$
     // 🆕 NOVO: Se não achou no training.json, tenta API do Gemini
     if (geminiAPI && geminiAPI.estaDisponivel()) {
         try {
-            melhorResposta = await geminiAPI.obterResposta(mensagemOriginal);
+            // Passa o histórico para manter contexto da conversa
+            melhorResposta = await geminiAPI.obterResposta(mensagemOriginal, historicoConversa);
             if (sentimento === 'triste') melhorResposta += ' 😊 Vai ficar tudo bem!';
             return formatarResposta(melhorResposta);
         } catch (erro) {
@@ -682,34 +703,14 @@ function gerarResumo(texto) {
 // ===== FUNÇÕES AUXILIARES DE IMAGEM =====
 
 function encontrarImagem(mensagemUsuario) {
-    mensagemUsuario = mensagemUsuario.toLowerCase();
-    const palavrasUsuario = new Set(mensagemUsuario.split(/\W+/).filter(Boolean));
-    let melhorImagem = null;
-    let maxPontos = 0;
-    for (const imagem in bancoImagens) {
-        const tags = bancoImagens[imagem];
-        let pontos = 0;
-        for (const tag of tags) {
-            if (palavrasUsuario.has(tag)) pontos++;
-        }
-        if (pontos > maxPontos) {
-            maxPontos = pontos;
-            melhorImagem = imagem;
-        }
-    }
-    return melhorImagem;
+    // 🆕 DESABILIDADO: Imagens agora vêm da API Gemini, não do imagem.json
+    // Mantém função para compatibilidade, mas retorna null
+    return null;
 }
 
 function buscarImagemPorNome(nomeBuscado) {
-    nomeBuscado = nomeBuscado.toLowerCase().trim();
-    for (const imagem in bancoImagens) {
-        const tags = bancoImagens[imagem];
-        for (const tag of tags) {
-            if (tag.toLowerCase() === nomeBuscado || tag.toLowerCase().includes(nomeBuscado)) {
-                return imagem;
-            }
-        }
-    }
+    // 🆕 DESABILIDADO: Imagens agora vêm da API Gemini, não do imagem.json
+    // Mantém função para compatibilidade, mas retorna null
     return null;
 }
 

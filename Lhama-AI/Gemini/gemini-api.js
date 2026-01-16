@@ -7,14 +7,16 @@ class GeminiAPI {
     constructor() {
         this.estaProcessando = false;
         this.ultimaRequisicao = null;
+        this.historico = [];  // Mantém histórico de conversa
     }
 
     /**
      * Faz uma requisição à API Gemini
      * @param {string} pergunta - A pergunta do usuário
+     * @param {Array} historicoConversa - Histórico de conversa anterior
      * @returns {Promise<string>} - A resposta da IA
      */
-    async obterResposta(pergunta) {
+    async obterResposta(pergunta, historicoConversa = []) {
         // Validar se há chave API disponível
         if (!temChaveAPI()) {
             return "⚠️ Desculpe, a integração com API está configurada. Por favor, contacte o administrador.";
@@ -31,17 +33,43 @@ class GeminiAPI {
             const chave = GEMINI_CONFIG.API_KEY();
             const url = construirURLAPI(chave);
 
-            // Preparar o payload
+            // Preparar histórico para context
+            let conteudo = [];
+
+            // Se há histórico, adicionar como contexto
+            if (historicoConversa && historicoConversa.length > 0) {
+                historicoConversa.forEach(msg => {
+                    conteudo.push({
+                        role: msg.tipo === 'usuario' ? 'user' : 'model',
+                        parts: [{ text: msg.texto }]
+                    });
+                });
+            }
+
+            // Adicionar pergunta atual
+            conteudo.push({
+                role: 'user',
+                parts: [{ text: pergunta }]
+            });
+
+            // Preparar o payload com system prompt em português
             const payload = {
-                contents: [
-                    {
-                        parts: [
-                            {
-                                text: pergunta
-                            }
-                        ]
-                    }
-                ],
+                system: {
+                    instructions: `Você é a Lhama AI 1, uma assistente de IA amigável e inteligente. 
+                    
+INSTRUÇÕES IMPORTANTES:
+1. Sempre responda em PORTUGUÊS BRASILEIRO, a menos que o usuário peça explicitamente outra língua
+2. Respostas devem ser completas, sem truncar
+3. Você pode usar: negrito, itálico, listas, tabelas, formatação Markdown
+4. Seja amigável, educado e sempre ajude
+5. Se não souber algo, seja honesto
+6. Mantenha consistência nas respostas anteriores nesta conversa
+7. Se pedir imagem, você pode gerar (mas isso é tratado no frontend)
+8. Responda de forma natural e conversacional`
+                },
+                contents: [{
+                    parts: conteudo
+                }],
                 generationConfig: {
                     temperature: GEMINI_CONFIG.REQUEST_CONFIG.temperature,
                     topK: GEMINI_CONFIG.REQUEST_CONFIG.topK,
@@ -91,13 +119,23 @@ class GeminiAPI {
                 return "Desculpe, não consegui gerar uma resposta. Tente novamente.";
             }
 
-            const conteudo = dados.candidates[0]?.content?.parts?.[0]?.text;
+            const conteudoResposta = dados.candidates[0]?.content?.parts?.[0]?.text;
             
-            if (!conteudo) {
+            if (!conteudoResposta) {
                 return "Desculpe, a resposta veio vazia. Tente novamente.";
             }
 
-            return conteudo;
+            // Armazenar no histórico
+            this.historico.push({
+                tipo: 'usuario',
+                texto: pergunta
+            });
+            this.historico.push({
+                tipo: 'bot',
+                texto: conteudoResposta
+            });
+
+            return conteudoResposta;
 
         } catch (erro) {
             console.error('Erro ao chamar API Gemini:', erro);
