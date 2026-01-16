@@ -8,11 +8,11 @@
  */
 
 // Inicializa a chave assim que a página carregar
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // Tenta obter a chave de diferentes fontes
     let chaveAPI = null;
 
-    // 1. Tenta de variável global do window (Vercel pode injetar aqui)
+    // 1. Tenta de variável global do window (para injeção manual)
     if (window.GEMINI_API_KEY) {
         chaveAPI = window.GEMINI_API_KEY;
         console.log('✓ Chave API encontrada em window.GEMINI_API_KEY');
@@ -27,6 +27,22 @@ document.addEventListener('DOMContentLoaded', () => {
         chaveAPI = localStorage.getItem('GEMINI_API_KEY');
         console.log('✓ Chave API encontrada em localStorage');
     }
+    // 4. Tenta buscar da API Vercel Function (Produção no Vercel)
+    else {
+        try {
+            const resposta = await fetch('/api/config');
+            if (resposta.ok) {
+                const config = await resposta.json();
+                if (config.GEMINI_API_KEY) {
+                    chaveAPI = config.GEMINI_API_KEY;
+                    console.log('✓ Chave API obtida da Vercel Function');
+                }
+            }
+        } catch (e) {
+            // Falha ao buscar, continua
+            console.log('ℹ️ Vercel Function não disponível (esperado em localhost)');
+        }
+    }
 
     // Se encontrou a chave, armazena em sessionStorage para acesso
     if (chaveAPI) {
@@ -35,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.warn('⚠️ Chave API não encontrada. A API do Gemini não funcionará sem ela.');
         console.warn('Para testes locais, execute no console: sessionStorage.setItem("GEMINI_API_KEY", "sua-chave-aqui")');
+        console.warn('Para produção no Vercel, certifique-se de que /api/config.js está presente e GEMINI_API_KEY está em Environment Variables');
     }
 });
 

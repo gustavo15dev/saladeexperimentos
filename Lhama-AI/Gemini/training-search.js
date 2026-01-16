@@ -17,7 +17,13 @@ class BuscaTrainamento {
         if (this.carregado) return true;
 
         try {
-            const resposta = await fetch('../training.json');
+            // Tenta o caminho absoluto primeiro (Vercel)
+            let resposta = await fetch('/training.json');
+            
+            // Se não encontrou, tenta caminho relativo (localhost)
+            if (!resposta.ok) {
+                resposta = await fetch('../training.json');
+            }
             
             if (!resposta.ok) {
                 console.error('Erro ao carregar training.json:', resposta.status);
