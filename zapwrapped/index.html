@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZapRetrospectiva - Seu Ano em Mensagens</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Bibliotecas Externas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0b141a;
+            color: white;
+            overflow: hidden; 
+        }
+
+        /* Animações e Utilitários */
+        @keyframes gradient-xy {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient-xy 6s ease infinite;
+        }
+
+        .slide-enter {
+            animation: slideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(30px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        /* Safe Area para Mobile */
+        .safe-area-y {
+            padding-top: max(1rem, env(safe-area-inset-top));
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+
+        /* Glassmorphism Refinado */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .drop-active {
+            border-color: #25D366 !important;
+            background-color: rgba(37, 211, 102, 0.15);
+            transform: scale(1.02);
+        }
+
+        /* Scrollbars */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col bg-[#0b141a]">
+
+    <!-- APP CONTAINER RESPONSIVO -->
+    <div id="app" class="relative w-full h-full max-w-md mx-auto bg-black sm:border-x sm:border-gray-800 overflow-hidden shadow-2xl">
+        
+        <!-- PÁGINA 1: LANDING PAGE -->
+        <div id="landing-page" class="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 bg-gradient-to-br from-[#0b141a] via-[#111b21] to-[#0a1014]">
+            
+            <!-- Botão Voltar (Link Externo) -->
+            <a href="../index.html" class="absolute top-6 left-6 text-gray-400 hover:text-white transition-colors flex items-center gap-2 text-sm font-bold z-50">
+                <i class="ph ph-arrow-left text-lg"></i> Voltar
+            </a>
+
+            <!-- Header Animado -->
+            <div class="flex-1 flex flex-col items-center justify-center w-full">
+                <div class="mb-8 relative group cursor-default">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-green-400 via-teal-500 to-blue-600 rounded-full blur-lg opacity-60 group-hover:opacity-100 transition duration-500 animate-gradient"></div>
+                    <div class="relative bg-black rounded-full p-5">
+                        <i class="ph ph-whatsapp-logo text-6xl text-[#25D366]"></i>
+                    </div>
+                </div>
+
+                <h1 class="text-5xl font-black mb-2 text-center text-white tracking-tighter">Zap<span class="text-[#25D366]">Wrapped</span></h1>
+                <p class="text-gray-400 text-center mb-10 max-w-[280px] text-sm leading-relaxed">Descubra quem manda mais áudio, quem some e quem é o inimigo do fim.</p>
+
+                <!-- Drop Zone -->
+                <div id="drop-zone" class="w-full max-w-xs h-40 border-2 border-dashed border-gray-700 rounded-2xl flex flex-col items-center justify-center bg-gray-900/30 hover:bg-gray-800/50 transition-all cursor-pointer relative overflow-hidden group">
+                    <input type="file" id="file-input" accept=".txt,.zip" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                    <div class="pointer-events-none text-center p-4 transition-transform group-hover:scale-105">
+                        <i class="ph ph-file-arrow-up text-3xl mb-2 text-gray-300"></i>
+                        <p class="font-bold text-white text-sm">Solte sua conversa aqui</p>
+                        <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-wider">.TXT ou .ZIP</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 mt-6">
+                    <button onclick="document.getElementById('tutorial-modal').classList.remove('hidden')" class="text-[#25D366] text-xs font-bold hover:underline flex items-center gap-1">
+                        <i class="ph ph-question"></i> Como exportar?
+                    </button>
+                    <button onclick="checkHistory()" class="text-blue-400 text-xs font-bold hover:underline flex items-center gap-1">
+                        <i class="ph ph-clock-counter-clockwise"></i> Ver Histórico
+                    </button>
+                </div>
+            </div>
+            
+            <div class="pb-6 text-center">
+                <div class="flex items-center justify-center gap-2 text-[10px] text-gray-600 uppercase tracking-widest font-bold">
+                    <i class="ph ph-lock-key text-green-700"></i> 100% Privado & Seguro
+                </div>
+            </div>
+        </div>
+
+        <!-- PÁGINA 2: LOADING -->
+        <div id="loading-page" class="hidden absolute inset-0 z-40 flex flex-col items-center justify-center bg-black">
+            <div class="relative">
+                <div class="w-24 h-24 border-4 border-gray-800 rounded-full"></div>
+                <div class="w-24 h-24 border-4 border-[#25D366] border-t-transparent rounded-full animate-spin absolute top-0 left-0"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-2xl">👀</span>
+                </div>
+            </div>
+            <h2 id="loading-text" class="text-xl font-bold mt-8 text-center px-6 animate-pulse text-green-400">Lendo suas conversas...</h2>
+            <p class="text-xs text-gray-500 mt-2">Processamento local</p>
+        </div>
+
+        <!-- PÁGINA 3: STORIES (MAIN UI) -->
+        <div id="stories-container" class="hidden absolute inset-0 z-20 bg-black flex flex-col">
+            <!-- Progress Bars -->
+            <div id="progress-container" class="absolute top-0 left-0 w-full z-50 pt-3 px-2 flex gap-1 h-5 safe-area-y">
+                <!-- Injetado via JS -->
+            </div>
+
+            <!-- Controls Overlay -->
+            <div id="left-tap" class="absolute top-0 bottom-0 left-0 w-1/3 z-40"></div>
+            <div id="right-tap" class="absolute top-0 bottom-0 right-0 w-1/3 z-40"></div>
+            <div id="pause-hold" class="absolute top-0 bottom-0 left-1/3 right-1/3 z-40"></div>
+
+            <!-- Content Area -->
+            <div id="slide-content" class="flex-1 flex flex-col relative w-full h-full overflow-hidden">
+                <!-- Conteúdo renderizado aqui -->
+            </div>
+        </div>
+
+        <!-- PÁGINA 4: HISTÓRICO (DASHBOARD) -->
+        <div id="history-page" class="hidden absolute inset-0 z-20 flex flex-col bg-[#0b141a] overflow-hidden">
+            <!-- Navbar -->
+            <div class="px-6 pt-12 pb-4 flex items-center justify-between bg-gradient-to-b from-black to-transparent z-10">
+                <a href="../index.html" class="text-gray-400 hover:text-white">
+                    <i class="ph ph-house text-2xl"></i>
+                </a>
+                <h2 class="text-lg font-bold text-white tracking-wide">MEUS WRAPS</h2>
+                <button onclick="resetToLanding()" class="text-[#25D366] hover:text-white">
+                    <i class="ph ph-plus-circle text-2xl"></i>
+                </button>
+            </div>
+
+            <!-- Grid de Cards -->
+            <div id="history-list" class="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar pb-20">
+                <!-- Cards injetados via JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- MODAL TUTORIAL -->
+    <div id="tutorial-modal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-6 animate-fade-in">
+        <div class="bg-[#1f2c34] p-8 rounded-3xl max-w-sm w-full border border-gray-700 shadow-2xl relative">
+            <button onclick="document.getElementById('tutorial-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            <h3 class="text-2xl font-black text-[#25D366] mb-6 flex items-center gap-2">
+                <i class="ph ph-export"></i> Como Exportar
+            </h3>
+            <ol class="space-y-4 text-sm text-gray-300 mb-8">
+                <li class="flex gap-3">
+                    <span class="bg-gray-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                    Abra a conversa ou grupo no WhatsApp.
+                </li>
+                <li class="flex gap-3">
+                    <span class="bg-gray-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                    Toque no nome do contato/grupo no topo.
+                </li>
+                <li class="flex gap-3">
+                    <span class="bg-gray-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                    Role até o fim e toque em <strong>Exportar conversa</strong>.
+                </li>
+                <li class="flex gap-3">
+                    <span class="bg-gray-700 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0">4</span>
+                    Selecione <strong>Sem mídia</strong> (obrigatório).
+                </li>
+            </ol>
+            <button onclick="document.getElementById('tutorial-modal').classList.add('hidden')" class="w-full bg-[#25D366] text-black font-bold py-4 rounded-xl hover:opacity-90 transition-opacity">
+                Entendi, vamos lá!
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL STATE ---
+        let appState = {
+            currentData: null, // Dados da conversa atual
+            history: [],       // Lista de retrospectivas salvas
+            currentSlide: 0,
+            stories: [],
+            isPaused: false
+        };
+
+        const ELEMENTS = {
+            app: document.getElementById('app'),
+            landing: document.getElementById('landing-page'),
+            loading: document.getElementById('loading-page'),
+            stories: document.getElementById('stories-container'),
+            history: document.getElementById('history-page'),
+            slideContent: document.getElementById('slide-content'),
+            progressContainer: document.getElementById('progress-container'),
+            fileInput: document.getElementById('file-input'),
+            dropZone: document.getElementById('drop-zone'),
+            loadingText: document.getElementById('loading-text'),
+            historyList: document.getElementById('history-list')
+        };
+
+        // Carregar histórico ao iniciar
+        try {
+            const saved = localStorage.getItem('zapWrappedHistory');
+            if (saved) appState.history = JSON.parse(saved);
+        } catch (e) { console.error("Erro ao carregar storage", e); }
+
+        // --- NAVEGAÇÃO ENTRE TELAS ---
+
+        function showLanding() {
+            hideAll();
+            ELEMENTS.landing.classList.remove('hidden');
+        }
+
+        function showLoading() {
+            hideAll();
+            ELEMENTS.loading.classList.remove('hidden');
+        }
+
+        function showStories() {
+            hideAll();
+            ELEMENTS.stories.classList.remove('hidden');
+        }
+
+        function showHistoryPage() {
+            hideAll();
+            renderHistoryList();
+            ELEMENTS.history.classList.remove('hidden');
+        }
+
+        function hideAll() {
+            ELEMENTS.landing.classList.add('hidden');
+            ELEMENTS.loading.classList.add('hidden');
+            ELEMENTS.stories.classList.add('hidden');
+            ELEMENTS.history.classList.add('hidden');
+        }
+
+        function resetToLanding() {
+            showLanding();
+        }
+
+        function checkHistory() {
+            if (appState.history.length > 0) {
+                showHistoryPage();
+            } else {
+                alert("Você ainda não tem nenhuma retrospectiva salva.");
+            }
+        }
+
+        // --- FILE HANDLING ---
+        
+        ELEMENTS.fileInput.addEventListener('change', handleFileSelect);
+        
+        ELEMENTS.dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            ELEMENTS.dropZone.classList.add('drop-active');
+        });
+        
+        ELEMENTS.dropZone.addEventListener('dragleave', () => {
+            ELEMENTS.dropZone.classList.remove('drop-active');
+        });
+
+        ELEMENTS.dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            ELEMENTS.dropZone.classList.remove('drop-active');
+            if (e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]);
+        });
+
+        function handleFileSelect(e) {
+            if (e.target.files.length) processFile(e.target.files[0]);
+        }
+
+        async function processFile(file) {
+            showLoading();
+            
+            const msgs = [
+                "Lendo seus segredos... 🤫", 
+                "Contando os 'kkkk'... 😂", 
+                "Calculando o vácuo... 👻", 
+                "Julgando seus emojis... 🤨",
+                "Gerando gráficos bonitos... 📊"
+            ];
+            
+            let msgInterval = setInterval(() => {
+                ELEMENTS.loadingText.innerText = msgs[Math.floor(Math.random() * msgs.length)];
+            }, 1200);
+
+            try {
+                let text = "";
+                if (file.name.endsWith('.zip')) {
+                    const zip = await JSZip.loadAsync(file);
+                    const txtFile = Object.values(zip.files).find(f => f.name.endsWith('.txt'));
+                    if (!txtFile) throw new Error("Nenhum arquivo .txt no ZIP.");
+                    text = await txtFile.async("string");
+                } else {
+                    text = await file.text();
+                }
+
+                setTimeout(() => {
+                    clearInterval(msgInterval);
+                    const data = parseWhatsAppText(text);
+                    if (data.messages.length < 10) {
+                        alert("Conversa muito curta para analisar!");
+                        showLanding();
+                        return;
+                    }
+                    
+                    // Salvar no histórico
+                    saveToHistory(data);
+                    
+                    // Iniciar Stories
+                    appState.currentData = data;
+                    initStories(data);
+                }, 1500); 
+            } catch (err) {
+                clearInterval(msgInterval);
+                alert("Erro: " + err.message);
+                showLanding();
+            }
+        }
+
+        // --- PARSING ENGINE ---
+
+        function parseWhatsAppText(text) {
+            const lines = text.split('\n');
+            const regex = /^\[?(\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}),?\s(\d{1,2}:\d{2}(?::\d{2})?)\]?\s(?:- )?([^:]+): (.+)/;
+            
+            const msgs = [];
+            const participants = {};
+            const daysMap = {};
+            const monthsMap = {};
+            let mediaTypes = { image: 0, video: 0, sticker: 0, audio: 0 };
+            let maxStreak = 0;
+            let currentStreak = 0;
+            let lastDateStr = null;
+            let totalWords = 0;
+            
+            // Auxiliar para detectar tipo
+            const detectType = (content) => {
+                const lower = content.toLowerCase();
+                if (lower.includes("imagem ocultada") || lower.includes("image omitted")) return 'image';
+                if (lower.includes("vídeo omitido") || lower.includes("video omitted")) return 'video';
+                if (lower.includes("figurinha omitida") || lower.includes("sticker omitted")) return 'sticker';
+                if (lower.includes("áudio ocultado") || lower.includes("audio omitted")) return 'audio';
+                return 'text';
+            };
+
+            lines.forEach(line => {
+                line = line.replace(/[\u200E\u200F]/g, ""); 
+                const match = line.match(regex);
+                
+                if (match) {
+                    const [_, dateStr, timeStr, sender, content] = match;
+                    
+                    // Filtrar sistema
+                    if (sender.includes("adicionou") || sender.includes("saiu") || sender.includes("criptografia")) return;
+
+                    // Data parsing robusto
+                    const [d, m, y] = dateStr.replace(/-/g, '/').split('/');
+                    const fullYear = y.length === 2 ? '20' + y : y;
+                    const dateIso = `${fullYear}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+                    const dateObj = new Date(`${dateIso}T${timeStr}`);
+                    
+                    // Mapas de dia e mês
+                    daysMap[dateIso] = (daysMap[dateIso] || 0) + 1;
+                    const monthKey = `${fullYear}-${m.padStart(2,'0')}`;
+                    monthsMap[monthKey] = (monthsMap[monthKey] || 0) + 1;
+
+                    // Streak
+                    if (dateIso !== lastDateStr) {
+                        if (lastDateStr) {
+                            const prev = new Date(lastDateStr);
+                            const curr = new Date(dateIso);
+                            const diff = Math.ceil((curr - prev) / (1000 * 60 * 60 * 24));
+                            if (diff === 1) currentStreak++;
+                            else currentStreak = 1;
+                        } else {
+                            currentStreak = 1;
+                        }
+                        if (currentStreak > maxStreak) maxStreak = currentStreak;
+                        lastDateStr = dateIso;
+                    }
+
+                    // Tipo e Palavras
+                    const type = detectType(content);
+                    let words = 0;
+                    if (type === 'text') words = content.split(/\s+/).length;
+                    
+                    if (type !== 'text') mediaTypes[type]++;
+                    totalWords += words;
+
+                    // Participante
+                    if (!participants[sender]) {
+                        participants[sender] = { 
+                            name: sender,
+                            count: 0, 
+                            words: 0, 
+                            emojis: {}, 
+                            hours: Array(24).fill(0),
+                            msgLengths: [],
+                            firstMsg: { date: dateObj, content: content } 
+                        };
+                    }
+                    
+                    const p = participants[sender];
+                    p.count++;
+                    p.words += words;
+                    p.hours[parseInt(timeStr.split(':')[0])]++;
+                    if(type === 'text') p.msgLengths.push(content.length);
+
+                    // Emojis
+                    const emojiRegex = /[\p{Emoji_Presentation}\p{Extended_Pictographic}]/gu;
+                    const foundEmojis = content.match(emojiRegex);
+                    if (foundEmojis) {
+                        foundEmojis.forEach(e => p.emojis[e] = (p.emojis[e] || 0) + 1);
+                    }
+
+                    msgs.push({ date: dateObj, sender, type, content });
+                }
+            });
+
+            // Processamento Pós-Loop
+            const sortedDays = Object.entries(daysMap).sort((a,b) => b[1] - a[1]);
+            const busiestDay = sortedDays[0] ? { date: sortedDays[0][0], count: sortedDays[0][1] } : null;
+
+            // Calcular média de tamanho de msg
+            Object.values(participants).forEach(p => {
+                const totalLen = p.msgLengths.reduce((a,b) => a+b, 0);
+                p.avgLen = p.msgLengths.length ? Math.round(totalLen / p.msgLengths.length) : 0;
+            });
+
+            // Nome da conversa (baseado nos participantes)
+            const names = Object.keys(participants);
+            let title = "Conversa Desconhecida";
+            if (names.length === 2) title = `${names[0]} & ${names[1]}`;
+            else if (names.length > 2) title = `Grupo (${names.length} pessoas)`;
+            else if (names.length === 1) title = names[0];
+
+            return {
+                id: Date.now().toString(), // ID único para histórico
+                title: title,
+                messages: msgs,
+                participants: participants,
+                totalWords,
+                mediaTypes,
+                maxStreak,
+                busiestDay,
+                monthsMap,
+                startDate: msgs[0]?.date,
+                endDate: msgs[msgs.length-1]?.date
+            };
+        }
+
+        // --- HISTORY LOGIC ---
+
+        function saveToHistory(data) {
+            // Salva apenas resumo leve para o localStorage não estourar
+            const summary = {
+                id: data.id,
+                title: data.title,
+                date: new Date().toLocaleDateString(),
+                totalMsgs: data.messages.length,
+                topSender: Object.values(data.participants).sort((a,b) => b.count - a.count)[0]?.name || "Ninguém",
+                // Salvo o objeto completo em memória (appState.currentData) mas no storage apenas o que precisa
+                // Se quiser persistir TUDO, teria que usar IndexedDB. Para este demo, mantemos simples.
+                // Vou salvar o data completo no array de memoria e update storage
+                fullData: data // Cuidado: pode ser grande. Em prod real usaria IndexedDB.
+            };
+
+            // Remove duplicatas se já existir (update)
+            appState.history = appState.history.filter(h => h.title !== data.title || h.totalMsgs !== data.messages.length);
+            appState.history.unshift(summary);
+            
+            // Limita a 5 itens no storage para não explodir cota
+            if (appState.history.length > 5) appState.history.pop();
+            
+            localStorage.setItem('zapWrappedHistory', JSON.stringify(appState.history));
+        }
+
+        function renderHistoryList() {
+            ELEMENTS.historyList.innerHTML = appState.history.map(item => `
+                <div onclick="loadFromHistory('${item.id}')" class="bg-[#1f2c34] p-5 rounded-2xl border border-gray-700 active:scale-95 transition-transform cursor-pointer shadow-lg relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-r from-green-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex justify-between items-start mb-2 relative z-10">
+                        <h3 class="font-bold text-white text-lg truncate pr-4">${item.title}</h3>
+                        <span class="text-[10px] text-gray-400 bg-black/30 px-2 py-1 rounded">${item.date}</span>
+                    </div>
+                    <div class="flex gap-4 text-sm text-gray-400 relative z-10">
+                        <span><i class="ph ph-chat-circle-text text-[#25D366]"></i> ${item.totalMsgs} msgs</span>
+                        <span><i class="ph ph-crown text-yellow-500"></i> ${item.topSender.split(' ')[0]}</span>
+                    </div>
+                    <div class="mt-3 flex items-center gap-1 text-xs text-[#25D366] font-bold opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
+                        Assistir novamente <i class="ph ph-play-circle"></i>
+                    </div>
+                </div>
+            `).join('');
+            
+            if (appState.history.length === 0) {
+                ELEMENTS.historyList.innerHTML = `<div class="text-center text-gray-500 mt-20"><p>Nenhuma análise salva.</p></div>`;
+            }
+        }
+
+        function loadFromHistory(id) {
+            const item = appState.history.find(h => h.id === id);
+            if (item && item.fullData) {
+                appState.currentData = item.fullData;
+                // Rehidrata datas que viraram string no JSON
+                appState.currentData.messages.forEach(m => m.date = new Date(m.date));
+                initStories(appState.currentData);
+            } else {
+                alert("Dados corrompidos ou antigos demais.");
+            }
+        }
+
+        // --- STORY ENGINE CONFIG ---
+
+        function initStories(data) {
+            showStories();
+            
+            // Definição dos Slides
+            appState.stories = [
+                { id: 'intro', duration: 5000, render: (el) => renderIntro(el, data), theme: 'bg-gradient-to-br from-green-900 via-black to-black' },
+                { id: 'timeline', duration: 6000, render: (el) => renderTimeline(el, data), theme: 'bg-gradient-to-bl from-purple-900 to-black' },
+                { id: 'busiest_day', duration: 5500, render: (el) => renderBusiestDay(el, data), theme: 'bg-gradient-to-tr from-red-900 to-black' },
+                { id: 'activity_chart', duration: 6000, render: (el) => renderActivity(el, data), theme: 'bg-black' },
+                { id: 'monthly_chart', duration: 6000, render: (el) => renderMonthly(el, data), theme: 'bg-[#0f172a]' },
+                { id: 'week_vs_weekend', duration: 5000, render: (el) => renderWeekVsWeekend(el, data), theme: 'bg-gradient-to-b from-indigo-900 to-black' },
+                { id: 'top_sender', duration: 6000, render: (el) => renderTopSender(el, data), theme: 'bg-gradient-to-t from-yellow-900/40 to-black' },
+                { id: 'bible_writer', duration: 5500, render: (el) => renderBibleWriter(el, data), theme: 'bg-gradient-to-br from-blue-900 to-black' },
+                { id: 'emojis', duration: 6000, render: (el) => renderEmojis(el, data), theme: 'bg-[#1a1a1a]' },
+                { id: 'media', duration: 5000, render: (el) => renderMedia(el, data), theme: 'bg-gradient-to-r from-pink-900/30 to-purple-900/30 bg-black' },
+                { id: 'summary', duration: 999999, render: (el) => renderSummary(el, data), theme: 'bg-[#0b141a]' }
+            ];
+
+            // Renderizar Barras de Progresso
+            ELEMENTS.progressContainer.innerHTML = appState.stories.map((_, i) => `
+                <div class="flex-1 bg-white/20 h-1 rounded-full overflow-hidden backdrop-blur-sm">
+                    <div id="bar-${i}" class="h-full bg-white w-0 shadow-[0_0_10px_white]"></div>
+                </div>
+            `).join('');
+
+            // Listeners de Navegação
+            document.getElementById('right-tap').onclick = nextSlide;
+            document.getElementById('left-tap').onclick = prevSlide;
+            
+            // Start
+            playStory(0);
+        }
+
+        let storyTimer;
+        
+        function playStory(index) {
+            if (index < 0 || index >= appState.stories.length) return;
+            appState.currentSlide = index;
+            const slide = appState.stories[index];
+
+            // Reset Bars
+            appState.stories.forEach((_, i) => {
+                const bar = document.getElementById(`bar-${i}`);
+                if (i < index) { bar.style.width = '100%'; bar.style.transition = 'none'; }
+                else { bar.style.width = '0%'; bar.style.transition = 'none'; }
+            });
+
+            // Set Background Theme & Clear
+            ELEMENTS.slideContent.className = `flex-1 flex flex-col relative w-full h-full overflow-hidden transition-colors duration-700 ${slide.theme}`;
+            ELEMENTS.slideContent.innerHTML = '';
+            
+            // Render
+            slide.render(ELEMENTS.slideContent);
+
+            // Animate Bar
+            const currentBar = document.getElementById(`bar-${index}`);
+            // Reflow hack
+            void currentBar.offsetWidth; 
+            currentBar.style.transition = `width ${slide.duration}ms linear`;
+            currentBar.style.width = '100%';
+
+            // Timer
+            clearTimeout(storyTimer);
+            if (slide.id !== 'summary') {
+                storyTimer = setTimeout(nextSlide, slide.duration);
+            }
+        }
+
+        function nextSlide() {
+            if (appState.currentSlide < appState.stories.length - 1) {
+                playStory(appState.currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (appState.currentSlide > 0) {
+                playStory(appState.currentSlide - 1);
+            } else {
+                playStory(0);
+            }
+        }
+
+        // --- STORY RENDERERS ---
+
+        // 1. INTRO
+        function renderIntro(container, data) {
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 text-center slide-enter">
+                    <div class="mb-6 text-7xl animate-bounce">👋</div>
+                    <h2 class="text-3xl font-bold mb-2">Olá novamente...</h2>
+                    <p class="text-lg text-gray-300 mb-8 font-light">Vamos ver o que rolou em</p>
+                    <div class="bg-white/10 p-6 rounded-3xl border border-white/10 w-full max-w-xs backdrop-blur-md">
+                        <h1 class="text-xl font-bold text-[#25D366] mb-1 uppercase tracking-widest">Total de Msgs</h1>
+                        <div class="text-6xl font-black text-white counter tracking-tighter" data-target="${data.messages.length}">0</div>
+                    </div>
+                </div>
+            `;
+            runCounter(container.querySelector('.counter'), data.messages.length);
+        }
+
+        // 2. TIMELINE
+        function renderTimeline(container, data) {
+            const first = data.messages[0];
+            const dateStr = first.date.toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'});
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center p-8 slide-enter relative">
+                    <i class="ph ph-hourglass-low text-9xl absolute top-10 right-[-20px] text-purple-500/10 rotate-12"></i>
+                    
+                    <h2 class="text-3xl font-bold mb-8 text-purple-400 leading-tight">Tudo começou em<br><span class="text-white">${dateStr}</span></h2>
+                    
+                    <div class="glass-panel p-5 rounded-2xl rounded-tl-none mb-8 border-l-4 border-purple-500 relative">
+                        <div class="absolute -top-3 left-0 bg-purple-500 text-black text-[10px] font-bold px-2 py-1 rounded-r">PRIMEIRA MENSAGEM</div>
+                        <p class="text-gray-400 text-xs mb-2 font-bold uppercase mt-2">${first.sender} disse:</p>
+                        <p class="text-xl italic text-white font-serif">"${first.content.substring(0, 120)}${first.content.length > 120 ? '...' : ''}"</p>
+                    </div>
+
+                    <div class="flex items-center gap-4 bg-purple-900/20 p-4 rounded-xl border border-purple-500/30">
+                        <div class="bg-purple-500 w-12 h-12 rounded-full flex items-center justify-center text-2xl">🔥</div>
+                        <div>
+                            <p class="text-xs text-purple-300 uppercase font-bold">Maior Sequência</p>
+                            <p class="text-3xl font-black text-white">${data.maxStreak} <span class="text-base font-normal">dias seguidos</span></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 3. BUSIEST DAY (NOVO)
+        function renderBusiestDay(container, data) {
+            if (!data.busiestDay) return nextSlide();
+            const date = new Date(data.busiestDay.date);
+            const dateStr = date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
+            const weekDay = date.toLocaleDateString('pt-BR', { weekday: 'long' });
+
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 text-center slide-enter bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
+                    <h2 class="text-2xl font-bold text-red-400 uppercase tracking-widest mb-2">Dia de Caos</h2>
+                    <h1 class="text-5xl font-black text-white mb-2 leading-none">${dateStr}</h1>
+                    <p class="text-xl text-gray-400 mb-10 capitalize">${weekDay}</p>
+
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-red-600 blur-[60px] opacity-40"></div>
+                        <div class="relative bg-[#1a0505] border border-red-500/50 p-6 rounded-2xl shadow-2xl transform rotate-2">
+                            <p class="text-sm text-gray-400 mb-1">Vocês trocaram</p>
+                            <p class="text-6xl font-black text-red-500">${data.busiestDay.count}</p>
+                            <p class="text-sm text-gray-400 mt-1">mensagens em 24h</p>
+                        </div>
+                    </div>
+                    
+                    <p class="mt-12 text-sm text-gray-500 italic max-w-xs">"Meus dedos doeram só de lembrar."</p>
+                </div>
+            `;
+        }
+
+        // 4. ACTIVITY CHART
+        function renderActivity(container, data) {
+            // Calcular horas
+            const hours = Array(24).fill(0);
+            data.messages.forEach(m => hours[new Date(m.date).getHours()]++);
+            const maxVal = Math.max(...hours);
+
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col p-6 slide-enter justify-center">
+                    <h2 class="text-3xl font-bold mb-2 text-blue-400">Relógio Biológico</h2>
+                    <p class="text-gray-400 mb-6 text-sm">Que horas a fofoca acontece?</p>
+                    
+                    <div class="w-full h-64 relative bg-gray-900/50 rounded-xl p-4 border border-blue-500/20 mb-6">
+                        <canvas id="chartActivity"></canvas>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-xl text-center">
+                            <i class="ph ph-sun text-yellow-400 text-2xl mb-1"></i>
+                            <p class="text-[10px] text-gray-400 uppercase">Dia (6h-18h)</p>
+                            <p class="text-xl font-bold">${hours.slice(6,18).reduce((a,b)=>a+b,0)}</p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl text-center">
+                            <i class="ph ph-moon text-indigo-400 text-2xl mb-1"></i>
+                            <p class="text-[10px] text-gray-400 uppercase">Noite (18h-6h)</p>
+                            <p class="text-xl font-bold">${hours.reduce((a,b)=>a+b,0) - hours.slice(6,18).reduce((a,b)=>a+b,0)}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                const ctx = document.getElementById('chartActivity').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: hours.map((_, i) => i + 'h'),
+                        datasets: [{
+                            data: hours,
+                            backgroundColor: hours.map(v => v === maxVal ? '#60A5FA' : 'rgba(96, 165, 250, 0.3)'),
+                            borderRadius: 4,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { x: { grid: { display: false }, ticks: { color: '#666', font: {size: 8} } }, y: { display: false } }
+                    }
+                });
+            }, 50);
+        }
+
+        // 5. MONTHLY CHART (NOVO)
+        function renderMonthly(container, data) {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const monthlyCounts = Array(12).fill(0);
+            
+            Object.entries(data.monthsMap).forEach(([key, count]) => {
+                const monthIndex = parseInt(key.split('-')[1]) - 1;
+                monthlyCounts[monthIndex] += count;
+            });
+
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center p-6 slide-enter bg-[#0f172a]">
+                    <h2 class="text-2xl font-bold mb-2 text-cyan-400">O Ano em Ondas</h2>
+                    <p class="text-sm text-gray-400 mb-8">Momentos de calmaria e tempestade.</p>
+                    
+                    <div class="w-full h-72 relative">
+                        <canvas id="chartMonthly"></canvas>
+                    </div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                new Chart(document.getElementById('chartMonthly'), {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            data: monthlyCounts,
+                            borderColor: '#22d3ee',
+                            backgroundColor: 'rgba(34, 211, 238, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#000'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { 
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }, 
+                            y: { display: false } 
+                        }
+                    }
+                });
+            }, 50);
+        }
+
+        // 6. WEEK VS WEEKEND (NOVO)
+        function renderWeekVsWeekend(container, data) {
+            let week = 0, weekend = 0;
+            data.messages.forEach(m => {
+                const day = new Date(m.date).getDay();
+                if (day === 0 || day === 6) weekend++;
+                else week++;
+            });
+            const total = week + weekend;
+            const weekPct = Math.round((week / total) * 100);
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 slide-enter">
+                    <h2 class="text-2xl font-bold mb-10 text-indigo-300 uppercase tracking-widest">Rotina</h2>
+                    
+                    <div class="flex w-full items-end justify-center gap-4 h-64 mb-6">
+                        <div class="w-24 bg-gray-800 rounded-t-2xl relative flex flex-col justify-end items-center pb-4 group hover:bg-gray-700 transition-colors" style="height: ${weekPct}%">
+                            <span class="text-2xl mb-2">💼</span>
+                            <span class="font-bold text-xl">${weekPct}%</span>
+                            <span class="text-[10px] uppercase text-gray-500 mt-1">Semana</span>
+                        </div>
+                        <div class="w-24 bg-indigo-600 rounded-t-2xl relative flex flex-col justify-end items-center pb-4 shadow-[0_0_30px_rgba(79,70,229,0.4)]" style="height: ${100 - weekPct}%">
+                            <span class="text-2xl mb-2">🍻</span>
+                            <span class="font-bold text-xl">${100 - weekPct}%</span>
+                            <span class="text-[10px] uppercase text-indigo-200 mt-1">Finde</span>
+                        </div>
+                    </div>
+
+                    <p class="text-center text-lg max-w-[200px] leading-snug">
+                        ${weekPct > 60 ? 'Vocês são viciados em trabalho (ou procrastinar).' : 'A vida de vocês acontece no final de semana!'}
+                    </p>
+                </div>
+            `;
+        }
+
+        // 7. TOP SENDER
+        function renderTopSender(container, data) {
+            const ranking = Object.values(data.participants).sort((a,b) => b.count - a.count);
+            const winner = ranking[0];
+
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-6 slide-enter relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-yellow-600/20 via-black to-black"></div>
+                    
+                    <i class="ph ph-crown-simple text-6xl text-yellow-400 mb-6 animate-bounce"></i>
+                    
+                    <h2 class="text-sm font-bold text-yellow-600 uppercase tracking-[0.2em] mb-4">Tagarela do Ano</h2>
+                    
+                    <div class="text-center z-10">
+                        <h1 class="text-4xl font-black text-white mb-2 truncate max-w-[300px]">${winner.name}</h1>
+                        <div class="inline-block bg-yellow-500/20 border border-yellow-500/50 px-4 py-2 rounded-full">
+                            <span class="text-yellow-400 font-bold text-xl">${winner.count.toLocaleString()}</span>
+                            <span class="text-yellow-200 text-xs uppercase ml-1">Mensagens</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 w-full max-w-xs space-y-3 z-10">
+                        ${ranking.slice(1, 4).map((p, i) => `
+                            <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/5">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-gray-500 font-mono text-xs">#${i+2}</span>
+                                    <span class="font-medium text-sm truncate max-w-[120px]">${p.name}</span>
+                                </div>
+                                <span class="text-gray-400 text-sm">${p.count}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#EAB308', '#FFFFFF'] });
+        }
+
+        // 8. BIBLE WRITER (NOVO)
+        function renderBibleWriter(container, data) {
+            const writer = Object.values(data.participants).sort((a,b) => b.avgLen - a.avgLen)[0];
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 text-center slide-enter">
+                    <div class="w-32 h-32 bg-blue-500/10 rounded-full flex items-center justify-center mb-6 relative">
+                        <i class="ph ph-scroll text-6xl text-blue-400"></i>
+                        <div class="absolute -right-2 -bottom-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">Textão</div>
+                    </div>
+
+                    <h2 class="text-2xl font-bold text-white mb-2">Escritor de Bíblia</h2>
+                    <p class="text-gray-400 text-sm mb-8">Quem nunca manda "ok", manda um parágrafo.</p>
+
+                    <h1 class="text-3xl font-black text-blue-400 mb-2 truncate max-w-xs">${writer.name}</h1>
+                    <p class="text-6xl font-black text-white mb-2">${writer.avgLen}</p>
+                    <p class="text-xs uppercase tracking-widest text-blue-300">Caracteres por mensagem (Média)</p>
+                </div>
+            `;
+        }
+
+        // 9. EMOJIS
+        function renderEmojis(container, data) {
+            const allEmojis = {};
+            Object.values(data.participants).forEach(p => {
+                for (let [e, c] of Object.entries(p.emojis)) allEmojis[e] = (allEmojis[e] || 0) + c;
+            });
+            const top5 = Object.entries(allEmojis).sort((a,b) => b[1] - a[1]).slice(0, 5);
+
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-6 slide-enter bg-[#111]">
+                    <h2 class="text-2xl font-bold mb-10 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-500">Top 5 Emojis</h2>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 max-w-sm">
+                        ${top5.map((e, i) => `
+                            <div class="flex flex-col items-center justify-center bg-gray-800 rounded-2xl border border-gray-700 w-[45%] aspect-square ${i===0 ? 'w-full bg-gradient-to-br from-pink-900/40 to-purple-900/40 border-pink-500/50' : ''}">
+                                <span class="${i===0 ? 'text-7xl' : 'text-4xl'} mb-2 transform hover:scale-110 transition-transform cursor-default">${e[0]}</span>
+                                <span class="text-xs text-gray-400 font-mono">${e[1]}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 10. MEDIA
+        function renderMedia(container, data) {
+            const m = data.mediaTypes;
+            const total = m.image + m.video + m.audio + m.sticker;
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center p-8 slide-enter">
+                    <h2 class="text-3xl font-bold mb-1">Galeria</h2>
+                    <p class="text-gray-400 text-sm mb-8">Total de ${total} arquivos compartilhados.</p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-2xl flex flex-col items-center gap-2">
+                            <i class="ph ph-image text-3xl text-green-400"></i>
+                            <span class="font-bold text-xl">${m.image}</span>
+                            <span class="text-[10px] uppercase opacity-50">Fotos</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl flex flex-col items-center gap-2">
+                            <i class="ph ph-film-strip text-3xl text-blue-400"></i>
+                            <span class="font-bold text-xl">${m.video}</span>
+                            <span class="text-[10px] uppercase opacity-50">Vídeos</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl flex flex-col items-center gap-2">
+                            <i class="ph ph-microphone text-3xl text-red-400"></i>
+                            <span class="font-bold text-xl">${m.audio}</span>
+                            <span class="text-[10px] uppercase opacity-50">Áudios</span>
+                        </div>
+                        <div class="glass-panel p-4 rounded-2xl flex flex-col items-center gap-2">
+                            <i class="ph ph-sticker text-3xl text-yellow-400"></i>
+                            <span class="font-bold text-xl">${m.sticker}</span>
+                            <span class="text-[10px] uppercase opacity-50">Stickers</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 11. SUMMARY
+        function renderSummary(container, data) {
+            const topUser = Object.values(data.participants).sort((a,b) => b.count - a.count)[0];
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col items-center bg-[#0b141a] overflow-y-auto no-scrollbar w-full h-full pt-6">
+                    
+                    <div id="share-card" class="bg-gradient-to-br from-[#111b21] to-[#0a1014] p-6 w-[300px] rounded-none border-[6px] border-[#25D366] relative shadow-2xl shrink-0 mx-auto mt-4">
+                        <div class="flex justify-between items-start mb-6 border-b border-gray-800 pb-4">
+                            <div>
+                                <h1 class="text-[#25D366] font-black text-xl tracking-tighter">ZAP<br>WRAPPED</h1>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs text-gray-500 font-mono">${new Date().getFullYear()}</p>
+                                <p class="text-[10px] text-gray-600 uppercase">Analysis</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-8 text-center">
+                            <div class="inline-block relative">
+                                <i class="ph ph-crown-simple text-4xl text-yellow-400 mb-2"></i>
+                                <div class="absolute -right-2 -top-2 text-xs bg-yellow-500 text-black font-bold px-1 rounded">TOP</div>
+                            </div>
+                            <h2 class="text-2xl font-bold text-white truncate px-2">${topUser.name}</h2>
+                            <p class="text-xs text-gray-500 uppercase tracking-widest mt-1">${topUser.count} MENSAGENS</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div class="bg-white/5 p-2 rounded text-center">
+                                <span class="block text-lg font-bold text-white">${data.messages.length}</span>
+                                <span class="text-[8px] text-gray-400 uppercase">Total Msgs</span>
+                            </div>
+                            <div class="bg-white/5 p-2 rounded text-center">
+                                <span class="block text-lg font-bold text-white">${data.maxStreak}</span>
+                                <span class="text-[8px] text-gray-400 uppercase">Dias Seguidos</span>
+                            </div>
+                            <div class="bg-white/5 p-2 rounded text-center">
+                                <span class="block text-lg font-bold text-white">${data.mediaTypes.sticker}</span>
+                                <span class="text-[8px] text-gray-400 uppercase">Figurinhas</span>
+                            </div>
+                            <div class="bg-white/5 p-2 rounded text-center">
+                                <span class="block text-lg font-bold text-white">${Object.keys(data.participants).length}</span>
+                                <span class="text-[8px] text-gray-400 uppercase">Pessoas</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center items-center gap-2 opacity-30 mt-4">
+                            <div class="h-1 w-1 bg-white rounded-full"></div>
+                            <div class="h-1 w-1 bg-white rounded-full"></div>
+                            <div class="h-1 w-1 bg-white rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="p-6 w-full max-w-sm text-center pb-12">
+                        <button onclick="downloadCard()" class="w-full bg-[#25D366] hover:bg-green-500 text-[#0b141a] font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-green-900/20 mb-3">
+                            <i class="ph ph-download-simple text-xl"></i> Salvar Cartão
+                        </button>
+                        
+                        <button onclick="showHistoryPage()" class="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 border border-gray-700">
+                            <i class="ph ph-squares-four text-xl"></i> Meus Wraps
+                        </button>
+                    </div>
+                </div>
+            `;
+            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        }
+
+        // --- UTILS ---
+
+        function runCounter(el, target) {
+            let start = 0;
+            const duration = 2000;
+            const step = t => {
+                if (!start) start = t;
+                const progress = Math.min((t - start) / duration, 1);
+                el.innerText = Math.floor(progress * target).toLocaleString();
+                if (progress < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+        }
+
+        function downloadCard() {
+            const card = document.getElementById('share-card');
+            html2canvas(card, { scale: 3, backgroundColor: null, useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `zap-wrapped-${Date.now()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+    </script>
+</body>
+</html>
