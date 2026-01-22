@@ -147,6 +147,11 @@
             <div id="left-tap" class="absolute top-0 bottom-0 left-0 w-1/3 z-40"></div>
             <div id="right-tap" class="absolute top-0 bottom-0 right-0 w-1/3 z-40"></div>
             <div id="pause-hold" class="absolute top-0 bottom-0 left-1/3 right-1/3 z-40"></div>
+            
+            <!-- Pause Icon -->
+            <div id="pause-icon" class="hidden absolute bottom-6 right-6 z-50 flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-3 rounded-full border border-white/30">
+                <i class="ph ph-pause text-xl text-white"></i>
+            </div>
 
             <!-- Content Area -->
             <div id="slide-content" class="flex-1 flex flex-col relative w-full h-full overflow-hidden">
@@ -562,7 +567,14 @@
                 { id: 'bible_writer', duration: 5500, render: (el) => renderBibleWriter(el, data), theme: 'bg-gradient-to-br from-blue-900 to-black' },
                 { id: 'emojis', duration: 6000, render: (el) => renderEmojis(el, data), theme: 'bg-[#1a1a1a]' },
                 { id: 'media', duration: 5000, render: (el) => renderMedia(el, data), theme: 'bg-gradient-to-r from-pink-900/30 to-purple-900/30 bg-black' },
-                { id: 'summary', duration: 999999, render: (el) => renderSummary(el, data), theme: 'bg-[#0b141a]' }
+                { id: 'top_words', duration: 5500, render: (el) => renderTopWords(el, data), theme: 'bg-gradient-to-br from-cyan-900 to-black' },
+                { id: 'deleted_msgs', duration: 6000, render: (el) => renderDeletedMessages(el, data), theme: 'bg-gradient-to-t from-orange-900/40 to-black' },
+                { id: 'evolution', duration: 6000, render: (el) => renderEvolution(el, data), theme: 'bg-gradient-to-br from-teal-900 to-black' },
+                { id: 'greetings', duration: 5500, render: (el) => renderGreetings(el, data), theme: 'bg-gradient-to-bl from-pink-900 to-black' },
+                { id: 'emoji_summary', duration: 5000, render: (el) => renderEmojiSummary(el, data), theme: 'bg-[#111111]' },
+                { id: 'silence_streak', duration: 5500, render: (el) => renderSilenceStreak(el, data), theme: 'bg-gradient-to-r from-slate-900 to-black' },
+                { id: 'wordcloud', duration: 6000, render: (el) => renderWordcloud(el, data), theme: 'bg-[#0f1419]' },
+                { id: 'influence', duration: 5500, render: (el) => renderInfluence(el, data), theme: 'bg-gradient-to-t from-purple-900/40 to-black' }
             ];
 
             // Renderizar Barras de Progresso
@@ -575,16 +587,21 @@
             // Listeners de Navegação
             document.getElementById('right-tap').onclick = nextSlide;
             document.getElementById('left-tap').onclick = prevSlide;
+            document.getElementById('pause-hold').onclick = togglePause;
             
             // Start
             playStory(0);
         }
 
         let storyTimer;
+        let storyStartTime = 0;
+        let storyElapsedTime = 0;
         
         function playStory(index) {
             if (index < 0 || index >= appState.stories.length) return;
             appState.currentSlide = index;
+            appState.isPaused = false;
+            storyElapsedTime = 0;
             const slide = appState.stories[index];
 
             // Reset Bars
@@ -607,25 +624,78 @@
             void currentBar.offsetWidth; 
             currentBar.style.transition = `width ${slide.duration}ms linear`;
             currentBar.style.width = '100%';
+            storyStartTime = Date.now();
 
             // Timer
             clearTimeout(storyTimer);
             if (slide.id !== 'summary') {
-                storyTimer = setTimeout(nextSlide, slide.duration);
+                storyTimer = setTimeout(() => {
+                    if (!appState.isPaused) {
+                        if (appState.currentSlide === appState.stories.length - 1) {
+                            showHistoryPage();
+                        } else {
+                            nextSlide();
+                        }
+                    }
+                }, slide.duration - storyElapsedTime);
             }
+            
+            // Update pause icon visibility
+            updatePauseIcon();
         }
 
         function nextSlide() {
-            if (appState.currentSlide < appState.stories.length - 1) {
-                playStory(appState.currentSlide + 1);
+            if (!appState.isPaused) {
+                if (appState.currentSlide < appState.stories.length - 1) {
+                    playStory(appState.currentSlide + 1);
+                }
             }
         }
 
         function prevSlide() {
-            if (appState.currentSlide > 0) {
-                playStory(appState.currentSlide - 1);
+            if (!appState.isPaused) {
+                if (appState.currentSlide > 0) {
+                    playStory(appState.currentSlide - 1);
+                } else {
+                    playStory(0);
+                }
+            }
+        }
+        
+        function togglePause() {
+            // Não permite pause no último story
+            const isLastStory = appState.currentSlide === appState.stories.length - 1;
+            if (isLastStory) return;
+            
+            appState.isPaused = !appState.isPaused;
+            const currentBar = document.getElementById(`bar-${appState.currentSlide}`);
+            
+            if (appState.isPaused) {
+                clearTimeout(storyTimer);
+                storyElapsedTime = Date.now() - storyStartTime;
+                if (currentBar) currentBar.style.animationPlayState = 'paused';
             } else {
-                playStory(0);
+                const slide = appState.stories[appState.currentSlide];
+                if (currentBar) currentBar.style.animationPlayState = 'running';
+                
+                storyTimer = setTimeout(() => {
+                    if (appState.currentSlide === appState.stories.length - 1) {
+                        showHistoryPage();
+                    } else {
+                        nextSlide();
+                    }
+                }, slide.duration - storyElapsedTime);
+            }
+            
+            updatePauseIcon();
+        }
+        
+        function updatePauseIcon() {
+            const pauseIcon = document.getElementById('pause-icon');
+            if (appState.isPaused) {
+                pauseIcon.classList.remove('hidden');
+            } else {
+                pauseIcon.classList.add('hidden');
             }
         }
 
@@ -959,72 +1029,332 @@
             `;
         }
 
-        // 11. SUMMARY
-        function renderSummary(container, data) {
-            const topUser = Object.values(data.participants).sort((a,b) => b.count - a.count)[0];
+        // 11. TOP WORDS (Palavra Mais Usada)
+        function renderTopWords(container, data) {
+            const wordFreq = {};
+            const stopWords = ['de', 'que', 'a', 'o', 'e', 'é', 'em', 'um', 'para', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 'as', 'dos', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito', 'há', 'nos', 'já', 'está', 'eu', 'também', 'só', 'pelo', 'pela', 'até', 'isso', 'ela', 'entre', 'depois', 'sem', 'mesmo', 'aos', 'ter', 'seus', 'quem', 'nas', 'me', 'esse', 'eles', 'estão', 'você', 'tinha', 'foram', 'essa', 'num', 'nem', 'suas', 'meu', 'às', 'minha', 'têm', 'numa', 'pelos', 'elas'];
+            
+            data.messages.forEach(m => {
+                if (m.type === 'text') {
+                    const words = m.content.toLowerCase().split(/\s+/);
+                    words.forEach(w => {
+                        const clean = w.replace(/[^\w]/g, '');
+                        if (clean.length > 3 && !stopWords.includes(clean)) {
+                            wordFreq[clean] = (wordFreq[clean] || 0) + 1;
+                        }
+                    });
+                }
+            });
+            
+            const topWords = Object.entries(wordFreq).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            const maxCount = topWords[0]?.[1] || 1;
             
             container.innerHTML = `
-                <div class="flex-1 flex flex-col items-center bg-[#0b141a] overflow-y-auto no-scrollbar w-full h-full pt-6">
+                <div class="flex-1 flex flex-col justify-center items-center p-8 slide-enter relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_center,_rgba(34,211,238,0.4),transparent)]"></div>
                     
-                    <div id="share-card" class="bg-gradient-to-br from-[#111b21] to-[#0a1014] p-6 w-[300px] rounded-none border-[6px] border-[#25D366] relative shadow-2xl shrink-0 mx-auto mt-4">
-                        <div class="flex justify-between items-start mb-6 border-b border-gray-800 pb-4">
-                            <div>
-                                <h1 class="text-[#25D366] font-black text-xl tracking-tighter">ZAP<br>WRAPPED</h1>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-xs text-gray-500 font-mono">${new Date().getFullYear()}</p>
-                                <p class="text-[10px] text-gray-600 uppercase">Analysis</p>
-                            </div>
-                        </div>
-
-                        <div class="mb-8 text-center">
-                            <div class="inline-block relative">
-                                <i class="ph ph-crown-simple text-4xl text-yellow-400 mb-2"></i>
-                                <div class="absolute -right-2 -top-2 text-xs bg-yellow-500 text-black font-bold px-1 rounded">TOP</div>
-                            </div>
-                            <h2 class="text-2xl font-bold text-white truncate px-2">${topUser.name}</h2>
-                            <p class="text-xs text-gray-500 uppercase tracking-widest mt-1">${topUser.count} MENSAGENS</p>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-3 mb-6">
-                            <div class="bg-white/5 p-2 rounded text-center">
-                                <span class="block text-lg font-bold text-white">${data.messages.length}</span>
-                                <span class="text-[8px] text-gray-400 uppercase">Total Msgs</span>
-                            </div>
-                            <div class="bg-white/5 p-2 rounded text-center">
-                                <span class="block text-lg font-bold text-white">${data.maxStreak}</span>
-                                <span class="text-[8px] text-gray-400 uppercase">Dias Seguidos</span>
-                            </div>
-                            <div class="bg-white/5 p-2 rounded text-center">
-                                <span class="block text-lg font-bold text-white">${data.mediaTypes.sticker}</span>
-                                <span class="text-[8px] text-gray-400 uppercase">Figurinhas</span>
-                            </div>
-                            <div class="bg-white/5 p-2 rounded text-center">
-                                <span class="block text-lg font-bold text-white">${Object.keys(data.participants).length}</span>
-                                <span class="text-[8px] text-gray-400 uppercase">Pessoas</span>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-center items-center gap-2 opacity-30 mt-4">
-                            <div class="h-1 w-1 bg-white rounded-full"></div>
-                            <div class="h-1 w-1 bg-white rounded-full"></div>
-                            <div class="h-1 w-1 bg-white rounded-full"></div>
-                        </div>
-                    </div>
-
-                    <!-- Actions -->
-                    <div class="p-6 w-full max-w-sm text-center pb-12">
-                        <button onclick="downloadCard()" class="w-full bg-[#25D366] hover:bg-green-500 text-[#0b141a] font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-lg shadow-green-900/20 mb-3">
-                            <i class="ph ph-download-simple text-xl"></i> Salvar Cartão
-                        </button>
-                        
-                        <button onclick="showHistoryPage()" class="w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 border border-gray-700">
-                            <i class="ph ph-squares-four text-xl"></i> Meus Wraps
-                        </button>
+                    <h2 class="text-2xl font-bold text-cyan-400 uppercase tracking-widest mb-2 relative z-10">Palavra do Ano</h2>
+                    <p class="text-gray-400 text-sm mb-10 relative z-10">A que mais marca presença</p>
+                    
+                    <div class="w-full max-w-sm space-y-4 relative z-10">
+                        ${topWords.map((w, i) => {
+                            const percentage = Math.round((w[1] / maxCount) * 100);
+                            return `
+                                <div class="group">
+                                    <div class="flex justify-between mb-2 items-center">
+                                        <span class="font-bold text-lg text-white">${i === 0 ? `🏆 ${w[0]}` : `${w[0]}`}</span>
+                                        <span class="text-cyan-400 text-sm font-mono">${w[1]}x</span>
+                                    </div>
+                                    <div class="h-2 bg-gray-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-300 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.6)]" style="width: ${percentage}%"></div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
                 </div>
             `;
-            confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        }
+
+        // 12. DELETED MESSAGES
+        function renderDeletedMessages(container, data) {
+            const deletedCount = data.messages.filter(m => m.content.toLowerCase().includes('mensagem deletada') || m.content.toLowerCase().includes('message deleted')).length;
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 slide-enter text-center">
+                    <div class="relative mb-8">
+                        <div class="absolute inset-0 bg-orange-600 blur-[80px] opacity-20 rounded-full"></div>
+                        <i class="ph ph-file-x text-7xl text-orange-400 relative"></i>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-orange-400 mb-2 uppercase tracking-widest">Segredos</h2>
+                    <p class="text-gray-400 text-sm mb-6">Vocês têm algo pra esconder? 👀</p>
+                    
+                    <div class="bg-orange-900/20 border-2 border-orange-500/50 rounded-2xl p-8 backdrop-blur-sm w-full max-w-xs">
+                        <p class="text-6xl font-black text-orange-400 mb-2">${deletedCount}</p>
+                        <p class="text-xs uppercase tracking-widest text-orange-300">Mensagens Deletadas</p>
+                        <div class="mt-4 text-[10px] text-gray-400 italic">
+                            ${deletedCount === 0 ? 'Vocês são honestos! 👼' : deletedCount < 5 ? 'Segredos pequeninos... 🤐' : 'Muito mistério por aqui! 🕵️'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 13. EVOLUTION (Evolução Temporal)
+        function renderEvolution(container, data) {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const monthlyCounts = Array(12).fill(0);
+            
+            Object.entries(data.monthsMap).forEach(([key, count]) => {
+                const monthIndex = parseInt(key.split('-')[1]) - 1;
+                monthlyCounts[monthIndex] += count;
+            });
+            
+            const trend = monthlyCounts[monthlyCounts.length - 1] > monthlyCounts[0] ? '📈 Crescendo' : '📉 Diminuindo';
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center p-6 slide-enter">
+                    <h2 class="text-2xl font-bold mb-2 text-teal-400">Trajetória</h2>
+                    <p class="text-gray-400 text-sm mb-8">Como a conversa evoluiu</p>
+                    
+                    <div class="w-full h-72 relative mb-8">
+                        <canvas id="chartEvolution"></canvas>
+                    </div>
+                    
+                    <div class="bg-teal-900/20 border border-teal-500/50 p-4 rounded-xl text-center">
+                        <p class="text-3xl font-black text-teal-400">${trend}</p>
+                        <p class="text-xs text-gray-400 mt-2">
+                            ${monthlyCounts[monthlyCounts.length - 1] > monthlyCounts[0] ? 'Vocês cada vez mais próximos!' : 'A conversa diminuiu com o tempo...'}
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                new Chart(document.getElementById('chartEvolution'), {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            data: monthlyCounts,
+                            borderColor: '#14b8a6',
+                            backgroundColor: 'rgba(20, 184, 166, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.5,
+                            pointRadius: 5,
+                            pointBackgroundColor: '#000',
+                            pointBorderColor: '#14b8a6',
+                            pointBorderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { 
+                            x: { grid: { display: false }, ticks: { color: '#94a3b8' } }, 
+                            y: { display: false } 
+                        }
+                    }
+                });
+            }, 50);
+        }
+
+        // 14. GREETINGS (Saudações & Despedidas)
+        function renderGreetings(container, data) {
+            const greetings = ['oi', 'olá', 'e aí', 'e ai', 'opa', 'ey', 'hey', 'oii', 'oiii', 'opa', 'fala'];
+            const goodbyes = ['tchau', 'até', 'falou', 'abraço', 'beijo', 'bye', 'adeus', 'até mais', 'flw'];
+            
+            let greetingCount = 0, goodbyeCount = 0;
+            
+            data.messages.forEach(m => {
+                if (m.type === 'text') {
+                    const lower = m.content.toLowerCase();
+                    greetings.forEach(g => { if (lower.includes(g)) greetingCount++; });
+                    goodbyes.forEach(g => { if (lower.includes(g)) goodbyeCount++; });
+                }
+            });
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 slide-enter">
+                    <h2 class="text-2xl font-bold text-pink-400 uppercase tracking-widest mb-10">Educação</h2>
+                    
+                    <div class="flex w-full max-w-sm gap-6 items-end justify-center h-64">
+                        <div class="flex-1 bg-gradient-to-t from-pink-500 to-pink-600 rounded-t-2xl relative flex flex-col justify-end items-center pb-4 shadow-[0_0_20px_rgba(236,72,153,0.3)]">
+                            <span class="text-3xl mb-2">👋</span>
+                            <span class="font-black text-2xl text-white">${greetingCount}</span>
+                            <span class="text-[10px] uppercase text-pink-200 mt-1 text-center">Saudações</span>
+                        </div>
+                        <div class="flex-1 bg-gradient-to-t from-rose-500 to-rose-600 rounded-t-2xl relative flex flex-col justify-end items-center pb-4 shadow-[0_0_20px_rgba(244,63,94,0.3)]">
+                            <span class="text-3xl mb-2">🙋</span>
+                            <span class="font-black text-2xl text-white">${goodbyeCount}</span>
+                            <span class="text-[10px] uppercase text-rose-200 mt-1 text-center">Despedidas</span>
+                        </div>
+                    </div>
+                    
+                    <p class="mt-10 text-center text-sm text-gray-400 max-w-xs">
+                        ${greetingCount + goodbyeCount > 100 ? '🎩 Vocês são educadíssimos!' : greetingCount + goodbyeCount > 50 ? '😊 Bem educados!' : '🤐 Vão direto ao ponto!'}
+                    </p>
+                </div>
+            `;
+        }
+
+        // 15. EMOJI SUMMARY (Resumo em 1 Emoji)
+        function renderEmojiSummary(container, data) {
+            const emojiTypes = { happy: '😊', sad: '😢', laugh: '😂', angry: '😠', love: '❤️', fire: '🔥', cool: '😎', thinking: '🤔', shock: '😱', party: '🎉' };
+            const participants = Object.values(data.participants);
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-6 slide-enter">
+                    <h2 class="text-2xl font-bold text-white uppercase tracking-widest mb-8">Personalidades</h2>
+                    
+                    <div class="w-full max-w-sm space-y-4">
+                        ${participants.slice(0, 5).map((p, i) => {
+                            const emojis = Object.entries(p.emojis).sort((a,b) => b[1] - a[1]);
+                            const topEmoji = emojis[0]?.[0] || '🤷';
+                            return `
+                                <div class="flex items-center justify-between bg-gradient-to-r from-gray-800/50 to-gray-900/50 p-4 rounded-xl border border-gray-700/50 group hover:border-white/20 transition-all">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-3xl">${topEmoji}</span>
+                                        <div>
+                                            <p class="font-bold text-white text-sm">${p.name.split(' ')[0]}</p>
+                                            <p class="text-[10px] text-gray-500">É assim mesmo</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-lg opacity-0 group-hover:opacity-100 transition-opacity">✨</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 16. SILENCE STREAK (Categoria de Silêncio)
+        function renderSilenceStreak(container, data) {
+            let maxGap = 0;
+            let gapStart = null;
+            
+            for (let i = 0; i < data.messages.length - 1; i++) {
+                const current = new Date(data.messages[i].date);
+                const next = new Date(data.messages[i + 1].date);
+                const gap = (next - current) / (1000 * 60 * 60); // em horas
+                if (gap > maxGap) {
+                    maxGap = gap;
+                    gapStart = current;
+                }
+            }
+            
+            const days = Math.floor(maxGap / 24);
+            const hours = Math.floor(maxGap % 24);
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 slide-enter text-center">
+                    <div class="relative mb-6">
+                        <i class="ph ph-hourglass text-6xl text-slate-400 animate-bounce"></i>
+                    </div>
+                    
+                    <h2 class="text-2xl font-bold text-slate-300 mb-2 uppercase tracking-widest">Maior Silêncio</h2>
+                    <p class="text-gray-400 text-sm mb-8">Tempo sem conversar</p>
+                    
+                    <div class="bg-slate-900/40 border-2 border-slate-600/50 rounded-3xl p-8 w-full max-w-xs backdrop-blur">
+                        <div class="flex items-center justify-center gap-4 mb-4">
+                            ${days > 0 ? `<div class="text-center"><p class="text-4xl font-black text-slate-400">${days}</p><p class="text-[10px] text-gray-500 uppercase">Dias</p></div>` : ''}
+                            <div class="text-center">
+                                <p class="text-4xl font-black text-slate-300">${hours}</p>
+                                <p class="text-[10px] text-gray-500 uppercase">Horas</p>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-gray-400 italic">
+                            ${maxGap > 72 ? '😱 Que saudade!' : maxGap > 24 ? '😅 Estranharam?' : '😊 Sempre juntos!'}
+                        </p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 17. WORDCLOUD (Nuvem de Palavras)
+        function renderWordcloud(container, data) {
+            const wordFreq = {};
+            const stopWords = ['de', 'que', 'a', 'o', 'e', 'é', 'em', 'um', 'para', 'com', 'não', 'uma', 'os', 'no', 'se', 'na', 'por', 'mais', 'as', 'dos', 'como', 'mas', 'foi', 'ao', 'ele', 'das', 'tem', 'à', 'seu', 'sua', 'ou', 'ser', 'quando', 'muito'];
+            
+            data.messages.forEach(m => {
+                if (m.type === 'text') {
+                    const words = m.content.toLowerCase().split(/\s+/);
+                    words.forEach(w => {
+                        const clean = w.replace(/[^\w]/g, '');
+                        if (clean.length > 2 && !stopWords.includes(clean)) {
+                            wordFreq[clean] = (wordFreq[clean] || 0) + 1;
+                        }
+                    });
+                }
+            });
+            
+            const topWords = Object.entries(wordFreq).sort((a,b) => b[1] - a[1]).slice(0, 40);
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-6 slide-enter">
+                    <h2 class="text-2xl font-bold text-blue-400 uppercase tracking-widest mb-6">Resumo Visual</h2>
+                    
+                    <div class="w-full max-w-sm h-56 flex flex-wrap gap-3 items-center justify-center content-center">
+                        ${topWords.map((w, i) => {
+                            const size = Math.max(10, Math.min(28, 10 + (w[1] / topWords[0][1]) * 18));
+                            const colors = ['text-blue-400', 'text-cyan-400', 'text-sky-400', 'text-indigo-400', 'text-blue-300', 'text-cyan-300'];
+                            const color = colors[i % colors.length];
+                            return `<span class="font-bold ${color} opacity-80 hover:opacity-100 transition-all cursor-default" style="font-size: ${size}px; line-height: 1; margin: 2px;">${w[0]}</span>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 18. INFLUENCE (Gráfico de Influência - Quem Inicia Conversas)
+        function renderInfluence(container, data) {
+            const initiators = {};
+            let lastDate = null;
+            
+            data.messages.forEach(m => {
+                const msgDate = m.date.toDateString();
+                if (msgDate !== lastDate) {
+                    initiators[m.sender] = (initiators[m.sender] || 0) + 1;
+                    lastDate = msgDate;
+                }
+            });
+            
+            const ranking = Object.entries(initiators).sort((a,b) => b[1] - a[1]);
+            const topInitiator = ranking[0];
+            
+            container.innerHTML = `
+                <div class="flex-1 flex flex-col justify-center items-center p-8 slide-enter relative">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.2),transparent)]"></div>
+                    
+                    <i class="ph ph-lightning-charge text-6xl text-purple-400 mb-6 animate-pulse relative z-10"></i>
+                    
+                    <h2 class="text-2xl font-bold text-purple-400 uppercase tracking-widest mb-2 relative z-10">Iniciante</h2>
+                    <p class="text-gray-400 text-sm mb-8 relative z-10">Quem começa mais conversas</p>
+                    
+                    <div class="text-center relative z-10">
+                        <h1 class="text-4xl font-black text-white mb-2 truncate max-w-xs">${topInitiator[0]}</h1>
+                        <div class="inline-block bg-purple-500/20 border border-purple-500/50 px-6 py-3 rounded-full">
+                            <span class="text-purple-400 font-bold text-xl">${topInitiator[1]}</span>
+                            <span class="text-purple-300 text-xs uppercase ml-2">Vezes</span>
+                        </div>
+                    </div>
+                    
+                    ${ranking.length > 1 ? `
+                    <div class="mt-10 w-full max-w-xs space-y-2 relative z-10">
+                        ${ranking.slice(1, 3).map((r, i) => `
+                            <div class="flex justify-between p-2 bg-white/5 rounded-lg border border-white/5 text-sm">
+                                <span>${r[0]}</span>
+                                <span class="text-purple-400 font-mono">${r[1]}x</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                </div>
+            `;
         }
 
         // --- UTILS ---
@@ -1042,12 +1372,19 @@
         }
 
         function downloadCard() {
+            // Prevent pause/navigation triggers while downloading
+            const wasPaused = appState.isPaused;
+            appState.isPaused = true;
+            
             const card = document.getElementById('share-card');
             html2canvas(card, { scale: 3, backgroundColor: null, useCORS: true }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `zap-wrapped-${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
+                
+                // Restore pause state
+                appState.isPaused = wasPaused;
             });
         }
 
