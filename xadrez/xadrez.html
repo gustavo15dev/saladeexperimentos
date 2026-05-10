@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grandmaster's Chess Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --panel-bg: #0f172a;
+            --accent-gold: #f59e0b;
+            --board-light: #f1f5f9;
+            --board-dark: #64748b;
+            --move-hint: rgba(245, 158, 11, 0.2);
+            --last-move-highlight: rgba(245, 158, 11, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f8fafc;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            width: min(90vw, 580px);
+            height: min(90vw, 580px);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 6px solid var(--panel-bg);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            margin: 0 auto;
+        }
+
+        .square {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .square.light { background-color: var(--board-light); }
+        .square.dark { background-color: var(--board-dark); }
+        
+        /* Highlight corrigido: usa border-inset para não mover a peça */
+        .square.last-move {
+            background-color: var(--last-move-highlight) !important;
+            box-shadow: inset 0 0 0 3px var(--accent-gold);
+        }
+
+        .square.selected {
+            background-color: rgba(245, 158, 11, 0.4) !important;
+        }
+
+        .piece-img {
+            width: 85%;
+            height: 85%;
+            object-fit: contain;
+            z-index: 10;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .move-dot {
+            width: 24%;
+            height: 24%;
+            background: var(--move-hint);
+            border-radius: 50%;
+            pointer-events: none;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+        }
+
+        .status-pill {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .thinking-glow {
+            animation: pulse-gold 1.5s infinite;
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+
+        .history-table {
+            font-family: 'JetBrains+Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .history-row:nth-child(even) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <aside class="lg:col-span-3 space-y-4">
+            <div class="glass-card p-6">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2 bg-amber-500 rounded-lg">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 22H5V20H19V22M17 10C17 11.24 16.5 12.4 15.65 13.25C13.28 14.41 12.21 15 11 15C9.79 15 8.72 14.41 8.16 13.45L8.12 13.56C7.93 14.17 7.82 15 8.38 15.86C6.7 16.89 5.7 15.34 6.35 13.25C5.5 12.4 5 11.24 5 10C5 6.69 7.69 4 11 4C11.55 4 12 3.55 12 3V1H10V3C10 3.55 9.55 4 9 4C5.69 4 3 6.69 3 10C3 11.75 3.75 13.33 4.95 14.41L4.34 16.03C5.23 18.9 6.33 19.46 7.46 19.34C10.15 17.32 10.42 17.11 11 17C11.58 17.11 11.85 17.32 12.58 18.45C14.54 19.34 15.67 19.46 16.77 18.9C17.81 17.05 17.84 16.5 17.66 16.03L17.05 14.41C18.25 13.33 19 11.75 19 10Z"/></svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Grandmaster</h1>
+                        <p class="text-xs text-slate-500 uppercase tracking-tighter">Engine v2.0 Local</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase">Modo</label>
+                        <select id="gameMode" class="w-full bg-slate-800 border-none rounded-lg p-2 text-sm outline-none focus:ring-1 focus:ring-amber-500">
+                            <option value="pve">🆚 Desafiar IA</option>
+                            <option value="pvp">👥 Local 1 vs 1</option>
+                        </select>
+                    </div>
+
+                    <div id="difficultyContainer" class="space-y-2">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase">Dificuldade da IA</label>
+                        <div class="flex justify-between gap-1">
+                            <button onclick="setDifficulty(1)" class="diff-btn flex-1 py-2 text-xs bg-slate-800 rounded-md transition-all border border-transparent active" data-level="1">1</button>
+                            <button onclick="setDifficulty(2)" class="diff-btn flex-1 py-2 text-xs bg-slate-800 rounded-md transition-all border border-transparent" data-level="2">2</button>
+                            <button onclick="setDifficulty(3)" class="diff-btn flex-1 py-2 text-xs bg-slate-800 rounded-md transition-all border border-transparent" data-level="3">3</button>
+                            <button onclick="setDifficulty(4)" class="diff-btn flex-1 py-2 text-xs bg-slate-800 rounded-md transition-all border border-transparent" data-level="4">4</button>
+                            <button onclick="setDifficulty(5)" class="diff-btn flex-1 py-2 text-xs bg-slate-800 rounded-md transition-all border border-transparent" data-level="5">5</button>
+                        </div>
+                    </div>
+
+                    <button id="resetBtn" class="w-full bg-amber-500 hover:bg-amber-600 py-3 rounded-xl font-bold text-sm transition-transform active:scale-95 shadow-lg shadow-amber-900/20">
+                        Reiniciar Partida
+                    </button>
+                </div>
+            </div>
+
+            <div class="glass-card p-4">
+                <p class="text-[10px] font-bold text-slate-500 uppercase mb-3">Capturadas</p>
+                <div id="captured-white" class="flex flex-wrap gap-1 min-h-[30px] mb-2"></div>
+                <div id="captured-black" class="flex flex-wrap gap-1 min-h-[30px]"></div>
+            </div>
+        </aside>
+
+        <main class="lg:col-span-6 flex flex-col items-center">
+            <!-- Barra de Status Dinâmica -->
+            <div id="statusBanner" class="w-full mb-6 py-4 px-6 glass-card flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div id="turnIndicator" class="w-3 h-3 rounded-full bg-white shadow-[0_0_10px_white]"></div>
+                    <div>
+                        <p id="turnText" class="text-sm font-bold uppercase tracking-widest text-slate-300">Carregando...</p>
+                        <p id="subStatus" class="text-[10px] text-slate-500 uppercase">Aguardando início</p>
+                    </div>
+                </div>
+                <div id="thinkingSpinner" class="hidden">
+                    <svg class="animate-spin h-5 w-5 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="board" class="chess-board"></div>
+        </main>
+
+        <aside class="lg:col-span-3">
+            <div class="glass-card h-full flex flex-col max-h-[680px]">
+                <div class="p-4 border-b border-white/5 flex justify-between items-center">
+                    <h3 class="text-xs font-bold uppercase text-slate-500">Histórico de Jogadas</h3>
+                    <span id="moveCount" class="text-[10px] bg-slate-800 px-2 py-1 rounded">0</span>
+                </div>
+                <div class="flex flex-col flex-grow overflow-hidden">
+                    <div class="grid grid-cols-3 p-3 text-[10px] font-bold text-slate-600 bg-slate-900/50 uppercase">
+                        <div>#</div>
+                        <div>Brancas</div>
+                        <div>Pretas</div>
+                    </div>
+                    <div id="moveHistory" class="flex-grow overflow-y-auto history-table">
+                        <!-- Jogadas serão inseridas aqui -->
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        const game = new Chess();
+        const boardEl = document.getElementById('board');
+        const turnText = document.getElementById('turnText');
+        const subStatus = document.getElementById('subStatus');
+        const turnIndicator = document.getElementById('turnIndicator');
+        const moveHistoryEl = document.getElementById('moveHistory');
+        const thinkingSpinner = document.getElementById('thinkingSpinner');
+        const capturedWhite = document.getElementById('captured-white');
+        const capturedBlack = document.getElementById('captured-black');
+        const gameModeSelect = document.getElementById('gameMode');
+        const diffBtns = document.querySelectorAll('.diff-btn');
+
+        let selectedSquare = null;
+        let aiDifficulty = 1;
+        let isAiThinking = false;
+
+        const PIECES_SVG = {
+            w: { p: 'https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg', r: 'https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg', n: 'https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg', b: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg', q: 'https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg', k: 'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg' },
+            b: { p: 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg', r: 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Chess_rdt45.svg', n: 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Chess_ndt45.svg', b: 'https://upload.wikimedia.org/wikipedia/commons/9/98/Chess_bdt45.svg', q: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg', k: 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Chess_kdt45.svg' }
+        };
+
+        function createBoard() {
+            boardEl.innerHTML = '';
+            for (let i = 0; i < 64; i++) {
+                const sq = document.createElement('div');
+                const r = Math.floor(i / 8), c = i % 8;
+                const name = String.fromCharCode(97 + c) + (8 - r);
+                sq.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+                sq.dataset.square = name;
+                sq.onclick = () => handleSquareClick(name);
+                boardEl.appendChild(sq);
+            }
+            updateBoard();
+        }
+
+        function updateBoard() {
+            const board = game.board();
+            const squares = boardEl.querySelectorAll('.square');
+            squares.forEach((sq, i) => {
+                const r = Math.floor(i / 8), c = i % 8;
+                const piece = board[r][c];
+                sq.innerHTML = piece ? `<img src="${PIECES_SVG[piece.color][piece.type]}" class="piece-img">` : '';
+            });
+            highlightLastMove();
+            updateStatusUI();
+        }
+
+        function highlightLastMove() {
+            document.querySelectorAll('.square').forEach(s => s.classList.remove('last-move'));
+            const history = game.history({ verbose: true });
+            if (history.length > 0) {
+                const last = history[history.length - 1];
+                document.querySelector(`[data-square="${last.from}"]`)?.classList.add('last-move');
+                document.querySelector(`[data-square="${last.to}"]`)?.classList.add('last-move');
+            }
+        }
+
+        function handleSquareClick(sq) {
+            if (game.game_over() || isAiThinking) return;
+            if (gameModeSelect.value === 'pve' && game.turn() === 'b') return;
+
+            const moves = game.moves({ square: sq, verbose: true });
+
+            if (selectedSquare === sq) {
+                clearHighlights();
+                selectedSquare = null;
+                return;
+            }
+
+            if (selectedSquare) {
+                const move = game.move({ from: selectedSquare, to: sq, promotion: 'q' });
+                if (move) {
+                    clearHighlights();
+                    selectedSquare = null;
+                    updateBoard();
+                    processMove(move);
+                    
+                    if (gameModeSelect.value === 'pve' && !game.game_over()) {
+                        triggerAI();
+                    }
+                    return;
+                }
+            }
+
+            clearHighlights();
+            if (moves.length > 0) {
+                selectedSquare = sq;
+                document.querySelector(`[data-square="${sq}"]`).classList.add('selected');
+                moves.forEach(m => {
+                    const target = document.querySelector(`[data-square="${m.to}"]`);
+                    const dot = document.createElement('div');
+                    dot.className = 'move-dot';
+                    target.appendChild(dot);
+                });
+            }
+        }
+
+        function clearHighlights() {
+            document.querySelectorAll('.square').forEach(s => {
+                s.classList.remove('selected');
+                const dot = s.querySelector('.move-dot');
+                if (dot) dot.remove();
+            });
+        }
+
+        function updateStatusUI() {
+            const turn = game.turn();
+            const isPve = gameModeSelect.value === 'pve';
+            
+            if (game.in_checkmate()) {
+                turnText.innerText = "Checkmate!";
+                subStatus.innerText = turn === 'w' ? "Vitoria das Pretas" : "Vitoria das Brancas";
+                turnIndicator.style.backgroundColor = "#ef4444";
+                return;
+            }
+
+            if (isAiThinking) {
+                turnText.innerText = "IA Pensando...";
+                subStatus.innerText = `Nível ${aiDifficulty} analisando`;
+                turnIndicator.className = "w-3 h-3 rounded-full bg-amber-500 thinking-glow";
+                thinkingSpinner.classList.remove('hidden');
+            } else {
+                thinkingSpinner.classList.add('hidden');
+                turnIndicator.className = "w-3 h-3 rounded-full shadow-[0_0_10px_white]";
+                if (turn === 'w') {
+                    turnText.innerText = isPve ? "Sua Vez (Brancas)" : "Vez das Brancas";
+                    subStatus.innerText = "Escolha sua jogada";
+                    turnIndicator.style.backgroundColor = "white";
+                } else {
+                    turnText.innerText = isPve ? "Vez da IA (Pretas)" : "Vez das Pretas";
+                    subStatus.innerText = "Aguardando movimento";
+                    turnIndicator.style.backgroundColor = "#334155";
+                }
+            }
+        }
+
+        function processMove(move) {
+            const hist = game.history();
+            const round = Math.ceil(hist.length / 2);
+            
+            if (move.color === 'w') {
+                const row = document.createElement('div');
+                row.className = "grid grid-cols-3 p-3 border-b border-white/5 history-row items-center";
+                row.id = `round-${round}`;
+                row.innerHTML = `
+                    <div class="text-slate-600 font-bold">#${round}</div>
+                    <div class="text-amber-500 font-bold">${move.san}</div>
+                    <div id="black-move-${round}" class="text-slate-400 italic">...</div>
+                `;
+                moveHistoryEl.prepend(row);
+            } else {
+                const blackCell = document.getElementById(`black-move-${round}`);
+                if (blackCell) blackCell.innerText = move.san;
+            }
+
+            if (move.captured) {
+                const img = document.createElement('img');
+                img.src = PIECES_SVG[move.color === 'w' ? 'b' : 'w'][move.captured];
+                img.className = "w-5 h-5 opacity-60";
+                (move.color === 'w' ? capturedWhite : capturedBlack).appendChild(img);
+            }
+            document.getElementById('moveCount').innerText = hist.length;
+        }
+
+        function triggerAI() {
+            isAiThinking = true;
+            updateStatusUI();
+            
+            // Delay artificial para o usuário "ver" que ela está pensando
+            setTimeout(() => {
+                const startTime = performance.now();
+                const moves = game.moves();
+                let bestMove = null;
+
+                if (aiDifficulty === 1) {
+                    bestMove = moves[Math.floor(Math.random() * moves.length)];
+                } else {
+                    const depth = aiDifficulty >= 4 ? 3 : aiDifficulty - 1;
+                    let bestScore = -99999;
+                    
+                    for (let m of moves) {
+                        game.move(m);
+                        let score = -minimax(depth, -100000, 100000);
+                        game.undo();
+                        if (score > bestScore) {
+                            bestScore = score;
+                            bestMove = m;
+                        }
+                    }
+                }
+
+                const endTime = performance.now();
+                const duration = endTime - startTime;
+                
+                // Garante que o spinner apareça por pelo menos 600ms
+                const wait = Math.max(600 - duration, 0);
+                
+                setTimeout(() => {
+                    const move = game.move(bestMove);
+                    isAiThinking = false;
+                    updateBoard();
+                    processMove(move);
+                }, wait);
+
+            }, 100);
+        }
+
+        const weights = { p: 10, n: 30, b: 30, r: 50, q: 90, k: 900 };
+        function evaluate() {
+            let total = 0;
+            const board = game.board();
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const p = board[r][c];
+                    if (p) total += (p.color === 'w' ? weights[p.type] : -weights[p.type]);
+                }
+            }
+            return game.turn() === 'w' ? total : -total;
+        }
+
+        function minimax(depth, alpha, beta) {
+            if (depth === 0) return evaluate();
+            const moves = game.moves();
+            if (moves.length === 0) return game.in_check() ? -99999 : 0;
+
+            let max = -100000;
+            for (let m of moves) {
+                game.move(m);
+                let score = -minimax(depth - 1, -beta, -alpha);
+                game.undo();
+                if (score >= beta) return score;
+                if (score > max) max = score;
+                if (score > alpha) alpha = score;
+            }
+            return max;
+        }
+
+        function setDifficulty(lvl) {
+            aiDifficulty = lvl;
+            diffBtns.forEach(btn => {
+                btn.className = "diff-btn flex-1 py-2 text-xs bg-slate-800 rounded-md transition-all border border-transparent";
+                if (parseInt(btn.dataset.level) === lvl) {
+                    btn.classList.add('bg-amber-500', 'text-white', 'font-bold');
+                }
+            });
+        }
+
+        document.getElementById('resetBtn').onclick = () => {
+            game.reset();
+            moveHistoryEl.innerHTML = '';
+            capturedWhite.innerHTML = '';
+            capturedBlack.innerHTML = '';
+            document.getElementById('moveCount').innerText = '0';
+            createBoard();
+        };
+
+        window.onload = () => {
+            createBoard();
+            setDifficulty(1);
+        };
+    </script>
+</body>
+</html>

@@ -19,20 +19,6 @@
     <link rel="icon" type="image/png" href="imagens/logo.png">
 
     <style>
-        #tubes-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            display: none;
-        }
-        [data-theme="tubes"] .snow-container,
-        [data-theme="tubes"] .background-orb {
-            display: none;
-        }
-
         /* ============================================ */
         /* CABEÇALHO FIXO COM BARRA DE PESQUISA */
         /* ============================================ */
@@ -53,12 +39,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.07);
             box-shadow: 0 4px 24px rgba(0,0,0,0.15);
             transition: background 0.5s ease, border-color 0.3s ease;
-        }
-
-        [data-theme="light"] .site-header,
-        [data-theme="pastel"] .site-header {
-            background: rgba(240, 242, 245, 0.7);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
         }
 
         [data-theme="marine"] .site-header {
@@ -126,10 +106,6 @@
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
         }
 
-        [data-theme="light"] .site-header #busca-input:focus {
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
         /* Empurra o conteúdo principal para baixo do header fixo */
         .main-wrapper {
             padding-top: 90px !important;
@@ -162,8 +138,6 @@
 
 <body>
 
-    <canvas id="tubes-canvas"></canvas>
-
     <div class="snow-container">
         <div class="snow-layer-1"></div>
         <div class="snow-layer-2"></div>
@@ -183,23 +157,26 @@
 
     <!-- THEME SWITCHER -->
     <div class="theme-switcher glass-liquid">
-        <button class="theme-btn" onclick="mudarTema('light')" data-tooltip="Claro">
-            <i class="fa-regular fa-sun"></i>
-        </button>
-        <button class="theme-btn" onclick="mudarTema('dark')" data-tooltip="Escuro">
+        <button class="theme-btn" data-theme="dark" onclick="mudarTema('dark', true)" data-tooltip="Escuro">
             <i class="fa-solid fa-moon"></i>
         </button>
-        <button class="theme-btn" onclick="mudarTema('marine')" data-tooltip="Marinha">
+        <button class="theme-btn" data-theme="marine" onclick="mudarTema('marine', true)" data-tooltip="Marinha">
             <i class="fa-solid fa-water"></i>
         </button>
-        <button class="theme-btn" onclick="mudarTema('pastel')" data-tooltip="Pastel">
-            <i class="fa-solid fa-ice-cream"></i>
-        </button>
-        <button class="theme-btn" onclick="mudarTema('newyear')" data-tooltip="Ano Novo">
+        <button class="theme-btn" data-theme="newyear" onclick="mudarTema('newyear', true)" data-tooltip="Ano Novo">
             <i class="fa-regular fa-snowflake"></i>
         </button>
-        <button class="theme-btn" onclick="mudarTema('tubes')" data-tooltip="Tubes">
-            <i class="fa-solid fa-bezier-curve"></i>
+        <button class="theme-btn" data-theme="green" onclick="mudarTema('green', true)" data-tooltip="Verde">
+            <i class="fa-solid fa-leaf"></i>
+        </button>
+        <button class="theme-btn" data-theme="purple" onclick="mudarTema('purple', true)" data-tooltip="Roxo">
+            <i class="fa-solid fa-gem"></i>
+        </button>
+        <button class="theme-btn" data-theme="red" onclick="mudarTema('red', true)" data-tooltip="Vermelho">
+            <i class="fa-solid fa-fire"></i>
+        </button>
+        <button class="theme-btn" data-theme="gray" onclick="mudarTema('gray', true)" data-tooltip="Cinza">
+            <i class="fa-solid fa-circle-half-stroke"></i>
         </button>
     </div>
 
@@ -224,6 +201,43 @@
         <!-- REMOVIDA do main-wrapper pois agora está no site-header -->
 
         <div id="container-cards">
+            <div class="glass-card" data-projeto="zeroia" data-categoria="ia">
+                <div class="card-image-wrapper">
+                    <img src="imagens/ia.png" alt="ZeroIA" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=ZeroIA'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>ZeroIA</h3>
+                        <span class="category-icon"><i class="fa-solid fa-brain"></i></span>
+                    </div>
+                    <p>Detector de textos gerados por IA. Analise se um texto foi escrito por inteligência artificial.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="zeroia-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="zeroia/index.html" onclick="atualizarEstatistica('zeroia')" class="action-btn">Detectar IA</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="piano" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="imagens/piano.png" alt="Piano Virtual" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Piano+Virtual'">
+                    <span class="status-tag">NOVO</span>
+                    <span class="status-tag">BETA</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Piano Virtual</h3>
+                        <span class="category-icon"><i class="fa-solid fa-music"></i></span>
+                    </div>
+                    <p>Toque piano virtualmente e crie melodias incríveis com este instrumento digital.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="piano-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="piano/piano.html" onclick="atualizarEstatistica('piano')" class="action-btn">Tocar Piano</a>
+                </div>
+            </div>
+
             <div class="glass-card" data-projeto="booom" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/booom.png" alt="Booom Music Player" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Booom+Music+Player'">
@@ -245,7 +259,7 @@
             <div class="glass-card" data-projeto="skydash" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/skydash.png" alt="SkyDash" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=SkyDash'">
-                    <span class="status-tag">NOVO</span>
+                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -263,7 +277,7 @@
             <div class="glass-card" data-projeto="halibuspace" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/halibu.png" alt="Halibu Space" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Halibu+Space'">
-                    <span class="status-tag">NOVO</span>
+                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -593,27 +607,43 @@
     </div>
 
     <script>
-        function mudarTema(tema) {
+        const themeCycle = ['dark', 'marine', 'green', 'purple', 'red', 'gray', 'newyear'];
+
+        function getThemeForDate(date = new Date()) {
+            const daysSinceEpoch = Math.floor(date.getTime() / 86400000);
+            return themeCycle[daysSinceEpoch % themeCycle.length];
+        }
+
+        function scheduleThemeRotation() {
+            const now = new Date();
+            const nextMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+            const msUntilMidnight = nextMidnight - now;
+            setTimeout(() => {
+                const nextTheme = getThemeForDate(new Date());
+                applyTheme(nextTheme, false);
+                scheduleThemeRotation();
+            }, msUntilMidnight);
+        }
+
+        function applyTheme(tema, persist = false) {
             document.documentElement.setAttribute('data-theme', tema);
-            localStorage.setItem('site-theme', tema);
             atualizarBotoesTema(tema);
-            
-            const tubesCanvas = document.getElementById('tubes-canvas');
-            if (tema === 'tubes') {
-                if (tubesCanvas) tubesCanvas.style.display = 'block';
-                initTubes();
-            } else {
-                if (tubesCanvas) tubesCanvas.style.display = 'none';
+
+            if (persist) {
+                const hoje = new Date().toISOString().split('T')[0];
+                localStorage.setItem('site-theme', tema);
+                localStorage.setItem('site-theme-day', hoje);
             }
+        }
+
+        function mudarTema(tema, manual = false) {
+            applyTheme(tema, manual);
         }
 
         function atualizarBotoesTema(temaAtivo) {
             const botoes = document.querySelectorAll('.theme-btn');
             botoes.forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.onclick.toString().includes(temaAtivo)) {
-                    btn.classList.add('active');
-                }
+                btn.classList.toggle('active', btn.dataset.theme === temaAtivo);
             });
         }
 
@@ -633,15 +663,19 @@
         }
 
         window.addEventListener('load', () => {
-            const projetos = ['zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
+            const projetos = ['zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
                 atualizarDisplay(proj, count);
             });
 
-            const temaSalvo = localStorage.getItem('site-theme') || 'dark';
-            mudarTema(temaSalvo);
+            const hoje = new Date().toISOString().split('T')[0];
+            const temaSalvo = localStorage.getItem('site-theme');
+            const temaSalvoDia = localStorage.getItem('site-theme-day');
+            const temaInicial = temaSalvo && temaSalvoDia === hoje ? temaSalvo : getThemeForDate();
+            mudarTema(temaInicial, temaSalvo && temaSalvoDia === hoje);
+            scheduleThemeRotation();
         });
 
         document.getElementById('busca-input').addEventListener('input', function (e) {
@@ -666,48 +700,6 @@
                     card.style.display = 'none';
                 }
             });
-        }
-
-        let tubesInitialized = false;
-        let tubesApp = null;
-
-        async function initTubes() {
-            if (tubesInitialized) return;
-            
-            try {
-                const module = await import("https://cdn.jsdelivr.net/npm/threejs-components@0.0.19/build/cursors/tubes1.min.js");
-                const TubesCursor = module.default;
-                
-                tubesApp = TubesCursor(document.getElementById('tubes-canvas'), {
-                    tubes: {
-                        colors: ["#f967fb", "#53bc28", "#6958d5"],
-                        lights: {
-                            intensity: 200,
-                            colors: ["#83f36e", "#fe8a2e", "#ff008a", "#60aed5"]
-                        }
-                    }
-                });
-                
-                tubesInitialized = true;
-
-                document.body.addEventListener('click', () => {
-                    if (document.documentElement.getAttribute('data-theme') === 'tubes' && tubesApp) {
-                        const colors = randomColors(3);
-                        const lightsColors = randomColors(4);
-                        tubesApp.tubes.setColors(colors);
-                        tubesApp.tubes.setLightsColors(lightsColors);
-                    }
-                });
-
-            } catch (error) {
-                console.error("Failed to load Tubes theme:", error);
-            }
-        }
-
-        function randomColors(count) {
-            return new Array(count)
-                .fill(0)
-                .map(() => "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'));
         }
 
         // --- LÓGICA REAL DA RETROSPECTIVA ---

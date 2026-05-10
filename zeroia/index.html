@@ -6,91 +6,146 @@
     <title>ZeroIA — Detector de Texto por IA</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app">
+        <!-- Topbar -->
         <nav class="topbar">
             <div class="brand">
                 <div class="logo">ZI</div>
                 <div class="brand-text">
                     <h1>ZeroIA</h1>
-                    <span class="tag">Detector de conteúdo gerado por IA</span>
+                    <span class="tag">Detecte conteúdo gerado por IA</span>
                 </div>
             </div>
             <div class="top-actions">
-        <a href="../index.html" class="btn ghost back-btn">← Voltar</a>
-      </div>
+                <a href="../index.html" class="btn-icon" title="Voltar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+            </div>
         </nav>
 
+        <!-- Layout Principal -->
         <main class="layout">
-            <section class="panel input-panel card">
+            <!-- Painel de Input -->
+            <section class="panel input-panel">
                 <div class="panel-header">
                     <h2>Cole seu texto</h2>
-                    <small class="hint">Máx. 5000 caracteres • Pressione Ctrl/Cmd+Enter para analisar</small>
+                    <small class="hint">Máximo 5000 caracteres</small>
                 </div>
 
-                <textarea id="inputText" maxlength="5000" placeholder="Cole aqui o texto que deseja verificar..."></textarea>
+                <textarea 
+                    id="inputText" 
+                    maxlength="5000" 
+                    placeholder="Cole aqui o texto que deseja verificar...">
+                </textarea>
 
                 <div class="controls">
-                    <div class="left-controls">
-                        <div class="char-count"><span id="charCount">0</span> / 5000</div>
+                    <div class="char-count">
+                        <span id="charCount">0</span> / 5000
                     </div>
                     <div class="right-controls">
-                        <button id="analyzeBtn" class="btn primary">Analisar</button>
-                        <button id="clearBtn" class="btn ghost">Limpar</button>
+                        <button id="analyzeBtn" class="btn btn-primary">Analisar</button>
+                        <button id="clearBtn" class="btn btn-ghost">Limpar</button>
                     </div>
+                </div>
+
+                <div class="shortcut-hint">
+                    <span>💡 Pressione <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para analisar</span>
                 </div>
             </section>
 
-            <aside class="panel result-panel card">
+            <!-- Painel de Resultado -->
+            <aside class="panel result-panel">
                 <div class="panel-header">
-                    <h2>Resultado</h2>
-                    <div class="result-actions"></div>
+                    <h2>Análise</h2>
                 </div>
 
-                <div id="emptyContainer" class="empty">Cole um texto e clique em "Analisar"</div>
+                <!-- Estado vazio -->
+                <div id="emptyContainer" class="state-empty">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                    </svg>
+                    <p>Cole um texto para começar</p>
+                </div>
 
-                <div id="loadingContainer" class="loading hidden">
+                <!-- Estado carregando -->
+                <div id="loadingContainer" class="state-loading hidden">
                     <div class="spinner"></div>
-                    <div class="loading-text">Analisando...</div>
+                    <p>Analisando...</p>
                 </div>
 
-                <div id="resultContainer" class="result hidden" aria-live="polite">
-                    <div class="score">
-                        <div class="circle-chart">
-                            <svg viewBox="0 0 100 100" class="progress-svg">
-                                <defs>
-                                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#6366f1" />
-                                        <stop offset="100%" stop-color="#ec4899" />
-                                    </linearGradient>
-                                </defs>
-                                <circle cx="50" cy="50" r="45" class="bg"></circle>
-                                <circle cx="50" cy="50" r="45" id="progressCircle" class="fg" stroke="url(#progressGradient)"></circle>
+                <!-- Estado resultado -->
+                <div id="resultContainer" class="state-result hidden">
+                    <!-- Gauge -->
+                    <div class="gauge-section">
+                        <div class="gauge-wrapper">
+                            <svg class="gauge-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Background arc -->
+                                <path class="gauge-bg" d="M 30 100 A 70 70 0 0 1 170 100" />
+                                <!-- Progress arc -->
+                                <path id="gaugeProgress" class="gauge-progress" d="M 30 100 A 70 70 0 0 1 170 100" stroke-dasharray="0 219" stroke-dashoffset="0" />
                             </svg>
-                            <div class="percentage" id="percentageText">0%</div>
-                        </div>
-                        <div class="labels">
-                            <div class="label"><strong id="aiPercentage">0%</strong><span>IA</span></div>
-                            <div class="label"><strong id="humanPercentage">0%</strong><span>Humano</span></div>
+                            <div class="gauge-content">
+                                <div class="gauge-percentage" id="percentageText">0%</div>
+                                <div class="gauge-label">Conteúdo de IA</div>
+                            </div>
                         </div>
                     </div>
 
-                    <div id="verdict" class="verdict"></div>
+                    <!-- Percentuais -->
+                    <div class="percentage-labels">
+                        <div class="percentage-item">
+                            <span class="percentage-value" id="aiPercentage">0%</span>
+                            <span class="percentage-name">IA</span>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="percentage-item">
+                            <span class="percentage-value" id="humanPercentage">0%</span>
+                            <span class="percentage-name">Humano</span>
+                        </div>
+                    </div>
 
-                    <div id="suggestions" class="suggestions hidden"></div>
+                    <!-- Veredito -->
+                    <div id="verdict" class="verdict-box"></div>
 
-                    <div id="analysisDetails" class="details"></div>
+                    <!-- Sinais de IA -->
+                    <div id="aiSignalsContainer" class="analysis-section hidden">
+                        <h3>🚩 Sinais de IA Detectados</h3>
+                        <div id="aiSignals" class="signals-list"></div>
+                    </div>
 
+                    <!-- Áreas de Melhoria -->
+                    <div id="improvementContainer" class="analysis-section hidden">
+                        <h3>✏️ Como Melhorar</h3>
+                        <div id="improvements" class="improvements-list"></div>
+                    </div>
+
+                    <!-- Trechos Suspeitos -->
+                    <div id="phrasesContainer" class="analysis-section hidden">
+                        <h3>💬 Trechos Suspeitos</h3>
+                        <div id="phrases" class="phrases-list"></div>
+                    </div>
+
+                    <!-- Características -->
+                    <div id="characteristicsContainer" class="analysis-section hidden">
+                        <h3>🔍 Características Analisadas</h3>
+                        <div id="characteristics" class="characteristics-list"></div>
+                    </div>
+
+                    <!-- Rodapé -->
                     <div class="result-footer">
-                        <button id="reanalyzeBtn" class="btn ghost">Reanalisar</button>
+                        <button id="reanalyzeBtn" class="btn btn-ghost">Reanalisar</button>
                     </div>
                 </div>
             </aside>
         </main>
 
+        <!-- Footer -->
         <footer class="footer">
             <small>Feito com ❤️ — ZeroIA • Experimentos</small>
         </footer>
