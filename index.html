@@ -31,7 +31,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 220px; /* espaço para o theme-switcher à direita */
+            gap: 16px;
+            padding: 0 40px;
             height: 70px;
             background: rgba(15, 16, 20, 0.6);
             backdrop-filter: blur(20px) saturate(180%);
@@ -51,13 +52,19 @@
         }
 
         .site-header .header-logo {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             color: var(--text-main);
             white-space: nowrap;
-            margin-right: 20px;
-            opacity: 0.9;
+            opacity: 0.95;
             letter-spacing: -0.3px;
+            cursor: pointer;
+        }
+
+        .site-header .header-search {
+            flex: 0 1 560px;
+            max-width: 560px;
+            position: relative;
         }
 
         .site-header .header-logo span {
@@ -133,6 +140,93 @@
                 top: 12px !important;
             }
         }
+
+        /* ============================================ */
+        /* DROPDOWN DE BUSCA COM AUTOCOMPLETE */
+        /* ============================================ */
+        .header-search {
+            position: relative;
+        }
+
+        .busca-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 8px;
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 999;
+            display: none;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .busca-dropdown::-webkit-scrollbar {
+            display: none;
+        }
+
+        .busca-dropdown.active {
+            display: block;
+        }
+
+        .busca-resultado {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .busca-resultado:last-child {
+            border-bottom: none;
+        }
+
+        .busca-resultado:hover {
+            background: rgba(255, 255, 255, 0.08);
+            padding-left: 20px;
+        }
+
+        .busca-resultado-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .busca-resultado-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .busca-resultado-titulo {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .busca-resultado-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
 </head>
 
@@ -149,43 +243,22 @@
 
     <!-- CABEÇALHO FIXO (desktop only) -->
     <header class="site-header">
+        <div class="header-logo" role="banner" onclick="window.location.href='index.html'">
+            Sala de <span class="text-gradient">Experimentos</span>
+        </div>
         <div class="header-search">
             <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="busca-input" placeholder="O que você procura hoje?">
+            <div id="busca-dropdown" class="busca-dropdown"></div>
         </div>
     </header>
-
-    <!-- THEME SWITCHER -->
-    <div class="theme-switcher glass-liquid">
-        <button class="theme-btn" data-theme="dark" onclick="mudarTema('dark', true)" data-tooltip="Escuro">
-            <i class="fa-solid fa-moon"></i>
-        </button>
-        <button class="theme-btn" data-theme="marine" onclick="mudarTema('marine', true)" data-tooltip="Marinha">
-            <i class="fa-solid fa-water"></i>
-        </button>
-        <button class="theme-btn" data-theme="newyear" onclick="mudarTema('newyear', true)" data-tooltip="Ano Novo">
-            <i class="fa-regular fa-snowflake"></i>
-        </button>
-        <button class="theme-btn" data-theme="green" onclick="mudarTema('green', true)" data-tooltip="Verde">
-            <i class="fa-solid fa-leaf"></i>
-        </button>
-        <button class="theme-btn" data-theme="purple" onclick="mudarTema('purple', true)" data-tooltip="Roxo">
-            <i class="fa-solid fa-gem"></i>
-        </button>
-        <button class="theme-btn" data-theme="red" onclick="mudarTema('red', true)" data-tooltip="Vermelho">
-            <i class="fa-solid fa-fire"></i>
-        </button>
-        <button class="theme-btn" data-theme="gray" onclick="mudarTema('gray', true)" data-tooltip="Cinza">
-            <i class="fa-solid fa-circle-half-stroke"></i>
-        </button>
-    </div>
 
     <div class="main-wrapper">
 
         <!-- Título (visível em todas as telas) -->
         <header style="text-align:center; margin-bottom: 50px; animation: fadeInDown 0.8s ease;">
             <h1>Sala de <span class="text-gradient">Experimentos</span></h1>
-            <h2>Onde a criatividade encontra a <span class="text-highlight">tecnologia</span>.</h2>
+            <h2>Onde a criatividade encontra a tecnologia.</h2>
         </header>
 
         <nav id="categorias-container">
@@ -716,6 +789,101 @@
                 localStorage.setItem('site-hour-stats', JSON.stringify(hourStats));
             }
         }, 1000);
+    </script>
+
+    <script>
+        // ============================================
+        // BUSCA COM AUTOCOMPLETE
+        // ============================================
+        const buscaInput = document.getElementById('busca-input');
+        const buscaDropdown = document.getElementById('busca-dropdown');
+        const containerCards = document.getElementById('container-cards');
+
+        // Extrair dados dos projetos
+        function extrairProjetos() {
+            const projetos = [];
+            const cards = containerCards.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const titulo = card.querySelector('.card-header h3')?.textContent || '';
+                const descricao = card.querySelector('.card-info p')?.textContent || '';
+                const imagem = card.querySelector('.card-image-wrapper img')?.src || '';
+                const link = card.querySelector('.action-btn')?.href || '';
+                const projeto = card.dataset.projeto || '';
+                const categoria = card.dataset.categoria || '';
+
+                if (titulo && link) {
+                    projetos.push({
+                        titulo: titulo.trim(),
+                        descricao: descricao.trim(),
+                        imagem: imagem,
+                        link: link,
+                        projeto: projeto,
+                        categoria: categoria
+                    });
+                }
+            });
+            return projetos;
+        }
+
+        // Buscar projetos relevantes
+        function buscarProjetos(termo) {
+            if (!termo.trim()) {
+                buscaDropdown.classList.remove('active');
+                return [];
+            }
+
+            const projetos = extrairProjetos();
+            const termoLower = termo.toLowerCase();
+
+            const resultados = projetos.filter(p => 
+                p.titulo.toLowerCase().includes(termoLower) || 
+                p.descricao.toLowerCase().includes(termoLower) ||
+                p.categoria.toLowerCase().includes(termoLower)
+            ).slice(0, 8); // Limite de 8 resultados
+
+            return resultados;
+        }
+
+        // Renderizar dropdown
+        function renderizarResultados(resultados) {
+            if (resultados.length === 0) {
+                buscaDropdown.classList.remove('active');
+                return;
+            }
+
+            buscaDropdown.innerHTML = resultados.map(r => `
+                <a href="${r.link}" onclick="atualizarEstatistica('${r.projeto}')" class="busca-resultado">
+                    <img src="${r.imagem}" alt="${r.titulo}" class="busca-resultado-img" onerror="this.src='https://placehold.co/48x48/1a1a1a/FFF?text=${encodeURIComponent(r.titulo.substring(0,3))}'">
+                    <div class="busca-resultado-info">
+                        <div class="busca-resultado-titulo">${r.titulo}</div>
+                        <div class="busca-resultado-desc">${r.descricao.substring(0, 50)}...</div>
+                    </div>
+                </a>
+            `).join('');
+
+            buscaDropdown.classList.add('active');
+        }
+
+        // Event listener para input
+        buscaInput.addEventListener('input', (e) => {
+            const termo = e.target.value;
+            const resultados = buscarProjetos(termo);
+            renderizarResultados(resultados);
+        });
+
+        // Fechar dropdown ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.header-search')) {
+                buscaDropdown.classList.remove('active');
+            }
+        });
+
+        // Fechar dropdown ao pressionar Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                buscaDropdown.classList.remove('active');
+            }
+        });
     </script>
 
     <script>
