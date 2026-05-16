@@ -23,6 +23,7 @@
     --secondary-gradient: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
     
     --accent-color: #00d2ff;
+    --accent-glow: rgba(0, 210, 255, 0.18);
     
     /* Espaçamento */
     --card-radius: 24px;
@@ -47,6 +48,7 @@
     --secondary-gradient: linear-gradient(135deg, #023e8a 0%, #0077b6 100%);
     
     --accent-color: #00e5ff;
+    --accent-glow: rgba(0, 229, 255, 0.18);
 }
 
 /* --- TEMA: VERDE --- */
@@ -66,6 +68,7 @@
     --secondary-gradient: linear-gradient(135deg, #4ade80 0%, #86efac 100%);
     
     --accent-color: #4ade80;
+    --accent-glow: rgba(74, 222, 128, 0.18);
 }
 
 [data-theme="green"] .text-gradient {
@@ -93,6 +96,7 @@
     --secondary-gradient: linear-gradient(135deg, #c084fc 0%, #8b5cf6 100%);
     
     --accent-color: #a78bfa;
+    --accent-glow: rgba(167, 139, 250, 0.18);
 }
 
 [data-theme="purple"] .text-gradient {
@@ -120,6 +124,7 @@
     --secondary-gradient: linear-gradient(135deg, #fb7185 0%, #fda4af 100%);
     
     --accent-color: #f87171;
+    --accent-glow: rgba(248, 113, 113, 0.18);
 }
 
 [data-theme="red"] .text-gradient {
@@ -147,6 +152,7 @@
     --secondary-gradient: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
     
     --accent-color: #94a3b8;
+    --accent-glow: rgba(148, 163, 184, 0.18);
 }
 
 [data-theme="gray"] .text-gradient {
