@@ -112,8 +112,7 @@
     </aside>
 
     <script>
-        // INSIRA SUA API KEY DA GROQ AQUI
-        const GROQ_API_KEY = "gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        const GROQ_PROXY_PATH = "/api/groq-proxy";
 
         lucide.createIcons();
         let mediaRecorder, audioChunks = [], audioContext, analyser, dataArray, source, animationFrameId;
@@ -144,6 +143,16 @@
         }
         setupCanvas();
         window.addEventListener('resize', setupCanvas);
+
+        function arrayBufferToBase64(buffer) {
+            let binary = '';
+            const bytes = new Uint8Array(buffer);
+            const chunkSize = 0x8000;
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+                binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+            }
+            return btoa(binary);
+        }
 
         function drawStaticWaveform() {
             canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
@@ -195,7 +204,7 @@
 
                 mediaRecorder.start();
                 isRecording = true;
-                btnRecord.className = "w-12 h-12 rounded-full bg-red-500 flex items-center justify-center text-white shadow-lg尊 animate-pulse";
+                btnRecord.className = "w-12 h-12 rounded-full bg-red-500 flex items-center justify-center text-white shadow-lg animate-pulse";
                 iconRecord.setAttribute('data-lucide', 'square'); iconRecord.className = "w-4 h-4 fill-white";
                 lucide.createIcons();
 
@@ -245,29 +254,36 @@
             btnSubmit.className = "w-12 h-12 rounded-full bg-white/10 text-white/40 flex items-center justify-center cursor-not-allowed";
 
             try {
-                // 1. Enviar arquivo para o Whisper da Groq
-                const formData = new FormData();
-                formData.append('file', recordedAudioBlob, 'audio.webm');
-                formData.append('model', 'whisper-large-v3-turbo');
+                const arrayBuffer = await recordedAudioBlob.arrayBuffer();
+                const audioBase64 = arrayBufferToBase64(arrayBuffer);
 
-                const whisperResponse = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+                const whisperResponse = await fetch(GROQ_PROXY_PATH, {
                     method: 'POST',
-                    headers: { 'Authorization': `Bearer ${GROQ_API_KEY}` },
-                    body: formData
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        requestType: 'transcription',
+                        model: 'whisper-large-v3-turbo',
+                        filename: 'audio.webm',
+                        mimeType: 'audio/webm',
+                        data: audioBase64
+                    })
                 });
 
-                if(!whisperResponse.ok) throw new Error("Falha no Whisper");
+                if (!whisperResponse.ok) {
+                    const errorPayload = await whisperResponse.json().catch(() => null);
+                    throw new Error(errorPayload?.error || "Falha no Whisper");
+                }
                 const whisperData = await whisperResponse.json();
                 const textCru = whisperData.text;
 
                 // 2. Enviar texto bruto para o Llama 3.1 8B formatar em Markdown elegante
-                const llamaResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                const llamaResponse = await fetch(GROQ_PROXY_PATH, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${GROQ_API_KEY}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        requestType: 'chat',
                         model: 'llama-3.1-8b-instant',
                         messages: [
                             {
@@ -322,13 +338,13 @@
             try {
                 chatContextHistory.push({ role: "user", content: prompt });
 
-                const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                const response = await fetch(GROQ_PROXY_PATH, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${GROQ_API_KEY}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        requestType: 'chat',
                         model: 'llama-3.1-8b-instant',
                         messages: chatContextHistory
                     })
