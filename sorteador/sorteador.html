@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteador</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151b2c;
+            --bg-input: #1e2640;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-success: #10b981;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            margin-bottom: 24px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .tabs-nav {
+            display: flex;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .tab-panel.active { grid-template-columns: 1fr; }
+        }
+
+        .config-side {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        input[type="number"], textarea, select {
+            width: 100%;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea {
+            height: 180px;
+            resize: none;
+            line-height: 1.5;
+        }
+
+        input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            user-select: none;
+        }
+
+        .checkbox-group input {
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-action {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .btn-action:hover:not(:disabled) { background: var(--accent-hover); }
+        .btn-action:disabled {
+            background: #1e2538;
+            color: var(--text-muted);
+            cursor: not-allowed;
+            border: 1px dashed var(--border);
+        }
+
+        .display-side {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 340px;
+            position: relative;
+        }
+
+        .result-box { text-align: center; width: 100%; }
+        .result-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .result-main {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-success);
+            word-break: break-word;
+        }
+
+        .result-list {
+            max-height: 160px;
+            overflow-y: auto;
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 14px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: #fff;
+            border: 1px solid var(--border);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .history-box {
+            margin-top: 20px;
+            width: 100%;
+            border-top: 1px solid var(--border);
+            padding-top: 14px;
+            text-align: left;
+        }
+
+        .history-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .history-items {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            max-height: 60px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            line-height: 1.4;
+        }
+
+        .group-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-height: 280px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .group-card {
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            animation: pulse 0.3s ease-out;
+        }
+
+        .group-card h4 {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 4px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 2px;
+        }
+
+        .group-card p { font-size: 0.85rem; font-family: 'JetBrains Mono', monospace; color: var(--text-main); }
+
+        .roulette-container {
+            position: relative;
+            width: 310px;
+            height: 310px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas { border-radius: 50%; box-shadow: 0 0 30px rgba(0, 0, 0, 0.7); }
+        .roulette-arrow {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 24px solid #ef4444;
+            z-index: 10;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            z-index: 999;
+            pointer-events: none;
+            border-radius: 2px;
+            top: -20px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(720deg); }
+        }
+
+        .shaking {
+            animation: shake 0.1s infinite alternate;
+            color: #f59e0b !important;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            100% { transform: translate(-1px, -2px) rotate(-1deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Mega Sorteador Premium</h1>
+            <p>Sorteios customizados com feedback sonoro sintético, suspense mecânico e motor de inércia física.</p>
+        </header>
+
+        <div class="tabs-nav">
+            <button class="tab-btn active" data-tab="tab-numbers">🔢 Números</button>
+            <button class="tab-btn" data-tab="tab-names">📝 Nomes</button>
+            <button class="tab-btn" data-tab="tab-groups">👥 Formar Grupos</button>
+            <button class="tab-btn" data-tab="tab-roulette" id="trigger-tab-roulette">🎡 Roleta da Sorte</button>
+        </div>
+
+        <div id="tab-numbers" class="tab-panel active">
+            <div class="config-side">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="input-group">
+                        <label>Mínimo</label>
+                        <input type="number" id="num-min" value="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Máximo</label>
+                        <input type="number" id="num-max" value="100">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Quantidade a Sortear</label>
+                    <input type="number" id="num-qty" value="1" min="1">
+                </div>
+                <label class="checkbox-group">
+                    <input type="checkbox" id="num-repeat" checked>
+                    Permitir números repetidos
+                </label>
+                <button class="btn-action" id="btn-draw-numbers">Sortear Números</button>
+            </div>
+            <div class="display-side">
+                <div class="result-box">
+                    <p class="result-title">Resultado do Sorteio</p>
+                    <div id="res-numbers" class="result-main">00</div>
+                    <div class="history-box">
+                        <span class="history-title">Sorteios Anteriores</span>
+                        <div id="hist-numbers" class="history-items">Nenhum realizado nesta sessão</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-names" class="tab-panel">
+            <div class="config-side">
+                <div class="input-group">
+                    <label>Insira os Nomes (um por linha)</label>
+                    <textarea id="names-list" placeholder="Ana&#10;Bruno&#10;Carlos&#10;Diana&#10;Eduardo"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Quantidade de Ganhadores</label>
+                    <input type="number" id="names-qty" value="1" min="1">
+                </div>
+                <button class="btn-action" id="btn-draw-names">Sortear Ganhador</button>
+            </div>
+            <div class="display-side">
+                <div class="result-box">
+                    <p class="result-title">Ganhador(es)</p>
+                    <div id="res-names" class="result-main" style="font-size: 2rem; margin-bottom: 12px;">...</div>
+                    <div id="res-names-list" class="result-list" style="display:none;"></div>
+                    <div class="history-box">
+                        <span class="history-title">Histórico de Escolhidos</span>
+                        <div id="hist-names" class="history-items">Nenhum realizado nesta sessão</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-groups" class="tab-panel">
+            <div class="config-side">
+                <div class="input-group">
+                    <label>Lista de Integrantes (um por linha)</label>
+                    <textarea id="groups-list" placeholder="Membro A&#10;Membro B&#10;Membro C&#10;Membro D&#10;Membro E&#10;Membro F"></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Quantidade de Grupos</label>
+                    <input type="number" id="groups-qty" value="2" min="2">
+                </div>
+                <button class="btn-action" id="btn-divide-groups">Dividir Equipes</button>
+            </div>
+            <div class="display-side">
+                <div class="result-box">
+                    <p class="result-title">Divisão Balanceada</p>
+                    <div id="res-groups" class="group-container">
+                        <span style="color: var(--text-muted); grid-column: span 2; text-align: center;">Aguardando comando...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-roulette" class="tab-panel">
+            <div class="config-side">
+                <div class="input-group">
+                    <label>Opções da Roleta (um por linha)</label>
+                    <textarea id="roulette-list" placeholder="Notebook&#10;Camiseta&#10;Ingresso&#10;Caneca&#10;PIX R$ 50&#10;Vale Chocolate"></textarea>
+                </div>
+                <button class="btn-action" id="btn-spin-wheel">Girar Roleta 🎡</button>
+            </div>
+            <div class="display-side" style="background: rgba(0,0,0,0.15);">
+                <div class="roulette-arrow"></div>
+                <div class="roulette-container">
+                    <canvas id="wheel-canvas" width="310" height="310"></canvas>
+                </div>
+                <div id="res-roulette-winner" style="margin-top: 14px; font-weight: 700; color: var(--accent-success); font-size: 1.4rem; min-height: 32px; font-family: 'JetBrains Mono', monospace;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- MOTOR DE ÁUDIO SINTÉTICO (WEB AUDIO API) ---
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        function playTickSound(freq = 400) {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.04);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.04);
+            } catch (e) {}
+        }
+        function playWinSound() {
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const chords = [523.25, 659.25, 783.99, 1046.50]; // Acorde Maior C
+                chords.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.08);
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime + idx * 0.08);
+                    gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.08 + 0.4);
+                    osc.start(audioCtx.currentTime + idx * 0.08);
+                    osc.stop(audioCtx.currentTime + idx * 0.08 + 0.4);
+                });
+            } catch (e) {}
+        }
+
+        // --- GERENCIADOR DE ABAS ---
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                initAudio();
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.getAttribute('data-tab')).classList.add('active');
+                if(btn.getAttribute('data-tab') === 'tab-roulette') updateWheel();
+            });
+        });
+
+        // --- SISTEMA INTERNO DE CONFETES ---
+        function launchConfetti() {
+            const confettiColors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#3b82f6', '#f43f5e', '#a855f7', '#22d3ee'];
+            for (let i = 0; i < 110; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('confetti');
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                particle.style.width = Math.random() * 8 + 6 + 'px';
+                particle.style.height = Math.random() * 14 + 6 + 'px';
+                particle.style.animationDuration = Math.random() * 2 + 1.8 + 's';
+                particle.style.animationDelay = Math.random() * 0.4 + 's';
+                particle.style.opacity = Math.random() * 0.4 + 0.6;
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 3000);
+            }
+        }
+
+        // --- HISTÓRICO EM SESSÃO ---
+        const historyData = { numbers: [], names: [] };
+        function updateHistoryDisplay(type) {
+            const container = document.getElementById(`hist-${type}`);
+            if(!container) return;
+            if(historyData[type].length === 0) {
+                container.innerText = "Nenhum realizado nesta sessão";
+            } else {
+                container.innerText = historyData[type].slice().reverse().map((item, idx) => `[#${historyData[type].length - idx}] ${item}`).join('\n');
+            }
+        }
+
+        // --- MÓDULO 1: NÚMEROS ---
+        document.getElementById('btn-draw-numbers').addEventListener('click', function() {
+            initAudio();
+            const min = parseInt(document.getElementById('num-min').value);
+            const max = parseInt(document.getElementById('num-max').value);
+            const qty = parseInt(document.getElementById('num-qty').value);
+            const repeat = document.getElementById('num-repeat').checked;
+            const display = document.getElementById('res-numbers');
+            const btn = this;
+
+            if (isNaN(min) || isNaN(max) || min >= max || qty < 1 || (!repeat && qty > (max - min + 1))) {
+                display.innerText = "Erro"; return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Embaralhando...";
+            display.classList.add('shaking');
+
+            let elapsed = 0;
+            let lastTick = 0;
+            const liveLoop = setInterval(() => {
+                display.innerText = Math.floor(Math.random() * (max - min + 1)) + min;
+                elapsed += 60;
+                
+                if (elapsed - lastTick >= 120) {
+                    playTickSound(500);
+                    lastTick = elapsed;
+                }
+
+                if(elapsed >= 3000) {
+                    clearInterval(liveLoop);
+                    display.classList.remove('shaking');
+                    
+                    let finalResults = [];
+                    if (repeat) {
+                        for (let i = 0; i < qty; i++) finalResults.push(Math.floor(Math.random() * (max - min + 1)) + min);
+                    } else {
+                        let pool = Array.from({length: max - min + 1}, (_, i) => min + i);
+                        for (let i = 0; i < qty; i++) finalResults.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+                    }
+                    const resultStr = finalResults.join(', ');
+                    display.innerText = resultStr;
+                    historyData.numbers.push(resultStr);
+                    updateHistoryDisplay('numbers');
+                    
+                    playWinSound();
+                    launchConfetti();
+                    btn.disabled = false;
+                    btn.innerText = "Sortear Números";
+                }
+            }, 60);
+        });
+
+        // --- MÓDULO 2: NOMES ---
+        document.getElementById('btn-draw-names').addEventListener('click', function() {
+            initAudio();
+            const text = document.getElementById('names-list').value;
+            const qty = parseInt(document.getElementById('names-qty').value);
+            const displaySingle = document.getElementById('res-names');
+            const displayList = document.getElementById('res-names-list');
+            const btn = this;
+
+            const names = text.split('\n').map(n => n.trim()).filter(n => n.length > 0);
+            if (names.length === 0 || qty < 1) { displaySingle.innerText = "Lista vazia"; return; }
+
+            btn.disabled = true;
+            btn.innerText = "Sorteando Ganhador...";
+            displaySingle.classList.add('shaking');
+            displayList.style.display = 'none';
+
+            let elapsed = 0;
+            let lastTick = 0;
+            const liveLoop = setInterval(() => {
+                displaySingle.innerText = names[Math.floor(Math.random() * names.length)];
+                elapsed += 60;
+
+                if (elapsed - lastTick >= 120) {
+                    playTickSound(450);
+                    lastTick = elapsed;
+                }
+
+                if(elapsed >= 3000) {
+                    clearInterval(liveLoop);
+                    displaySingle.classList.remove('shaking');
+
+                    let pool = [...names];
+                    let winners = [];
+                    const maxWinners = Math.min(qty, pool.length);
+                    for(let i = 0; i < maxWinners; i++) winners.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+
+                    if (winners.length === 1) {
+                        displaySingle.innerText = winners[0];
+                        historyData.names.push(winners[0]);
+                    } else {
+                        displaySingle.innerText = `🎉 ${winners.length} Sorteados`;
+                        displayList.innerHTML = winners.map((w, i) => `<div><strong>${i+1}º:</strong> ${w}</div>`).join('');
+                        displayList.style.display = 'block';
+                        historyData.names.push(winners.join(' | '));
+                    }
+                    updateHistoryDisplay('names');
+                    
+                    playWinSound();
+                    launchConfetti();
+                    btn.disabled = false;
+                    btn.innerText = "Sortear Ganhador";
+                }
+            }, 60);
+        });
+
+        // --- MÓDULO 3: DIVISOR DE GRUPOS ---
+        document.getElementById('btn-divide-groups').addEventListener('click', function() {
+            initAudio();
+            const text = document.getElementById('groups-list').value;
+            const qtyGroups = parseInt(document.getElementById('groups-qty').value);
+            const display = document.getElementById('res-groups');
+            const btn = this;
+
+            const members = text.split('\n').map(m => m.trim()).filter(m => m.length > 0);
+            if(members.length === 0 || qtyGroups < 2) { display.innerHTML = 'Entrada Inválida'; return; }
+
+            btn.disabled = true;
+            btn.innerText = "Calculando Afinidades...";
+            display.innerHTML = `<span style="grid-column: span 2; text-align: center; font-size:1.5rem;" class="shaking">⚡ Distribuindo Integrantes...</span>`;
+            
+            let soundInterval = setInterval(() => playTickSound(300), 200);
+
+            setTimeout(() => {
+                clearInterval(soundInterval);
+                for (let i = members.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [members[i], members[j]] = [members[j], members[i]];
+                }
+                let groups = Array.from({ length: qtyGroups }, () => []);
+                members.forEach((m, idx) => groups[idx % qtyGroups].push(m));
+
+                display.innerHTML = groups.map((g, idx) => `
+                    <div class="group-card">
+                        <h4>Grupo ${idx + 1} (${g.length})</h4>
+                        <p>${g.join(', ') || 'Vazio'}</p>
+                    </div>
+                `).join('');
+                
+                playWinSound();
+                launchConfetti();
+                btn.disabled = false;
+                btn.innerText = "Dividir Equipes";
+            }, 3000);
+        });
+
+        // --- MÓDULO 4: ROLETA DA SORTE ---
+        const canvas = document.getElementById('wheel-canvas');
+        const ctx = canvas.getContext('2d');
+        const rouletteInput = document.getElementById('roulette-list');
+        const winnerDisplay = document.getElementById('res-roulette-winner');
+        const btnSpin = document.getElementById('btn-spin-wheel');
+
+        let options = [];
+        let startAngle = 0;
+        let arc = 0;
+        let velocity = 0;      
+        let friction = 0.993;  
+        let lastSoundAngle = 0;
+        const colors = ["#4f46e5", "#06b6d4", "#10b981", "#f59e0b", "#ec4899", "#8b5cf6", "#3b82f6", "#f43f5e"];
+
+        rouletteInput.addEventListener('input', updateWheel);
+
+        function updateWheel() {
+            const raw = rouletteInput.value.split('\n').map(o => o.trim()).filter(o => o.length > 0);
+            options = raw.length > 0 ? raw : ["Opção A", "Opção B", "Opção C", "Opção D"];
+            arc = Math.PI / (options.length / 2);
+            drawRoulette();
+        }
+
+        function drawRoulette() {
+            if (!ctx) return;
+            const radius = canvas.width / 2;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            options.forEach((opt, i) => {
+                const angle = startAngle + i * arc;
+                ctx.fillStyle = colors[i % colors.length];
+                
+                ctx.beginPath();
+                ctx.arc(radius, radius, radius - 4, angle, angle + arc, false);
+                ctx.lineTo(radius, radius);
+                ctx.fill();
+
+                ctx.save();
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 12px 'Plus Jakarta Sans', sans-serif";
+                ctx.translate(radius + Math.cos(angle + arc / 2) * (radius * 0.55), radius + Math.sin(angle + arc / 2) * (radius * 0.55));
+                ctx.rotate(angle + arc / 2 + Math.PI / 2);
+                const text = opt.length > 12 ? opt.substring(0, 10) + '..' : opt;
+                ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+                ctx.restore();
+            });
+
+            ctx.beginPath();
+            ctx.arc(radius, radius, 18, 0, 2 * Math.PI, false);
+            ctx.fillStyle = "#151b2c";
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#6366f1";
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        btnSpin.addEventListener('click', () => {
+            initAudio();
+            if (velocity > 0) return; 
+            winnerDisplay.innerText = "";
+            btnSpin.disabled = true;
+            btnSpin.innerText = "Girando...";
+            
+            velocity = Math.random() * 0.22 + 0.38; 
+            lastSoundAngle = startAngle;
+            physicsLoop();
+        });
+
+        function physicsLoop() {
+            if (velocity > 0.0006) {
+                startAngle += velocity;
+                velocity *= friction; 
+
+                // Gatilho de som mecânico a cada transição de fatia de pizza
+                if (Math.abs(startAngle - lastSoundAngle) >= arc) {
+                    playTickSound(650);
+                    lastSoundAngle = startAngle;
+                }
+
+                drawRoulette();
+                requestAnimationFrame(physicsLoop);
+            } else {
+                velocity = 0;
+                btnSpin.disabled = false;
+                btnSpin.innerText = "Girar Roleta 🎡";
+                evaluateWinner();
+            }
+        }
+
+        function evaluateWinner() {
+            const degrees = startAngle * 180 / Math.PI + 90;
+            const arcd = arc * 180 / Math.PI;
+            const index = Math.floor((360 - (degrees % 360)) / arcd);
+            const safeIndex = (index + options.length) % options.length;
+            
+            winnerDisplay.innerText = `🎉 Sorteado: ${options[safeIndex]}`;
+            playWinSound();
+            launchConfetti();
+        }
+
+        updateWheel();
+    </script>
+</body>
+</html>

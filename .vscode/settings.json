@@ -1,5 +1,5 @@
 {
-    "liveServer.settings.port": 5508,
+    "liveServer.settings.port": 5509,
     "chat.tools.terminal.autoApprove": {
         "/^node -c main\\.js 2>&1 ; echo \"VALIDACAO MAIN OK\"$/": {
             "approve": true,

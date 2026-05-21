@@ -274,6 +274,63 @@
         <!-- REMOVIDA do main-wrapper pois agora está no site-header -->
 
         <div id="container-cards">
+            <!-- Projeto: Calculadora de Datas -->
+            <div class="glass-card" data-projeto="datas" data-categoria="ferramentas">
+                <div class="card-image-wrapper">
+                    <img src="datas/img.png" alt="Calculadora de Datas" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Datas'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Calculadora de Datas</h3>
+                        <span class="category-icon"><i class="fa-solid fa-calendar-days"></i></span>
+                    </div>
+                    <p>Contagem regressiva, cálculo de prazos corporativos, dias úteis e intervalos temporais.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="datas-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="datas/data.html" onclick="atualizarEstatistica('datas')" class="action-btn">Calcular Datas</a>
+                </div>
+            </div>
+
+            <!-- Projeto: Mega Sorteador -->
+            <div class="glass-card" data-projeto="sorteador" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="sorteador/img.png" alt="Sorteador" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Sorteador'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Mega Sorteador</h3>
+                        <span class="category-icon"><i class="fa-solid fa-clover"></i></span>
+                    </div>
+                    <p>Sorteios customizados de números, nomes, grupos e roleta com suspense e efeitos.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="sorteador-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="sorteador/sorteador.html" onclick="atualizarEstatistica('sorteador')" class="action-btn">Sortear Agora</a>
+                </div>
+            </div>
+
+            <!-- Projeto: Laboratório de Texto -->
+            <div class="glass-card" data-projeto="textlab" data-categoria="ferramentas">
+                <div class="card-image-wrapper">
+                    <img src="textlab/img.png" alt="TextLab" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=TextLab'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Laboratório de Texto</h3>
+                        <span class="category-icon"><i class="fa-solid fa-font"></i></span>
+                    </div>
+                    <p>Tratamento, limpeza e formatação inteligente de dados e textos em tempo real.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="textlab-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="textlab/index.html" onclick="atualizarEstatistica('textlab')" class="action-btn">Processar Texto</a>
+                </div>
+            </div>
+
             <div class="glass-card" data-projeto="nao-clique" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="NAO_CLIQUE/vava.png" alt="NÃO CLIQUE AQUI" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=N%C3%83O+CLIQUE'">
@@ -313,7 +370,6 @@
             <div class="glass-card" data-projeto="zeroia" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <img src="imagens/ia.png" alt="ZeroIA" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=ZeroIA'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -331,8 +387,6 @@
             <div class="glass-card" data-projeto="piano" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/piano.png" alt="Piano Virtual" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Piano+Virtual'">
-                    <span class="status-tag">NOVO</span>
-                    <span class="status-tag">BETA</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -350,7 +404,6 @@
             <div class="glass-card" data-projeto="booom" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/booom.png" alt="Booom Music Player" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Booom+Music+Player'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -772,7 +825,7 @@
         }
 
         window.addEventListener('load', () => {
-            const projetos = ['nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
+            const projetos = ['datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
@@ -921,43 +974,5 @@
             }
         });
     </script>
-
-    <script>
-        // Redireciona para 404.html em caso de erro de navegação
-        window.addEventListener('error', function(e) {
-            if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK' || e.target.tagName === 'IMG')) {
-                return; // Ignora erros de recursos (imagens, etc.)
-            }
-            window.location.href = '404.html';
-        }, true);
-
-        // Intercepta cliques em links e redireciona para 404 se a página não existir
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('a');
-            if (!link || !link.href || link.href.startsWith('#') || link.href.startsWith('javascript')) return;
-            
-            const url = link.href;
-            // Só intercepta links internos (mesmo domínio)
-            if (!url.startsWith(window.location.origin)) return;
-
-            e.preventDefault();
-            fetch(url, { method: 'HEAD' })
-                .then(res => {
-                    if (res.ok) {
-                        // Executa onclick original se existir, depois navega
-                        if (link.getAttribute('onclick')) {
-                            try { eval(link.getAttribute('onclick')); } catch(_) {}
-                        }
-                        window.location.href = url;
-                    } else {
-                        window.location.href = '404.html';
-                    }
-                })
-                .catch(() => {
-                    window.location.href = '404.html';
-                });
-        });
-    </script>
 </body>
-
 </html>

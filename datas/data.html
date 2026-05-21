@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Datas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #0b0f19;
+            --bg-card: #151b2c;
+            --bg-input: #1e2640;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-success: #10b981;
+            --border: rgba(255, 255, 255, 0.06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            margin-bottom: 28px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            background: linear-gradient(to right, #fff, var(--text-muted));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        @media (max-width: 768px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tool-section {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tool-section h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 4px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input[type="date"], input[type="number"], select {
+            width: 100%;
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent);
+        }
+
+        .btn-hoje {
+            align-self: flex-start;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            color: #a5b4fc;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 2px;
+            transition: all 0.2s;
+        }
+
+        .btn-hoje:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .results-panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: auto;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .result-row:first-child {
+            padding-top: 0;
+        }
+
+        .result-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .result-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-success);
+        }
+
+        .result-highlight {
+            font-size: 1.25rem;
+            color: #fff;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            padding: 10px 0;
+        }
+
+        /* --- MEDIAS QUERIES ESPECÍFICAS PARA CELULAR --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            .container {
+                padding: 20px;
+                border-radius: 10px;
+            }
+
+            header {
+                margin-bottom: 20px;
+            }
+
+            header h1 {
+                font-size: 1.45rem;
+            }
+
+            header p {
+                font-size: 0.85rem;
+            }
+
+            .tool-section {
+                padding: 18px;
+                gap: 16px;
+            }
+
+            .tool-section h2 {
+                font-size: 1rem;
+            }
+
+            /* Força os campos lado a lado do bloco de prazos a virarem uma coluna única no mobile */
+            .inline-grid-prazos {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+
+            input[type="date"], input[type="number"], select {
+                padding: 11px;
+                font-size: 0.9rem;
+            }
+
+            .result-value {
+                font-size: 1rem;
+            }
+
+            .result-highlight {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Calculadora de Datas</h1>
+            <p>Contagem regressiva, cálculo de prazos corporativos, dias úteis e intervalos temporais.</p>
+        </header>
+
+        <div class="workspace">
+            
+            <div class="tool-section">
+                <h2>Contagem e Intervalos</h2>
+                
+                <div class="input-group">
+                    <label for="date-start-1">Data de Início</label>
+                    <input type="date" id="date-start-1">
+                    <button class="btn-hoje" id="btn-hoje-1">Usar data de Hoje</button>
+                </div>
+
+                <div class="input-group">
+                    <label for="date-end-1">Data Final</label>
+                    <input type="date" id="date-end-1">
+                </div>
+
+                <div class="results-panel">
+                    <div class="result-row">
+                        <span class="result-label">Dias Corridos:</span>
+                        <span id="res-dias" class="result-value">0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Semanas Equivalentes:</span>
+                        <span id="res-semanas" class="result-value">0</span>
+                    </div>
+                    <div class="result-row">
+                        <span class="result-label">Meses Aproximados:</span>
+                        <span id="res-meses" class="result-value">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tool-section">
+                <h2>Adicionar ou Subtrair Prazos</h2>
+                
+                <div class="input-group">
+                    <label for="date-start-2">Data de Referência</label>
+                    <input type="date" id="date-start-2">
+                    <button class="btn-hoje" id="btn-hoje-2">Usar data de Hoje</button>
+                </div>
+
+                <div class="inline-grid-prazos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="input-group">
+                        <label for="days-count">Quantidade</label>
+                        <input type="number" id="days-count" value="45" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label for="days-type">Tipo de Dias</label>
+                        <select id="days-type">
+                            <option value="corridos">Corridos</option>
+                            <option value="uteis">Úteis (Seg a Sex)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="results-panel" style="display: flex; flex-direction: column; justify-content: center;">
+                    <span class="result-label" style="text-align: center; display: block; margin-bottom: 2px;">A DATA FINAL SERÁ:</span>
+                    <div id="res-target-date" class="result-highlight">--/--/----</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const dateStart1 = document.getElementById('date-start-1');
+        const dateEnd1 = document.getElementById('date-end-1');
+        const btnHoje1 = document.getElementById('btn-hoje-1');
+        const resDias = document.getElementById('res-dias');
+        const resSemanas = document.getElementById('res-semanas');
+        const resMeses = document.getElementById('res-meses');
+
+        const dateStart2 = document.getElementById('date-start-2');
+        const daysCount = document.getElementById('days-count');
+        const daysType = document.getElementById('days-type');
+        const btnHoje2 = document.getElementById('btn-hoje-2');
+        const resTargetDate = document.getElementById('res-target-date');
+
+        const hojeISO = new Date().toISOString().split('T')[0];
+        dateStart1.value = hojeISO;
+        dateStart2.value = hojeISO;
+        dateEnd1.value = hojeISO;
+
+        btnHoje1.addEventListener('click', () => {
+            dateStart1.value = new Date().toISOString().split('T')[0];
+            calculateInterval();
+        });
+
+        btnHoje2.addEventListener('click', () => {
+            dateStart2.value = new Date().toISOString().split('T')[0];
+            calculateDeadline();
+        });
+
+        [dateStart1, dateEnd1].forEach(el => el.addEventListener('change', calculateInterval));
+        [dateStart2, daysCount, daysType].forEach(el => el.addEventListener('input', calculateDeadline));
+        [dateStart2, daysCount, daysType].forEach(el => el.addEventListener('change', calculateDeadline));
+
+        calculateInterval();
+        calculateDeadline();
+
+        function calculateInterval() {
+            if (!dateStart1.value || !dateEnd1.value) return;
+
+            const d1 = new Date(dateStart1.value + 'T00:00:00');
+            const d2 = new Date(dateEnd1.value + 'T00:00:00');
+
+            const diffTime = Math.abs(d2 - d1);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            resDias.innerText = diffDays;
+            resSemanas.innerText = (diffDays / 7).toFixed(1);
+            
+            const months = (diffDays / 30.4375).toFixed(1);
+            resMeses.innerText = months;
+        }
+
+        function calculateDeadline() {
+            if (!dateStart2.value || !daysCount.value) return;
+
+            let date = new Date(dateStart2.value + 'T00:00:00');
+            const totalDays = parseInt(daysCount.value);
+            const type = daysType.value;
+
+            if (type === 'corridos') {
+                date.setDate(date.getDate() + totalDays);
+            } else {
+                let added = 0;
+                while (added < totalDays) {
+                    date.setDate(date.getDate() + 1);
+                    const dayOfWeek = date.getDay();
+                    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+                        added++;
+                    }
+                }
+            }
+
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            resTargetDate.innerText = date.toLocaleDateString('pt-BR', options);
+        }
+    </script>
+</body>
+</html>
