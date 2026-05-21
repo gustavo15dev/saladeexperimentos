@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experimento #04 - O BOTÃO PROIBIDO V3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: "Source Serif 4", Georgia, serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            user-select: none;
+            transition: background 0.3s ease;
+        }
+
+        #aviso {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 80%;
+            color: #ff4444;
+            text-shadow: 0 2px 10px rgba(255, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        #botao-proibido {
+            padding: 20px 50px;
+            font-size: 1.6rem;
+            font-family: "Source Serif 4", serif;
+            font-weight: 700;
+            color: white;
+            background-color: #b30000;
+            border: 2px solid #ff4444;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(179, 0, 0, 0.5);
+            position: absolute;
+            z-index: 10;
+            /* Transição um pouco mais rápida para acompanhar a aleatoriedade */
+            transition: left 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        top 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        transform 0.2s, background-color 0.3s;
+        }
+        
+        /* --- BANCO DE ANIMAÇÕES INTERCAMEÁVEIS --- */
+        .flutuar { animation: flutuarAnim 3s infinite ease-in-out alternate; }
+        .tremer { animation: tremerAnim 0.1s infinite linear; }
+        .pulsar-louco { animation: pulsarAnim 0.3s infinite alternate ease-in-out; }
+        .gelatina { animation: gelatinaAnim 0.5s infinite linear; }
+        .encolher { animation: encolherAnim 0.4s infinite alternate ease-in-out; }
+        .zonzo { animation: zonzoAnim 0.8s infinite ease-in-out; }
+
+        #meme-container {
+            position: absolute;
+            width: 280px;
+            height: 210px;
+            border: 5px solid #fff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            display: none;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        #meme-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes flutuarAnim { 0% { transform: translateY(0px); } 100% { transform: translateY(-15px); } }
+        
+        @keyframes tremerAnim {
+            0% { transform: translate(2px, 1px) rotate(0deg); }
+            50% { transform: translate(-2px, -1px) rotate(-2deg); }
+            100% { transform: translate(1px, 2px) rotate(2deg); }
+        }
+        
+        @keyframes pulsarAnim {
+            0% { transform: scale(0.7); background-color: #b30000; }
+            100% { transform: scale(1.3); background-color: #ff0055; box-shadow: 0 0 40px #ff0055; }
+        }
+        
+        @keyframes gelatinaAnim {
+            0%, 100% { transform: scale(1, 1); }
+            33% { transform: scale(1.4, 0.6); }
+            66% { transform: scale(0.6, 1.4); }
+        }
+
+        @keyframes encolherAnim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0.1); opacity: 0.2; }
+        }
+
+        @keyframes zonzoAnim {
+            0%, 100% { transform: rotate(-20deg) skewX(-10deg); }
+            50% { transform: rotate(20deg) skewX(10deg); }
+        }
+
+        /* Fundos Alternantes */
+        .bg-1 { background-color: #1a0000 !important; }
+        .bg-2 { background-color: #001a11 !important; }
+        .bg-3 { background-color: #150024 !important; }
+        .bg-caos { 
+            background: linear-gradient(45deg, #0f001a, #1a0000, #001a1a) !important;
+            background-size: 400% 400% !important;
+            animation: gradienteAnim 3s ease infinite !important;
+        }
+        @keyframes gradienteAnim { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    </style>
+</head>
+<body>
+
+    <h1 id="aviso">Não clique no botão.</h1>
+    
+    <button id="botao-proibido" class="flutuar">NÃO</button>
+
+    <div id="meme-container">
+        <img id="meme-img" src="" alt="Meme Distração">
+    </div>
+
+    <script>
+        const botao = document.getElementById('botao-proibido');
+        const aviso = document.getElementById('aviso');
+        const memeContainer = document.getElementById('meme-container');
+        const memeImg = document.getElementById('meme-img');
+
+        // Listas de modificadores para o sorteio do caos
+        const animacoes = ['tremer', 'pulsar-louco', 'gelatina', 'encolher', 'zonzo', 'flutuar'];
+        const fundos = ['bg-1', 'bg-2', 'bg-3', 'bg-caos', ''];
+        const textos = [
+            "Ei! Pare com isso!", "Tente outra vez... ou não.", "Desista.", 
+            "Erro 404: Paciência não encontrada", "Quase!", "Nem tente.", 
+            "Vá ler um livro.", "FALHA NO SISTEMA"
+        ];
+
+        // O raio do ímã agora também muda dinamicamente a cada fuga para quebrar o padrão
+        let raioIman = 120; 
+
+        function posicionarCentro() {
+            botao.style.left = (window.innerWidth / 2 - botao.offsetWidth / 2) + 'px';
+            botao.style.top = (window.innerHeight / 2 - botao.offsetHeight / 2) + 'px';
+        }
+        window.onload = posicionarCentro;
+        window.onresize = posicionarCentro;
+
+        function fugir() {
+            const padding = 130;
+            const maxX = window.innerWidth - botao.offsetWidth - padding;
+            const maxY = window.innerHeight - botao.offsetHeight - padding;
+
+            const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+            botao.style.left = randomX + 'px';
+            botao.style.top = randomY + 'px';
+            
+            aplicarCaosAleatorio();
+        }
+
+        // Lógica do Ímã
+        document.addEventListener('mousemove', (e) => {
+            const rect = botao.getBoundingClientRect();
+            const btnX = rect.left + rect.width / 2;
+            const btnY = rect.top + rect.height / 2;
+            const distancia = Math.hypot(e.clientX - btnX, e.clientY - btnY);
+
+            if (distancia < raioIman) {
+                fugir();
+            }
+        });
+
+        botao.addEventListener('mouseover', fugir);
+
+        // A MÁGICA DA ALEATORIEDADE
+        function aplicarCaosAleatorio() {
+            // 1. Remove TODAS as classes de animação antigas do botão
+            botao.className = ''; 
+            
+            // 2. Sorteia uma animação nova e aplica
+            const animacaoSorteada = animacoes[Math.floor(Math.random() * animacoes.length)];
+            botao.classList.add(animacaoSorteada);
+
+            // 3. Sorteia um fundo novo para o body
+            document.body.className = '';
+            const fundoSorteado = fundos[Math.floor(Math.random() * fundos.length)];
+            if(fundoSorteado) document.body.classList.add(fundoSorteado);
+
+            // 4. Sorteia uma frase de aviso
+            if (Math.random() > 0.4) { // 60% de chance de mudar o texto para não ficar frenético demais
+                aviso.innerText = textos[Math.floor(Math.random() * textos.length)];
+            }
+
+            // 5. Altera o tamanho do raio do ímã aleatoriamente entre 90px e 210px
+            raioIman = Math.floor(Math.random() * 120) + 90;
+
+            // 6. Chance de 40% de fazer um meme brotar na tela de surpresa
+            if (Math.random() > 0.6) {
+                memeContainer.style.display = 'block';
+                memeImg.src = `https://loremflickr.com/320/240/meme?random=${Math.random()}`;
+                
+                const mx = Math.random() * (window.innerWidth - 300);
+                const my = Math.random() * (window.innerHeight - 250);
+                memeContainer.style.left = mx + 'px';
+                memeContainer.style.top = my + 'px';
+                memeContainer.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+            } else {
+                // Remove o meme se não passar na chance, pro layout respirar às vezes
+                memeContainer.style.display = 'none';
+            }
+        }
+
+        // FIM DE JOGO
+        botao.addEventListener('click', () => {
+            aviso.innerText = "SISTEMA CORROMPIDO. APROVEITE A MANGA.";
+            botao.style.backgroundColor = "#00ff00";
+
+            const linkDownload = document.createElement('a');
+            linkDownload.href = 'image.png'; 
+            linkDownload.download = 'image.png'; 
+            linkDownload.click();
+
+            setTimeout(() => {
+                window.location.href = "http://www.republiquedesmangues.fr/";
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

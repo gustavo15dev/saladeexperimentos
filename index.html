@@ -274,6 +274,23 @@
         <!-- REMOVIDA do main-wrapper pois agora está no site-header -->
 
         <div id="container-cards">
+            <div class="glass-card" data-projeto="nao-clique" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="NAO_CLIQUE/vava.png" alt="NÃO CLIQUE AQUI" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=N%C3%83O+CLIQUE'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>NÃO CLIQUE AQUI</h3>
+                        <span class="category-icon"><i class="fa-solid fa-ban"></i></span>
+                    </div>
+                    <p>Só entre nesse site se você for muito teimoso e curioso — não diga que eu não avisei.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="nao-clique-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="NAO_CLIQUE/raff-louco.html" onclick="atualizarEstatistica('nao-clique')" class="action-btn">Entrar (não clique)</a>
+                </div>
+            </div>
             <div class="glass-card" data-projeto="openimg" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="openimg/image.png" alt="OpenImage" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=OpenImage'">
@@ -755,7 +772,7 @@
         }
 
         window.addEventListener('load', () => {
-            const projetos = ['zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
+            const projetos = ['nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
