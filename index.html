@@ -1774,6 +1774,29 @@
         </nav>
 
         <div id="container-cards">
+            <!-- Projeto: Cook-me -->
+            <div class="glass-card" data-projeto="cookme" data-categoria="ia">
+                <div class="card-image-wrapper">
+                    <img src="imagens/cookme.png" alt="Cook-me" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Cook-me'">
+                    <span class="status-tag">NOVO</span>
+                    <span class="status-tag">IA</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h3>Cook-me</h3>
+                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Heloíse</a>
+                        </div>
+                        <span class="category-icon"><i class="fa-solid fa-utensils"></i></span>
+                    </div>
+                    <p>O Cook-me analisa fotos dos ingredientes da sua geladeira e usa inteligência artificial para criar receitas gourmet exclusivas de forma instantânea.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="cookme-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="https://mecookme.vercel.app/" onclick="atualizarEstatistica('cookme')" class="action-btn">Criar Receita</a>
+                </div>
+            </div>
+
             <!-- Projeto: Calculadora de Datas -->
             <div class="glass-card" data-projeto="datas" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
@@ -1851,8 +1874,6 @@
             <div class="glass-card" data-projeto="openimg" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="openimg/image.png" alt="OpenImage" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=OpenImage'">
-                    <span class="status-tag">NOVO</span>
-                    <span class="status-tag">DESTAQUE</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -2327,7 +2348,7 @@
         }
 
         window.addEventListener('load', () => {
-            const projetos = ['datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
+            const projetos = ['cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
