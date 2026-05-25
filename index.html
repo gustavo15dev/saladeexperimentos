@@ -1031,6 +1031,33 @@
             100% { transform: translateY(800px); }
         }
 
+        /* Estilo para a Tag de Ouro do 30º Projeto */
+        .special-tag-gold {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffae00 100%);
+            color: #1a1a1a;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(255, 174, 0, 0.4);
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+        }
+        .crown-jump {
+            animation: crownJump 1.2s infinite ease-in-out;
+        }
+        @keyframes crownJump {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
         /* ---------------------------------------------------- */
         /* MODAL DE CONTROLE VIRTUAL NEURAL */
         /* ---------------------------------------------------- */
@@ -1777,6 +1804,7 @@
             <!-- Projeto: WSM Chat -->
             <div class="glass-card" data-projeto="wsm" data-categoria="ia">
                 <div class="card-image-wrapper">
+                    <span class="special-tag-gold"><i class="fa-solid fa-crown crown-jump"></i> 30º projeto</span>
                     <img src="imagens/wsm.gif" alt="WSM Chat" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=WSM+Chat'">
                     <span class="status-tag">NOVO</span>
                 </div>
@@ -1937,6 +1965,28 @@
                 </div>
             </div>
 
+            <div class="glass-card" data-projeto="marinho" data-categoria="diversao">
+                <div class="card-image-wrapper">
+                    <img src="imagens/marinho.png" alt="Animal Marinho" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Animal+Marinho'">
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h3>Quiz Animal Marinho</h3>
+                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Heloíse</a>
+                                                <span class="status-tag dev">DESTAQUE NOVAMENTE</span>
+
+                        </div>
+                        <span class="category-icon"><i class="fa-solid fa-fish"></i></span>
+                    </div>
+                    <p>Descubra qual criatura do mar melhor representa sua personalidade.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="marinho-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="marinho/marinho.html" onclick="atualizarEstatistica('marinho')" class="action-btn">Descobrir</a>
+                </div>
+            </div>
+
             <div class="glass-card" data-projeto="booom" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/booom.png" alt="Booom Music Player" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Booom+Music+Player'">
@@ -2027,12 +2077,15 @@
             <div class="glass-card" data-projeto="drive-mad" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/drive-mad.png" alt="Drive Mad" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Drive+Mad'">
-                    <span class="status-tag dev">POPULAR</span>
+                    <span class="status-tag dev">Tendência</span>
                     
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Drive Mad - Coding Stella</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h3>Drive Mad</h3>
+                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Coding Stella</a>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-car"></i></span>
                     </div>
                     <p>Desafie a física em pistas insanas! Você consegue chegar à linha de chegada sem capotar?</p>
@@ -2050,7 +2103,10 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Escape Road  - Coding Stella</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h3>Escape Road</h3>
+                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Coding Stella</a>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-road"></i></span>
                     </div>
                     <p>Fuja da perseguição em alta velocidade! Sobreviva o máximo que puder nas estradas perigosas.</p>
@@ -2223,7 +2279,10 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Daily Motivation</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h3>Daily Motivation</h3>
+                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Rafaela</a>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-bolt"></i></span>
                     </div>
                     <p>Gerador de doses diárias de energia e sabedoria para começar o seu dia.</p>
@@ -2240,7 +2299,10 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Contador de Mosquitos</h3>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <h3>Contador de Mosquitos</h3>
+                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Rafaela</a>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-crosshairs"></i></span>
                     </div>
                     <p>Ferramenta essencial para rastrear vitórias contra insetos locais.</p>
@@ -2282,23 +2344,6 @@
                         <span><i class="fa-regular fa-eye"></i> <span id="advinhar-count">0</span> vezes você usou</span>
                     </div>
                     <a href="advinhar/advinhar.html" onclick="atualizarEstatistica('advinhar')" class="action-btn">Jogar Agora</a>
-                </div>
-            </div>
-
-            <div class="glass-card" data-projeto="marinho" data-categoria="diversao">
-                <div class="card-image-wrapper">
-                    <img src="imagens/marinho.png" alt="Animal Marinho" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Animal+Marinho'">
-                </div>
-                <div class="card-info">
-                    <div class="card-header">
-                        <h3>Quiz Animal Marinho</h3>
-                        <span class="category-icon"><i class="fa-solid fa-fish"></i></span>
-                    </div>
-                    <p>Descubra qual criatura do mar melhor representa sua personalidade.</p>
-                    <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="marinho-count">0</span> vezes você usou</span>
-                    </div>
-                    <a href="marinho/marinho.html" onclick="atualizarEstatistica('marinho')" class="action-btn">Descobrir</a>
                 </div>
             </div>
         </div>
