@@ -186,12 +186,18 @@ body {
 }
 
 /* ============================================
-   INPUT PANEL
+   INPUT PANEL (Esquerdo, contendo o Textarea e o Modo Grifado)
    ============================================ */
+
+.input-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
 
 .input-panel textarea {
     width: 100%;
-    min-height: 280px;
+    min-height: 380px;
     max-height: 60vh;
     padding: var(--spacing-lg);
     border: 1px solid var(--gray-200);
@@ -202,6 +208,7 @@ body {
     resize: vertical;
     transition: all 0.2s ease;
     background: var(--white);
+    line-height: 1.6;
 }
 
 .input-panel textarea::placeholder {
@@ -212,6 +219,29 @@ body {
     outline: none;
     border-color: var(--black);
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Container do texto interativo que substitui visualmente o textarea */
+.interactive-text-container {
+    width: 100%;
+    min-height: 380px;
+    max-height: 60vh;
+    padding: var(--spacing-lg);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-md);
+    background: var(--gray-50);
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--gray-900);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.highlighted-text {
+    background: transparent;
+    font-family: inherit;
+    color: var(--gray-900);
 }
 
 .controls {
@@ -305,7 +335,7 @@ body {
 .result-panel {
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 200px);
+    max-height: calc(100vh - 120px);
     overflow-y: auto;
 }
 
@@ -535,43 +565,26 @@ body {
 }
 
 /* ============================================
-   HIGHLIGHTING INTERATIVO
+   HIGHLIGHTING INTERATIVO (No texto original)
    ============================================ */
-
-.highlighted-text-container {
-    padding: var(--spacing-lg);
-    background: var(--gray-50);
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-lg);
-}
-
-.highlighted-text {
-    background: var(--white);
-    padding: var(--spacing-lg);
-    border-radius: var(--radius-sm);
-    line-height: 1.8;
-    word-wrap: break-word;
-    font-size: 0.95rem;
-    color: var(--gray-900);
-    white-space: pre-wrap;
-}
 
 .highlight {
     padding: 2px 4px;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
     font-weight: 500;
     border-bottom: 2px solid;
+    display: inline;
 }
 
 .highlight:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Cores das Legendas Facilitadas */
 .highlight.linguistic {
     background: #fef3c7;
     border-bottom-color: #b45309;
@@ -597,13 +610,16 @@ body {
     border-bottom-color: #dc2626;
 }
 
+/* Legenda amigável posicionada abaixo do texto */
 .highlight-legend {
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
-    padding-top: var(--spacing-lg);
-    border-top: 1px solid var(--gray-200);
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--gray-50);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
     font-size: 0.8rem;
 }
 
@@ -614,28 +630,29 @@ body {
 }
 
 .legend-color {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border-radius: 3px;
     border: 1px solid var(--gray-300);
+    display: inline-block;
 }
 
 /* ============================================
-   CARD FLUTUANTE (TOOLTIP)
+   CARD FLUTUANTE (TOOLTIP INTERATIVO)
    ============================================ */
 
 .floating-card {
-    position: fixed;
+    position: absolute;
     background: var(--white);
     border: 1px solid var(--gray-300);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
     padding: var(--spacing-lg);
-    max-width: 340px;
+    width: 320px;
     z-index: 1000;
     pointer-events: auto;
     display: none;
-    animation: slideUp 0.2s ease;
+    animation: slideUp 0.15s ease-out;
 }
 
 .floating-card.visible {
@@ -645,7 +662,7 @@ body {
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(5px);
     }
     to {
         opacity: 1;
@@ -655,19 +672,19 @@ body {
 
 .card-arrow {
     position: absolute;
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     background: var(--white);
     border-left: 1px solid var(--gray-300);
     border-top: 1px solid var(--gray-300);
-    transform: rotate(-45deg);
-    top: -7px;
+    transform: rotate(45deg);
+    top: -6px;
     left: 20px;
 }
 
 .card-header {
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
     border-bottom: 1px solid var(--gray-100);
 }
 
@@ -684,21 +701,22 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .card-text {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--gray-600);
-    line-height: 1.5;
-    margin: 0 0 var(--spacing-md) 0;
+    margin-bottom: var(--spacing-md);
 }
 
+/* Área de sugestão de substituição no card */
 .card-suggestion {
     padding: var(--spacing-md);
-    background: var(--gray-50);
+    background: #f9fafb;
     border-radius: var(--radius-sm);
     border-left: 3px solid var(--ai-green);
+    margin-bottom: var(--spacing-md);
 }
 
 .card-suggestion strong {
@@ -713,6 +731,61 @@ body {
     font-size: 0.8rem;
     margin: 0;
     line-height: 1.4;
+}
+
+/* Caixa com ideias reais de substituição */
+.alternatives-box {
+    margin-top: var(--spacing-sm);
+}
+
+.alternatives-box strong {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--gray-800);
+    margin-bottom: var(--spacing-xs);
+}
+
+.alternatives-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: 6px;
+}
+
+/* Botões rápidos das sugestões propostas pela IA */
+.alternative-btn {
+    background: var(--white);
+    color: var(--gray-800);
+    border: 1px solid var(--gray-300);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.alternative-btn:hover {
+    background: var(--gray-900);
+    color: var(--white);
+    border-color: var(--gray-900);
+}
+
+/* Feedback visual quando substitui a palavra no editor */
+.word-replaced-flash {
+    animation: flashGreen 1.5s ease-out;
+}
+
+@keyframes flashGreen {
+    0% {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+    100% {
+        background-color: transparent;
+    }
 }
 
 /* ============================================
@@ -897,8 +970,8 @@ body {
         padding: var(--spacing-lg);
     }
 
-    .input-panel textarea {
-        min-height: 200px;
+    .input-panel textarea, .interactive-text-container {
+        min-height: 250px;
     }
 
     .controls {

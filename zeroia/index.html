@@ -31,18 +31,48 @@
 
         <!-- Layout Principal -->
         <main class="layout">
-            <!-- Painel de Input -->
+            <!-- Painel de Entrada de Texto (Lado Esquerdo) -->
             <section class="panel input-panel">
                 <div class="panel-header">
-                    <h2>Cole seu texto</h2>
-                    <small class="hint">Máximo 5000 caracteres</small>
+                    <h2 id="inputPanelTitle">Cole seu texto</h2>
+                    <small class="hint" id="inputPanelHint">Máximo 5000 caracteres</small>
                 </div>
 
+                <!-- Campo de edição original -->
                 <textarea 
                     id="inputText" 
                     maxlength="5000" 
                     placeholder="Cole aqui o texto que deseja verificar...">
                 </textarea>
+
+                <!-- Área onde o texto fica grifado para interação (ocupa o mesmo lugar do textarea pós-análise) -->
+                <div id="interactiveTextContainer" class="interactive-text-container hidden">
+                    <div id="highlightedText" class="highlighted-text"></div>
+                </div>
+
+                <!-- Legenda integrada diretamente abaixo do texto grifado para facilitar visualização -->
+                <div id="legendContainer" class="highlight-legend hidden">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #fef3c7; border-bottom: 2px solid #b45309;"></span>
+                        <span>Linguagem Comum</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #dbeafe; border-bottom: 2px solid #0369a1;"></span>
+                        <span>Frase Repetitiva</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #d1fae5; border-bottom: 2px solid #059669;"></span>
+                        <span>Ideia Vaga</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #fce7f3; border-bottom: 2px solid #be185d;"></span>
+                        <span>Falta de Fonte</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #fee2e2; border-bottom: 2px solid #dc2626;"></span>
+                        <span>Estilo de IA</span>
+                    </div>
+                </div>
 
                 <div class="controls">
                     <div class="char-count">
@@ -50,19 +80,20 @@
                     </div>
                     <div class="right-controls">
                         <button id="analyzeBtn" class="btn btn-primary">Analisar</button>
+                        <button id="editBtn" class="btn btn-ghost hidden">Editar Texto</button>
                         <button id="clearBtn" class="btn btn-ghost">Limpar</button>
                     </div>
                 </div>
 
-                <div class="shortcut-hint">
+                <div class="shortcut-hint" id="shortcutHint">
                     <span>💡 Pressione <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para analisar</span>
                 </div>
             </section>
 
-            <!-- Painel de Resultado -->
+            <!-- Painel de Resultado (Lado Direito) -->
             <aside class="panel result-panel">
                 <div class="panel-header">
-                    <h2>Análise</h2>
+                    <h2>Análise Geral</h2>
                 </div>
 
                 <!-- Estado vazio -->
@@ -70,13 +101,13 @@
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                     </svg>
-                    <p>Cole um texto para começar</p>
+                    <p>Cole o texto no painel ao lado e clique em analisar para ver o resultado detalhado</p>
                 </div>
 
                 <!-- Estado carregando -->
                 <div id="loadingContainer" class="state-loading hidden">
                     <div class="spinner"></div>
-                    <p>Analisando...</p>
+                    <p>Analisando padrões linguísticos...</p>
                 </div>
 
                 <!-- Estado resultado -->
@@ -113,48 +144,17 @@
                     <!-- Veredito -->
                     <div id="verdict" class="verdict-box"></div>
 
-                    <!-- Texto com Highlighting Interativo -->
-                    <div id="highlightedTextSection" class="analysis-section hidden">
-                        <h3>📖 Análise do Texto</h3>
-                        <div class="highlighted-text-container">
-                            <div id="highlightedText" class="highlighted-text"></div>
-                        </div>
-                        <div class="highlight-legend">
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #fef3c7; border-bottom: 2px solid #b45309;"></span>
-                                <span>Linguístico</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #dbeafe; border-bottom: 2px solid #0369a1;"></span>
-                                <span>Estrutura</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #d1fae5; border-bottom: 2px solid #059669;"></span>
-                                <span>Argumentação</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #fce7f3; border-bottom: 2px solid #be185d;"></span>
-                                <span>Repertório</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color" style="background: #fee2e2; border-bottom: 2px solid #dc2626;"></span>
-                                <span>Padrão IA</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card Flutuante -->
+                    <!-- Card Flutuante de Sugestões / Substituições (Inserido no body dinamicamente, mantido para referência de ID) -->
                     <div id="floatingCard" class="floating-card">
                         <div class="card-arrow"></div>
                         <div class="card-header">
-                            <h4 class="card-title" id="cardTitle">Título</h4>
+                            <h4 class="card-title" id="cardTitle">Problema Identificado</h4>
                             <div class="card-category" id="cardCategory">Categoria</div>
                         </div>
-                        <p class="card-text" id="cardText">Feedback</p>
-                        <div class="card-suggestion">
-                            <strong>💡 Sugestão:</strong>
-                            <p id="cardSuggestion">Sugestão de melhoria</p>
-                        </div>
+                        <p class="card-text">Termo original: <strong id="cardText">""</strong></p>
+                        
+                        <!-- Caixa dinâmica para sugestões e substituições rápidas -->
+                        <div id="cardSuggestionBox"></div>
                     </div>
 
                     <!-- Sinais de IA -->
@@ -165,13 +165,13 @@
 
                     <!-- Áreas de Melhoria -->
                     <div id="improvementContainer" class="analysis-section hidden">
-                        <h3>✏️ Como Melhorar</h3>
+                        <h3>✏️ Recomendações de Edição</h3>
                         <div id="improvements" class="improvements-list"></div>
                     </div>
 
                     <!-- Trechos Suspeitos -->
                     <div id="phrasesContainer" class="analysis-section hidden">
-                        <h3>💬 Trechos Suspeitos</h3>
+                        <h3>💬 Trechos Artificiais</h3>
                         <div id="phrases" class="phrases-list"></div>
                     </div>
 
