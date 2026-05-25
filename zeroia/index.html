@@ -17,7 +17,7 @@
                 <div class="logo">ZI</div>
                 <div class="brand-text">
                     <h1>ZeroIA</h1>
-                    <span class="tag">Detecte conteúdo gerado por IA</span>
+                    <span class="tag">Análise Avançada de Probabilidade de IA & Autoria</span>
                 </div>
             </div>
             <div class="top-actions">
@@ -31,46 +31,50 @@
 
         <!-- Layout Principal -->
         <main class="layout">
-            <!-- Painel de Entrada de Texto (Lado Esquerdo) -->
+            <!-- Painel do Editor de Texto (Lado Esquerdo) -->
             <section class="panel input-panel">
                 <div class="panel-header">
-                    <h2 id="inputPanelTitle">Cole seu texto</h2>
+                    <div>
+                        <h2 id="inputPanelTitle">Editor de Redação</h2>
+                        <p class="panel-subtitle">Insira ou modifique seu texto para verificar padrões e clichês de IA</p>
+                    </div>
                     <small class="hint" id="inputPanelHint">Máximo 5000 caracteres</small>
                 </div>
 
-                <!-- Campo de edição original -->
-                <textarea 
-                    id="inputText" 
-                    maxlength="5000" 
-                    placeholder="Cole aqui o texto que deseja verificar...">
-                </textarea>
+                <div class="editor-wrapper">
+                    <!-- Campo de edição original (Ocultado pós-análise) -->
+                    <textarea 
+                        id="inputText" 
+                        maxlength="5000" 
+                        placeholder="Cole seu texto aqui para avaliar o índice de autoria humana e marcas de IA..."></textarea>
 
-                <!-- Área onde o texto fica grifado para interação (ocupa o mesmo lugar do textarea pós-análise) -->
-                <div id="interactiveTextContainer" class="interactive-text-container hidden">
-                    <div id="highlightedText" class="highlighted-text"></div>
+                    <!-- Área Interativa de Edição com Grifos em Tempo Real -->
+                    <div id="interactiveTextContainer" class="interactive-text-container hidden">
+                        <div id="highlightedText" class="highlighted-text" contenteditable="true" spellcheck="false"></div>
+                    </div>
                 </div>
 
-                <!-- Legenda integrada diretamente abaixo do texto grifado para facilitar visualização -->
+                <!-- Legenda de Categorias Amigáveis baseadas em Autoria -->
                 <div id="legendContainer" class="highlight-legend hidden">
                     <div class="legend-item">
                         <span class="legend-color" style="background: #fef3c7; border-bottom: 2px solid #b45309;"></span>
-                        <span>Linguagem Comum</span>
+                        <span>Vocabulário Clichê</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color" style="background: #dbeafe; border-bottom: 2px solid #0369a1;"></span>
-                        <span>Frase Repetitiva</span>
+                        <span>Frase Moldura / IA</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color" style="background: #d1fae5; border-bottom: 2px solid #059669;"></span>
-                        <span>Ideia Vaga</span>
+                        <span>Argumento Abstrato</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color" style="background: #fce7f3; border-bottom: 2px solid #be185d;"></span>
-                        <span>Falta de Fonte</span>
+                        <span>Repertório Vago</span>
                     </div>
                     <div class="legend-item">
                         <span class="legend-color" style="background: #fee2e2; border-bottom: 2px solid #dc2626;"></span>
-                        <span>Estilo de IA</span>
+                        <span>Estilo Autômato</span>
                     </div>
                 </div>
 
@@ -79,21 +83,21 @@
                         <span id="charCount">0</span> / 5000
                     </div>
                     <div class="right-controls">
-                        <button id="analyzeBtn" class="btn btn-primary">Analisar</button>
-                        <button id="editBtn" class="btn btn-ghost hidden">Editar Texto</button>
+                        <button id="analyzeBtn" class="btn btn-primary">Analisar Redação</button>
+                        <button id="editBtn" class="btn btn-ghost hidden">Modo Texto Puro</button>
                         <button id="clearBtn" class="btn btn-ghost">Limpar</button>
                     </div>
                 </div>
 
                 <div class="shortcut-hint" id="shortcutHint">
-                    <span>💡 Pressione <kbd>Ctrl</kbd> + <kbd>Enter</kbd> para analisar</span>
+                    <span>💡 Dica: O editor interativo permite escrever e fazer ajustes direto no texto grifado!</span>
                 </div>
             </section>
 
-            <!-- Painel de Resultado (Lado Direito) -->
+            <!-- Painel de Resultados de Autoria (Lado Direito) -->
             <aside class="panel result-panel">
                 <div class="panel-header">
-                    <h2>Análise Geral</h2>
+                    <h2>Análise de Estilo & Probabilidade</h2>
                 </div>
 
                 <!-- Estado vazio -->
@@ -101,89 +105,86 @@
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                     </svg>
-                    <p>Cole o texto no painel ao lado e clique em analisar para ver o resultado detalhado</p>
+                    <p>Cole seu texto e clique em <strong>Analisar Redação</strong> para obter a métrica de originalidade e marcas de autoria.</p>
                 </div>
 
                 <!-- Estado carregando -->
                 <div id="loadingContainer" class="state-loading hidden">
                     <div class="spinner"></div>
-                    <p>Analisando padrões linguísticos...</p>
+                    <p>Verificando perplexidade e uniformidade estilística...</p>
                 </div>
 
                 <!-- Estado resultado -->
                 <div id="resultContainer" class="state-result hidden">
-                    <!-- Gauge -->
+                    <!-- Gauge de probabilidade de IA -->
                     <div class="gauge-section">
                         <div class="gauge-wrapper">
                             <svg class="gauge-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                                <!-- Background arc -->
                                 <path class="gauge-bg" d="M 30 100 A 70 70 0 0 1 170 100" />
-                                <!-- Progress arc -->
                                 <path id="gaugeProgress" class="gauge-progress" d="M 30 100 A 70 70 0 0 1 170 100" stroke-dasharray="0 219" stroke-dashoffset="0" />
                             </svg>
                             <div class="gauge-content">
                                 <div class="gauge-percentage" id="percentageText">0%</div>
-                                <div class="gauge-label">Conteúdo de IA</div>
+                                <div class="gauge-label">Risco de IA</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Percentuais -->
+                    <!-- Percentuais de Autoria -->
                     <div class="percentage-labels">
                         <div class="percentage-item">
                             <span class="percentage-value" id="aiPercentage">0%</span>
-                            <span class="percentage-name">IA</span>
+                            <span class="percentage-name">Marcas de IA</span>
                         </div>
                         <div class="divider"></div>
                         <div class="percentage-item">
                             <span class="percentage-value" id="humanPercentage">0%</span>
-                            <span class="percentage-name">Humano</span>
+                            <span class="percentage-name">Originalidade Humana</span>
                         </div>
                     </div>
 
                     <!-- Veredito -->
                     <div id="verdict" class="verdict-box"></div>
 
-                    <!-- Card Flutuante de Sugestões / Substituições (Inserido no body dinamicamente, mantido para referência de ID) -->
+                    <!-- Card Flutuante de Sugestões Contextuais (Posicionamento absoluto em relação ao editor) -->
                     <div id="floatingCard" class="floating-card">
                         <div class="card-arrow"></div>
                         <div class="card-header">
-                            <h4 class="card-title" id="cardTitle">Problema Identificado</h4>
+                            <h4 class="card-title" id="cardTitle">Clichê Identificado</h4>
                             <div class="card-category" id="cardCategory">Categoria</div>
                         </div>
                         <p class="card-text">Termo original: <strong id="cardText">""</strong></p>
                         
-                        <!-- Caixa dinâmica para sugestões e substituições rápidas -->
                         <div id="cardSuggestionBox"></div>
                     </div>
 
-                    <!-- Sinais de IA -->
+                    <!-- Sinais de Automação Estilística -->
                     <div id="aiSignalsContainer" class="analysis-section hidden">
-                        <h3>🚩 Sinais de IA Detectados</h3>
+                        <h3>🚩 Sinais de Automação Detectados</h3>
                         <div id="aiSignals" class="signals-list"></div>
                     </div>
 
-                    <!-- Áreas de Melhoria -->
+                    <!-- Recomendações de Edição para Humanização -->
                     <div id="improvementContainer" class="analysis-section hidden">
-                        <h3>✏️ Recomendações de Edição</h3>
+                        <h3>✏️ Guia de Humanização (Estilo ENEM)</h3>
                         <div id="improvements" class="improvements-list"></div>
                     </div>
 
-                    <!-- Trechos Suspeitos -->
+                    <!-- Frases Prontas Suspeitas -->
                     <div id="phrasesContainer" class="analysis-section hidden">
-                        <h3>💬 Trechos Artificiais</h3>
+                        <h3>💬 Frases Moldura</h3>
                         <div id="phrases" class="phrases-list"></div>
                     </div>
 
-                    <!-- Características -->
+                    <!-- Características de IA vs Humano -->
                     <div id="characteristicsContainer" class="analysis-section hidden">
-                        <h3>🔍 Características Analisadas</h3>
+                        <h3>🔍 Características de Coesão Analisadas</h3>
                         <div id="characteristics" class="characteristics-list"></div>
                     </div>
 
-                    <!-- Rodapé -->
+                    <!-- Rodapé da análise -->
                     <div class="result-footer">
-                        <button id="reanalyzeBtn" class="btn btn-ghost">Reanalisar</button>
+                        <button id="reanalyzeBtn" class="btn btn-ghost">Recalcular Originalidade</button>
                     </div>
                 </div>
             </aside>
@@ -191,7 +192,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <small>Feito com ❤️ — ZeroIA • Experimentos</small>
+            <small>Feito com ❤️ — ZeroIA • Simulador de Autoria Humana para Redações</small>
         </footer>
     </div>
 

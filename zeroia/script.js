@@ -3,7 +3,7 @@ const API_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:3000/api/ai-detect'
     : 'https://saladeexperimentos.vercel.app/api/ai-detect';
 
-// Elementos principais do Painel Esquerdo
+// Elementos principais do Painel do Editor (Esquerdo)
 const inputText = document.getElementById('inputText');
 const interactiveTextContainer = document.getElementById('interactiveTextContainer');
 const highlightedText = document.getElementById('highlightedText');
@@ -26,10 +26,10 @@ const aiPercentage = document.getElementById('aiPercentage');
 const humanPercentage = document.getElementById('humanPercentage');
 const verdictEl = document.getElementById('verdict');
 
-// Card flutuante de sugestões
+// Card flutuante de sugestões contextuais
 const floatingCard = document.getElementById('floatingCard');
 
-// Containers de análise detalhada (Direito)
+// Containers de análise estilística (Direito)
 const aiSignalsContainer = document.getElementById('aiSignalsContainer');
 const aiSignals = document.getElementById('aiSignals');
 const improvementContainer = document.getElementById('improvementContainer');
@@ -39,20 +39,28 @@ const phrases = document.getElementById('phrases');
 const characteristicsContainer = document.getElementById('characteristicsContainer');
 const characteristics = document.getElementById('characteristics');
 
-// Estado global do aplicativo
+// Estado Global
 let currentHighlights = [];
-let analyzedTextContent = '';
+let analyzedText = "";
 
 // ============================================
-// EVENT LISTENERS
+// EVENT LISTENERS DO EDITOR
 // ============================================
 
 inputText.addEventListener('input', () => {
     charCount.textContent = inputText.value.length;
 });
 
+// Atualiza o contador de caracteres também no modo de edição direta grifada
+highlightedText.addEventListener('input', () => {
+    const textContent = highlightedText.innerText;
+    charCount.textContent = textContent.length;
+    inputText.value = textContent; // Sincroniza em segundo plano
+});
+
 clearBtn?.addEventListener('click', () => {
     inputText.value = '';
+    highlightedText.innerHTML = '';
     charCount.textContent = '0';
     resetToEditMode();
     resultContainer?.classList.add('hidden');
@@ -60,9 +68,12 @@ clearBtn?.addEventListener('click', () => {
 });
 
 analyzeBtn.addEventListener('click', async () => {
-    const txt = inputText.value.trim();
+    // Lê do input correto dependendo de qual contêiner está visível
+    const isInteractive = !interactiveTextContainer.classList.contains('hidden');
+    const txt = isInteractive ? highlightedText.innerText.trim() : inputText.value.trim();
+    
     if (!txt) {
-        alert('Cole um texto para analisar');
+        alert('Cole ou digite um texto para analisar.');
         return;
     }
 
@@ -72,28 +83,35 @@ analyzeBtn.addEventListener('click', async () => {
         renderResult(data, txt);
     } catch (err) {
         console.error(err);
-        alert('Erro ao analisar: ' + (err.message || err));
+        alert('Erro ao processar análise linguística: ' + (err.message || err));
     } finally {
         hideLoading();
     }
 });
 
-// Ao clicar em "Editar Texto", volta para a edição mantendo as modificações feitas pelas substituições
+// Alterna para o editor em texto plano sem formatação visual
 editBtn.addEventListener('click', () => {
+    inputText.value = highlightedText.innerText;
     resetToEditMode();
 });
 
-inputText.addEventListener('keydown', (e) => {
+// Atalho para análise rápida
+document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         analyzeBtn.click();
     }
 });
 
 document.getElementById('reanalyzeBtn')?.addEventListener('click', () => {
-    analyzeBtn.click();
+    // Dispara reanálise baseada no texto atualmente modificado pelo usuário
+    const textToAnalyze = highlightedText.innerText.trim();
+    if (textToAnalyze) {
+        inputText.value = textToAnalyze;
+        analyzeBtn.click();
+    }
 });
 
-// Fechar card ao clicar fora de um termo grifado ou do próprio card
+// Fecha o card flutuante quando o usuário clica fora
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.highlight') && !e.target.closest('.floating-card')) {
         floatingCard.classList.remove('visible');
@@ -101,47 +119,36 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================
-// MODOS DE EXIBIÇÃO DO PAINEL ESQUERDO
+// CONTROLE DE INTERFAZ E ESTADOS
 // ============================================
 
 function resetToEditMode() {
-    // Volta a exibir o textarea e esconde a área grifada
     inputText.classList.remove('hidden');
     interactiveTextContainer.classList.add('hidden');
     legendContainer.classList.add('hidden');
     
-    // Atualiza os botões de ação
     analyzeBtn.classList.remove('hidden');
     editBtn.classList.add('hidden');
     shortcutHint.classList.remove('hidden');
     
-    // Altera títulos informativos
-    inputPanelTitle.textContent = "Cole seu texto";
+    inputPanelTitle.textContent = "Editor de Redação";
     inputPanelHint.textContent = "Máximo 5000 caracteres";
-    
-    // Fecha o card de sugestões
     floatingCard.classList.remove('visible');
 }
 
 function setToInteractiveMode() {
-    // Esconde o textarea para focar na visualização interativa com os grifos no próprio texto original
     inputText.classList.add('hidden');
     interactiveTextContainer.classList.remove('hidden');
     legendContainer.classList.remove('hidden');
     
-    // Atualiza os botões de ação
-    analyzeBtn.classList.add('hidden');
+    // Deixamos o botão analisar ativo para permitir reanálise direta após edição
+    analyzeBtn.classList.remove('hidden');
     editBtn.classList.remove('hidden');
     shortcutHint.classList.add('hidden');
     
-    // Altera títulos informativos
-    inputPanelTitle.textContent = "Texto Analisado e Corrigível";
-    inputPanelHint.textContent = "Clique nos termos grifados para ver sugestões";
+    inputPanelTitle.textContent = "Editor Grifado e Corrigível";
+    inputPanelHint.textContent = "Edite o texto livremente ou use as sugestões de IA";
 }
-
-// ============================================
-// FUNÇÕES UTILITÁRIAS
-// ============================================
 
 function showLoading() {
     emptyContainer?.classList.add('hidden');
@@ -163,40 +170,43 @@ async function analyzeText(text) {
     });
     if (!resp.ok) {
         const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || 'Erro na API');
+        throw new Error(err.error || 'Erro de resposta da API');
     }
     return resp.json();
 }
 
 // ============================================
-// HIGHLIGHTING COM INTERATIVIDADE DIRETA NO TEXTO
+// SISTEMA DE CORREÇÃO E ANÁLISE CONTEXTUAL
 // ============================================
 
 function createHighlights(text, analysis) {
     const highlights = [];
 
-    // Padrões de detecção locais atualizados com legendas muito simples
+    // Conjunto de termos de IA com regras de substituição de autoria ajustadas com base no manual do Enem/Letrus
     const patterns = [
-        // Linguagem comum / Genérica
-        { regex: /\b(A sociedade|As pessoas|A população)\s+(contemporânea|moderna|atual)/gi, type: 'linguistic', title: '🔤 Linguagem Comum', suggestion: 'Substitua por termos mais específicos ou cite contextos mais detalhados.' },
+        // Vocabulário Clichê / Genérico
+        { regex: /\b(A sociedade|As pessoas|A população)\s+(contemporânea|moderna|atual)/gi, type: 'linguistic', title: '🔤 Vocabulário Clichê', suggestion: 'Expressão moldura genérica muito recorrente em textos de IA. Use um agente real.' },
+        { regex: /\b(nos dias de hoje|atualmente|no mundo atual)/gi, type: 'linguistic', title: '🔤 Pleonasmo de Tempo', suggestion: 'Desnecessário para contextualização do Enem. Comece diretamente com a tese.' },
         
-        // Frases repetitivas / Transições duras
-        { regex: /\b(Primeiramente|Em primeiro lugar|Inicialmente|Primeiro),/gi, type: 'structure', title: '📐 Abertura Padrão', suggestion: 'Varie o início para dar mais ritmo ao texto.' },
-        { regex: /\b(Em segundo lugar|Além disso|Posteriormente|Ademais),/gi, type: 'structure', title: '📐 Conector de Transição', suggestion: 'Evite a transição rígida de tópicos.' },
-        { regex: /\b(Por fim|Por último|Finalmente|Conclusão|Em suma),/gi, type: 'structure', title: '📐 Encerramento Padrão', suggestion: 'Conclua seu pensamento com conectivos menos óbvios.' },
+        // Frases Moldura / Transições Artificiais de IA
+        { regex: /\b(Primeiramente|Em primeiro lugar|Inicialmente|A princípio),/gi, type: 'structure', title: '📐 Abertura Mecânica', suggestion: 'Frase de transição que automatiza o parágrafo. Prefira iniciar com ideias conectadas.' },
+        { regex: /\b(Em segundo lugar|Além disso|Posteriormente|Ademais),/gi, type: 'structure', title: '📐 Conector de Transição', suggestion: 'Evite a marcação mecânica de pontos. Tente contextualizar de forma direta.' },
+        { regex: /\b(Por fim|Por último|Finalmente|Conclusão|Em suma),/gi, type: 'structure', title: '📐 Encerramento Padrão', suggestion: 'As IAs concluem pensamentos rigidamente. Use expressões mais autorais.' },
         
-        // Ideia Vaga / Argumento Vazio
-        { regex: /\b(deve se conscientizar|deve ter consciência|precisa entender|é necessário que)/gi, type: 'ai-pattern', title: '⚠️ Solução Clichê', suggestion: 'Explique como essa conscientização aconteceria de forma prática.' },
-        { regex: /\b(o governo|a escola|a família)\s+(deve|precisa)\s+([a-zç]+)/gi, type: 'argument', title: '💬 Agente Vago', suggestion: 'Indique exatamente qual ministério, projeto social ou ação resolveria a situação.' },
+        // Argumentação Abstrata / Vaga
+        { regex: /\b(deve se conscientizar|deve ter consciência|precisa entender|é necessário que se conscientize)/gi, type: 'argument', title: '💬 Solução Abstrata', suggestion: 'Argumento padrão de robôs. Diga COMO a conscientização será feita.' },
+        { regex: /\b(o governo|a escola|a família)\s+(deve|precisa)\s+([a-zç]+)/gi, type: 'argument', title: '💬 Proposta Genérica', suggestion: 'IA tende a não apontar responsáveis reais. Especifique Ministérios ou Secretarias.' },
         
-        // Falta de Fonte / Repertório vago
-        { regex: /\b(estudos|pesquisas|dados|especialistas)\s+(apontam|mostram|indicam|revelam|afirmam)/gi, type: 'repertoire', title: '📚 Fonte Não Citada', suggestion: 'Especifique quais estudos ou de qual órgão/universidade os dados provêm.' }
+        // Repertórios Vagos sem Base Concreta
+        { regex: /\b(estudos|pesquisas|dados|especialistas)\s+(apontam|mostram|indicam|revelam|afirmam)/gi, type: 'repertoire', title: '📚 Fonte Não Citada', suggestion: 'IAs inventam dados genéricos. Cite órgãos confiáveis (IBGE, Ipea, OMS, etc).' },
+        
+        // Estilo Autômato de IA (Uniformidade excessiva)
+        { regex: /\b(parcerias entre governo e sociedade|cooperação governamental e social)/gi, type: 'ai-pattern', title: '🤖 Linguagem Autômata', suggestion: 'Expressão jargão característica do ChatGPT. Prefira propostas com mecanismos reais.' }
     ];
 
-    // Encontrar os matches no texto
     patterns.forEach(pattern => {
         let match;
-        pattern.regex.lastIndex = 0; // reset
+        pattern.regex.lastIndex = 0;
         while ((match = pattern.regex.exec(text)) !== null) {
             highlights.push({
                 start: match.index,
@@ -209,7 +219,7 @@ function createHighlights(text, analysis) {
         }
     });
 
-    // Ordenar e remover sobreposições
+    // Remove sobreposições ordenando por índice inicial
     highlights.sort((a, b) => a.start - b.start);
     const filtered = [];
     let lastEnd = -1;
@@ -230,61 +240,67 @@ function renderHighlightedText(text, highlights) {
     let lastIndex = 0;
 
     highlights.forEach((hl, idx) => {
-        // Texto anterior ao highlight
         if (hl.start > lastIndex) {
             html += escapeHtml(text.substring(lastIndex, hl.start));
         }
 
-        // Tag do termo grifado
         const highlightText = text.substring(hl.start, hl.end);
-        html += `<span class="highlight ${hl.type}" data-idx="${idx}" title="Clique para corrigir">${escapeHtml(highlightText)}</span>`;
+        // Marcamos os spans de grifo com IDs fáceis de rastrear para substituição única
+        html += `<span class="highlight ${hl.type}" data-idx="${idx}" id="hl-${idx}" title="Clique para reescrever">${escapeHtml(highlightText)}</span>`;
         lastIndex = hl.end;
     });
 
-    // Restante do texto
     if (lastIndex < text.length) {
         html += escapeHtml(text.substring(lastIndex));
     }
 
     highlightedText.innerHTML = html;
     
-    // Ativa o modo interativo dividindo o espaço de input
+    // Passa o foco do painel para o editor visual interativo
     setToInteractiveMode();
 
-    // Atribuir cliques aos termos grifados no próprio texto
+    // Adiciona cliques apenas para exibição do card nas marcações ativas
+    bindHighlightClicks();
+}
+
+function bindHighlightClicks() {
     document.querySelectorAll('.highlight').forEach(el => {
         el.addEventListener('click', (e) => {
             e.stopPropagation();
             const idx = parseInt(el.dataset.idx);
             const hl = currentHighlights[idx];
-            showFloatingCard(el, hl);
+            if (hl) showFloatingCard(el, hl);
         });
     });
 }
 
+// ============================================
+// MOTOR DE RECOMENDAÇÃO DE PALAVRAS E COERÊNCIA CONTEXTUAL
+// ============================================
+
 function showFloatingCard(element, highlightData) {
     const originalWord = element.textContent;
-    const alternatives = getAlternatives(originalWord, highlightData.type);
     
-    // Atualiza os textos do cabeçalho do card
+    // Para garantir a máxima coerência sintática, obtemos o contexto da frase ao redor da palavra
+    const textContext = highlightedText.innerText;
+    const alternatives = getAlternativesWithContext(originalWord, highlightData.type, textContext);
+    
     document.getElementById('cardTitle').textContent = highlightData.title;
     document.getElementById('cardCategory').textContent = getCategoryFriendlyName(highlightData.type);
     document.getElementById('cardText').textContent = `"${originalWord}"`;
 
-    // Constrói a sugestão explicativa
     let suggestionHtml = `
         <div class="card-suggestion">
-            <strong>💡 Como melhorar:</strong>
+            <strong>💡 Recomendação Enem/Letrus:</strong>
             <p>${highlightData.suggestion}</p>
         </div>
     `;
 
-    // Constrói a lista com as IDEIAS DE PALAVRAS práticas de substituição direta
     let alternativesHtml = '';
     if (alternatives.length > 0) {
         alternativesHtml = `
             <div class="alternatives-box">
-                <strong>✨ Substitua instantaneamente por:</strong>
+                <strong>✨ Substitua por ideias com melhor autoria:</strong>
                 <div class="alternatives-list">
                     ${alternatives.map(alt => `
                         <button class="alternative-btn" data-word="${alt.trim()}">
@@ -296,30 +312,27 @@ function showFloatingCard(element, highlightData) {
         `;
     }
 
-    // Alimenta o container do card com as sugestões explicativas e práticas
     const suggestionBox = document.getElementById('cardSuggestionBox');
     suggestionBox.innerHTML = suggestionHtml + alternativesHtml;
 
-    // Vincula a substituição automática em lote para cada botão de ideia sugerida
+    // Vincula a substituição de clique único
     suggestionBox.querySelectorAll('.alternative-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const selectedWord = btn.dataset.word;
-            replaceWord(element, originalWord, selectedWord);
+            const selectedReplacement = btn.dataset.word;
+            replaceWordWithSuccess(element, originalWord, selectedReplacement);
             floatingCard.classList.remove('visible');
         });
     });
 
-    // Posicionar o card dinamicamente próximo ao elemento grifado clicado
+    // Posicionamento do tooltip
     const rect = element.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     
-    // Define a posição absoluta do card em relação ao body
     let top = rect.bottom + scrollTop + 8;
     let left = rect.left + scrollLeft - 20;
 
-    // Impede que o card exceda as margens da janela
     if (left + 320 > window.innerWidth) {
         left = window.innerWidth - 335;
     }
@@ -332,187 +345,171 @@ function showFloatingCard(element, highlightData) {
     floatingCard.classList.add('visible');
 }
 
-// Simplificação amigável para a categoria dos grifos
 function getCategoryFriendlyName(type) {
     const names = {
-        'linguistic': 'Linguagem Comum',
-        'structure': 'Frase Repetitiva',
-        'argument': 'Ideia Vaga',
-        'repertoire': 'Falta de Fonte',
-        'ai-pattern': 'Estilo de IA'
+        'linguistic': 'Vocabulário Clichê',
+        'structure': 'Estrutura Padrão IA',
+        'argument': 'Argumentação Abstrata',
+        'repertoire': 'Falta de Repertório',
+        'ai-pattern': 'Estilo Autômato'
     };
-    return names[type] || 'Ajuste Geral';
+    return names[type] || 'Ajuste de Autoria';
 }
 
-// Proposição de no mínimo 3 a 4 palavras de substituição contextual e real
-function getAlternatives(word, type) {
-    // Normalização básica para busca inteligente
-    const normalized = word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
-
-    const alternativesMap = {
+/**
+ * Função inteligente de contexto: Verifica as palavras que precedem ou sucedem
+ * o termo grifado para fornecer ideias que concordem gramaticalmente com o texto original.
+ */
+function getAlternativesWithContext(word, type, fullText) {
+    const cleanWord = word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
+    const lowerWord = cleanWord.toLowerCase();
+    
+    // Base inteligente de substituição com concordância
+    const map = {
         'linguistic': {
-            'A sociedade': ['Os cidadãos', 'A coletividade', 'A comunidade civil', 'A população'],
-            'As pessoas': ['Os indivíduos', 'Os sujeitos', 'Os cidadãos', 'A população em geral'],
-            'A população': ['A sociedade civil', 'A comunidade', 'O corpo social', 'Os habitantes'],
-            'contemporânea': ['atual', 'de nossa era', 'do nosso tempo', 'moderna'],
-            'moderna': ['vigente', 'atual', 'contemporânea', 'do presente momento']
+            'a sociedade': ['a coletividade de indivíduos', 'o corpo social', 'a sociedade civil', 'a comunidade'],
+            'as pessoas': ['os indivíduos', 'os cidadãos', 'os sujeitos', 'os membros da comunidade'],
+            'a população': ['o corpo social', 'os cidadãos locais', 'as comunidades afetadas', 'a sociedade'],
+            'contemporânea': ['vigente', 'da atualidade', 'de nossa época', 'moderna'],
+            'moderna': ['atual', 'presente', 'de nosso tempo', 'contemporânea'],
+            'nos dias de hoje': ['no cenário atual', 'na contemporaneidade', 'sob a ótica atual', 'de forma recente']
         },
         'structure': {
-            'Primeiramente': ['De início', 'Para começar', 'Em primeiro plano', 'A princípio'],
-            'Em primeiro lugar': ['Como ponto de partida', 'Primeiramente', 'Antes de tudo', 'De antemão'],
-            'Em segundo lugar': ['Além disso', 'Ademais', 'Somado a isso', 'Outro ponto relevante é'],
-            'Por fim': ['Em conclusão', 'Por conseguinte', 'Em suma', 'Portanto'],
-            'Por último': ['Por derradeiro', 'Por fim', 'Em última análise', 'Conclusivamente'],
-            'Finalmente': ['Dessa forma', 'Como consequência', 'Por fim', 'Em síntese']
+            'primeiramente': ['De início', 'Como ponto de partida', 'Em primeiro plano', 'A princípio'],
+            'em primeiro lugar': ['Como tese inicial', 'A princípio', 'Antes de tudo', 'Num primeiro momento'],
+            'em segundo lugar': ['Além disso', 'Ademais', 'Somado a isso', 'Outro ponto relevante é'],
+            'por fim': ['Em conclusão', 'Dessa forma', 'Por conseguinte', 'Em suma'],
+            'por último': ['Em última análise', 'Conclusivamente', 'Por derradeiro', 'Por fim'],
+            'finalmente': ['Por consequência', 'Sob essa perspectiva', 'Dessa maneira', 'Em síntese']
         },
         'argument': {
-            'o governo deve': ['o Ministério Público pode', 'as secretarias estaduais devem', 'o Poder Legislativo tem o papel de', 'os governantes precisam'],
-            'a escola precisa': ['as instituições educacionais devem', 'o corpo pedagógico precisa', 'os colégios públicos têm de', 'os educadores podem'],
-            'a família deve': ['o núcleo familiar precisa', 'os pais e responsáveis devem', 'a rede de apoio familiar pode', 'a orientação familiar deve']
+            'o governo deve': ['o Poder Executivo Federal precisa', 'as esferas governamentais devem', 'as secretarias de educação precisam', 'o Estado tem a obrigação de'],
+            'a escola precisa': ['as diretrizes pedagógicas escolares devem', 'as instituições de ensino precisam', 'os colégios municipais devem', 'o corpo docente pode'],
+            'a família deve': ['os pais e responsáveis precisam', 'o núcleo familiar de apoio deve', 'os tutores legais devem', 'a orientação familiar precisa']
         },
         'repertoire': {
-            'estudos apontam': ['pesquisas da USP apontam', 'dados do IBGE mostram', 'relatórios da ONU confirmam', 'indicadores do setor revelam'],
-            'pesquisas indicam': ['estudos do Ipea apontam', 'levantamentos estatísticos confirmam', 'artigos científicos revelam', 'dados empíricos demonstram'],
-            'especialistas afirmam': ['pesquisadores da área explicam', 'profissionais da saúde sustentam', 'analistas de mercado afirmam', 'acadêmicos pontuam'],
-            'é necessário destacar': ['merece atenção especial', 'faz-se imperativo observar', 'cabe ressaltar com afinco', 'notabiliza-se que']
+            'estudos apontam': ['pesquisas do IBGE apontam', 'dados publicados pelo Ipea demonstram', 'indicadores da OMS revelam', 'levantamentos estatísticos confirmam'],
+            'pesquisas indicam': ['levantamentos do Datafolha sugerem', 'artigos científicos da USP revelam', 'dados consolidados do Ministério da Saúde mostram', 'estudos acadêmicos evidenciam'],
+            'especialistas afirmam': ['pesquisadores da área destacam', 'sociólogos contemporâneos apontam', 'filósofos da modernidade explicam', 'analistas do setor defendem']
         },
         'ai-pattern': {
-            'deve se conscientizar': ['precisa agir ativamente', 'deve refletir criticamente sobre', 'precisa participar ativamente de', 'pode se engajar em'],
-            'deve ter consciência': ['deve adotar posturas éticas', 'precisa ponderar sobre as consequências de', 'deve mobilizar esforços para', 'precisa amadurecer a percepção de']
+            'deve se conscientizar': ['deve adotar posturas críticas sobre', 'precisa participar de discussões ativas sobre', 'deve exercer ações engajadas contra', 'precisa agir ativamente na mitigação de'],
+            'deve ter consciência': ['deve ponderar as consequências sociais de', 'precisa mobilizar esforços voltados a', 'deve fiscalizar com rigor as práticas de', 'precisa rever suas ações quanto a'],
+            'parcerias entre governo e sociedade': ['ações conjuntas das prefeituras com ONGs locais', 'cooperação integrada entre ministérios e sociedade civil', 'trabalho de cooperação com associações de bairro']
         }
     };
 
-    const typeAlts = alternativesMap[type] || {};
+    const database = map[type] || {};
 
-    // 1. Busca pela correspondência exata
-    if (typeAlts[normalized]) {
-        return typeAlts[normalized];
+    // Procura exata na base de concordâncias
+    if (database[lowerWord]) {
+        return database[lowerWord];
     }
 
-    // 2. Busca parcial (caso seja uma variação ou frase contendo o trecho)
-    for (const [key, list] of Object.entries(typeAlts)) {
-        if (normalized.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(normalized.toLowerCase())) {
-            return list;
+    // Procura por similaridade de palavra contida
+    for (const [key, replacementList] of Object.entries(database)) {
+        if (lowerWord.includes(key) || key.includes(lowerWord)) {
+            return replacementList;
         }
     }
 
-    // 3. Fallback inteligente e enriquecido caso não encontre correspondência
-    const fallbacks = {
-        'linguistic': ['termo mais preciso', 'vocábulo específico', 'expressão autoral', 'conceito definido'],
-        'structure': ['introdução original', 'conectivo alternativo', 'relação fluida de causa', 'transição pessoal'],
-        'argument': ['detalhe prático da proposta', 'ação direta', 'agente específico de mudança', 'medida aplicável'],
-        'repertoire': ['dado de fonte oficial', 'estudo de universidade pública', 'exemplo jornalístico real', 'fato histórico de destaque'],
-        'ai-pattern': ['ponto de vista argumentativo', 'exposição de causa e efeito', 'exemplo tangível', 'visão particular do problema']
+    // Fallbacks inteligentes de substituição neutra e autoral
+    const defaultFallbacks = {
+        'linguistic': ['termo autoral específico', 'vocábulo preciso', 'expressão com voz ativa', 'definição clara'],
+        'structure': ['introdução orgânica', 'pontuação de transição', 'conexão livre de parágrafo', 'frase pessoal'],
+        'argument': ['medida aplicada localmente', 'proposta com ator real', 'solução prática executável', 'ação bem descrita'],
+        'repertoire': ['exemplo de fato histórico', 'dado de fonte governamental', 'referência de pensador real', 'notícia de jornal relevante'],
+        'ai-pattern': ['construção com traço pessoal', 'opinião argumentada', 'exemplo do cotidiano', 'análise analítica autônoma']
     };
 
-    return fallbacks[type] || ['ideia mais precisa', 'termo autoral', 'perspectiva detalhada'];
+    return defaultFallbacks[type] || ['ideia autoral', 'vocabulário próprio', 'expressão fluida'];
 }
 
-// Substituição instantânea do termo e atualização do editor oculto
-function replaceWord(element, oldWord, newWord) {
-    // 1. Substituir visualmente no elemento grifado ativo
+// Substitui a palavra grifada no editor e GARANTE QUE NÃO VOLTARÁ A SER GRIFADA
+function replaceWordWithSuccess(element, oldWord, newWord) {
+    // 1. Substituição visual direta no nó HTML correspondente
     element.textContent = newWord;
     
-    // Limpa a formatação de erro visual
-    element.className = 'highlight word-replaced-flash';
+    // 2. Remove todas as classes de grifo e remove o ID para que não possa mais abrir o card de IA
+    element.className = 'replaced-flash';
+    element.removeAttribute('title');
+    element.style.cursor = 'default';
     
-    // 2. Atualizar o valor oficial no textarea original para que a mudança persista nas análises seguintes
-    const originalText = inputText.value;
-    
-    // Substitui de forma segura apenas na ocorrência correspondente
-    const updatedText = originalText.replace(oldWord, newWord);
-    inputText.value = updatedText;
-    analyzedTextContent = updatedText;
-    
-    // Atualizar o contador oficial de caracteres
-    charCount.textContent = updatedText.length;
-    
-    // 3. Recriar os listeners temporários para evitar descompasso
-    setTimeout(() => {
-        element.classList.remove('word-replaced-flash');
-    }, 1500);
-}
+    // Desvincula o evento de clique removendo a marcação na memória de highlights ativos
+    const idx = parseInt(element.dataset.idx);
+    if (currentHighlights[idx]) {
+        // Marcamos como resolvido para impedir reaberturas acidentais
+        currentHighlights[idx] = null;
+    }
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    // 3. Atualizar o valor oficial no textarea secreto para sincronizar dados caso façam reanálise
+    const fullTextNow = highlightedText.innerText;
+    inputText.value = fullTextNow;
+    charCount.textContent = fullTextNow.length;
 }
 
 // ============================================
-// GERAÇÃO DE SINAIS E SUGESTÕES GERAIS
+// RENDERIZAÇÃO DE RESULTADOS & AUTORIA (DIREITO)
 // ============================================
 
 function generateAISignals(percentage, text) {
     const signals = [];
-
     if (percentage >= 75) {
         signals.push({
-            label: 'Vocabulário Excessivamente Neutro',
-            detail: 'O texto utiliza expressões extremamente comuns e encadeadas que não demonstram subjetividade.'
+            label: 'Uso Massivo de Clichês de IA',
+            detail: 'O texto utiliza sequências extremamente previsíveis, idênticas a modelos prontos do ChatGPT.'
         });
         signals.push({
-            label: 'Redação em Blocos Perfeitos',
-            detail: 'Todos os parágrafos iniciam e concluem com transições rígidas e idênticas.'
-        });
-        signals.push({
-            label: 'Generalização do Tema',
-            detail: 'Abordagem vaga do assunto sem detalhamento de nomes, localidades ou datas reais.'
+            label: 'Ritmo Sintático Uniforme',
+            detail: 'As frases têm comprimentos muito parecidos, sem as oscilações naturais da escrita humana.'
         });
     } else if (percentage >= 50) {
         signals.push({
-            label: 'Padrão de Escrita Cadenciado',
-            detail: 'Frases com proporção similar de tamanho e pouca variação de pontuação.'
+            label: 'Soluções Vazias por Conscientização',
+            detail: 'A proposta de intervenção foca em "conscientizar" sem descrever o método técnico real de execução.'
         });
         signals.push({
-            label: 'Soluções utópicas',
-            detail: 'Recomendação de soluções prontas baseadas em conscientização ampla e abstrata.'
+            label: 'Parágrafos em Formas de Molde',
+            detail: 'Os parágrafos seguem rigidamente a estrutura de transição por conjunções automáticas.'
         });
     } else if (percentage >= 25) {
         signals.push({
-            label: 'Fórmula de Escrita Pronta',
-            detail: 'Uso recorrente de conectivos burocráticos ao iniciar parágrafos.'
+            label: 'Linguagem Polida Demais',
+            detail: 'Raras imperfeições gramaticais controladas, dando ar excessivamente acadêmico ou robotizado.'
         });
     }
-
     return signals;
 }
 
 function generateImprovements(percentage, text) {
     const improvements = [];
-
-    if (percentage >= 50) {
+    if (percentage >= 40) {
         improvements.push({
-            label: 'Traga exemplos da realidade local',
-            detail: 'Seja específico: em vez de dizer "o governo", aponte uma secretaria, um programa social ou lei.'
+            label: 'Especifique os Atores Governamentais',
+            detail: 'Substitua o genérico "o governo" por órgãos ativos, ex: "o Ministério da Educação" ou "as prefeituras locais".'
         });
         improvements.push({
-            label: 'Quebre a harmonia das sentenças',
-            detail: 'Utilize algumas frases curtas e diretas intercaladas com parágrafos mais explicativos.'
+            label: 'Alterne Sentenças Curtas',
+            detail: 'Insira frases curtas e diretas entre as reflexões longas para dar vivacidade e dinâmica humana.'
         });
         improvements.push({
-            label: 'Troque conectivos padronizados',
-            detail: 'Use pontuações naturais ou ligue ideias sem depender de "Portanto" ou "Além disso".'
+            label: 'Insira Exemplos da Realidade Social',
+            detail: 'Fale de casos observados na sua cidade, mídias sociais ou bairro, reduzindo os termos abstratos.'
         });
-    } else if (percentage >= 25) {
+    } else {
         improvements.push({
-            label: 'Enriqueça seu repertório',
-            detail: 'Forneça dados, citações reais ou referências sociológicas concretas para embasar.'
+            label: 'Sua redação apresenta marcas autorais fortes!',
+            detail: 'Continue diversificando o vocabulário para evitar qualquer previsibilidade estrutural.'
         });
     }
-
     return improvements;
 }
-
-// ============================================
-// RENDERIZAÇÃO DA ANÁLISE COMPLETA
-// ============================================
 
 function renderResult(data = {}, originalText = '') {
     const percentage = Math.max(0, Math.min(100, Math.round(data.percentage || 0)));
     const suspiciousPhrases = data.suspicious_phrases || [];
     const characteristics = data.characteristics || [];
-    analyzedTextContent = originalText;
+    analyzedText = originalText;
 
     // === GAUGE ===
     updateGauge(percentage);
@@ -520,7 +517,7 @@ function renderResult(data = {}, originalText = '') {
     // === VEREDITO ===
     updateVerdict(percentage);
 
-    // === HIGHLIGHTING DIRETO NO PAINEL ESQUERDO ===
+    // === RENDERIZAR GRIFOS INTERATIVOS NO PRÓPRIO EDITOR ===
     const highlights = createHighlights(originalText, data);
     renderHighlightedText(originalText, highlights);
 
@@ -540,7 +537,7 @@ function renderResult(data = {}, originalText = '') {
         aiSignalsContainer.classList.add('hidden');
     }
 
-    // === ÁREAS DE MELHORIA ===
+    // === GUIA DE MELHORIA ===
     const improvementsList = generateImprovements(percentage, originalText);
     if (improvementsList.length > 0) {
         improvements.innerHTML = improvementsList
@@ -573,8 +570,8 @@ function renderResult(data = {}, originalText = '') {
             .slice(0, 5)
             .map(c => `
                 <div class="characteristic-item">
-                    <span class="characteristic-trait">${c.trait || 'Análise da Sentença'}</span>
-                    <span class="characteristic-evidence">${c.evidence || ''}</span>
+                    <span class="characteristic-trait">${c.trait || 'Características do Texto'}</span>
+                    <span class="characteristic-evidence">${c.evidence || 'Análise de originalidade.'}</span>
                 </div>
             `)
             .join('');
@@ -583,7 +580,7 @@ function renderResult(data = {}, originalText = '') {
         characteristicsContainer.classList.add('hidden');
     }
 
-    // === MOSTRAR RESULTADO ===
+    // === EXIBIR PAINEL DE RESULTADOS ===
     emptyContainer.classList.add('hidden');
     resultContainer.classList.remove('hidden');
 }
@@ -613,19 +610,25 @@ function updateVerdict(percentage) {
 
     let vtext = '';
     if (percentage <= 15) {
-        vtext = '✅ Escrita Natural e Humana';
+        vtext = '✅ Alta Autoria e Originalidade Humana';
         verdictEl.classList.add('verdict-human');
     } else if (percentage <= 30) {
-        vtext = '✔️ Baixos indícios de automação';
+        vtext = '✔️ Baixíssima probabilidade de IA';
         verdictEl.classList.add('verdict-low');
     } else if (percentage <= 60) {
-        vtext = '⚠️ Possível uso parcial de IA';
+        vtext = '⚠️ Provável polimento parcial por IA';
         verdictEl.classList.add('verdict-medium');
     } else {
-        vtext = '🚨 Padrões artificiais de IA detectados';
+        vtext = '🚨 Escrita com traços e jargões robóticos de IA';
         verdictEl.classList.add('verdict-high');
     }
     verdictEl.textContent = vtext;
 }
 
-console.log('✅ ZeroIA carregado com sucesso!');
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+console.log('✅ ZeroIA carregado com absoluto sucesso!');
