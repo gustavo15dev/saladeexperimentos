@@ -113,6 +113,50 @@
                     <!-- Veredito -->
                     <div id="verdict" class="verdict-box"></div>
 
+                    <!-- Texto com Highlighting Interativo -->
+                    <div id="highlightedTextSection" class="analysis-section hidden">
+                        <h3>📖 Análise do Texto</h3>
+                        <div class="highlighted-text-container">
+                            <div id="highlightedText" class="highlighted-text"></div>
+                        </div>
+                        <div class="highlight-legend">
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #fef3c7; border-bottom: 2px solid #b45309;"></span>
+                                <span>Linguístico</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #dbeafe; border-bottom: 2px solid #0369a1;"></span>
+                                <span>Estrutura</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #d1fae5; border-bottom: 2px solid #059669;"></span>
+                                <span>Argumentação</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #fce7f3; border-bottom: 2px solid #be185d;"></span>
+                                <span>Repertório</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color" style="background: #fee2e2; border-bottom: 2px solid #dc2626;"></span>
+                                <span>Padrão IA</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Flutuante -->
+                    <div id="floatingCard" class="floating-card">
+                        <div class="card-arrow"></div>
+                        <div class="card-header">
+                            <h4 class="card-title" id="cardTitle">Título</h4>
+                            <div class="card-category" id="cardCategory">Categoria</div>
+                        </div>
+                        <p class="card-text" id="cardText">Feedback</p>
+                        <div class="card-suggestion">
+                            <strong>💡 Sugestão:</strong>
+                            <p id="cardSuggestion">Sugestão de melhoria</p>
+                        </div>
+                    </div>
+
                     <!-- Sinais de IA -->
                     <div id="aiSignalsContainer" class="analysis-section hidden">
                         <h3>🚩 Sinais de IA Detectados</h3>
