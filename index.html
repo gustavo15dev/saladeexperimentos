@@ -1774,6 +1774,25 @@
         </nav>
 
         <div id="container-cards">
+            <!-- Projeto: WSM Chat -->
+            <div class="glass-card" data-projeto="wsm" data-categoria="ia">
+                <div class="card-image-wrapper">
+                    <img src="imagens/wsm.gif" alt="WSM Chat" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=WSM+Chat'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>WSM Chat</h3>
+                        <span class="category-icon"><i class="fa-solid fa-robot"></i></span>
+                    </div>
+                    <p>Plataforma de chat inteligente para comunicação rápida e eficiente, integrada com tecnologias de IA.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="wsm-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="https://wsm-chat.vercel.app/" onclick="atualizarEstatistica('wsm')" class="action-btn">Acessar Chat</a>
+                </div>
+            </div>
+
             <!-- Projeto: Cook-me -->
             <div class="glass-card" data-projeto="cookme" data-categoria="ia">
                 <div class="card-image-wrapper">
@@ -1819,7 +1838,6 @@
             <div class="glass-card" data-projeto="sorteador" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="sorteador/img.png" alt="Sorteador" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Sorteador'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -1838,7 +1856,6 @@
             <div class="glass-card" data-projeto="textlab" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="textlab/img.png" alt="TextLab" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=TextLab'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -1856,7 +1873,6 @@
             <div class="glass-card" data-projeto="nao-clique" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="NAO_CLIQUE/vava.png" alt="NÃO CLIQUE AQUI" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=N%C3%83O+CLIQUE'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -2347,7 +2363,7 @@
         }
 
         window.addEventListener('load', () => {
-            const projetos = ['cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
+            const projetos = ['wsm', 'cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
