@@ -634,6 +634,127 @@
             box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
         }
 
+        /* ---------------------------------------------------- */
+        /* HERO WSM LAUNCH */
+        /* ---------------------------------------------------- */
+        .wsm-launch-hero {
+            margin-bottom: 34px;
+        }
+
+        .wsm-launch-card {
+            position: relative;
+            overflow: hidden;
+            padding: 28px;
+            min-height: min(72vh, 780px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+                rgba(12, 14, 21, 0.88);
+            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            text-align: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .wsm-launch-card::before {
+            content: '';
+            position: absolute;
+            inset: -30% auto auto -15%;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 210, 255, 0.24), transparent 65%);
+            pointer-events: none;
+        }
+
+        .wsm-launch-title {
+            font-size: clamp(2rem, 1.5rem + 1.6vw, 2.9rem);
+            line-height: 1.05;
+            font-weight: 800;
+            color: var(--text-main);
+            max-width: 860px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wsm-launch-video-wrap {
+            position: relative;
+            width: min(100%, 1100px);
+            min-height: 320px;
+            flex: 1 1 auto;
+            border-radius: 22px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.38);
+            z-index: 1;
+        }
+
+        .wsm-launch-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .wsm-launch-copy {
+            max-width: 760px;
+            color: var(--text-muted);
+            font-size: 1.02rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wsm-launch-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 13px 30px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #00d2ff 0%, #3a7bfd 100%);
+            color: #03131b;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 16px 40px rgba(58, 123, 253, 0.32);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .wsm-launch-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 46px rgba(58, 123, 253, 0.42);
+        }
+
+        @media (max-width: 768px) {
+            .wsm-launch-card {
+                min-height: auto;
+                padding: 20px 16px;
+                gap: 16px;
+            }
+
+            .wsm-launch-title {
+                font-size: 1.9rem;
+            }
+
+            .wsm-launch-video-wrap {
+                min-height: 240px;
+            }
+
+            .wsm-launch-copy {
+                font-size: 0.98rem;
+                line-height: 1.6;
+            }
+        }
+
 
         /* ---------------------------------------------------- */
         /* FEATURED CARD (ZapWrapped) */
@@ -1744,7 +1865,28 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        html[data-wsm-hero-seen="true"] .wsm-launch-hero {
+            display: none !important;
+        }
     </style>
+
+    <script>
+        (() => {
+            try {
+                const key = 'wsm-launch-hero-seen';
+                const seen = localStorage.getItem(key) === 'true';
+
+                if (seen) {
+                    document.documentElement.setAttribute('data-wsm-hero-seen', 'true');
+                } else {
+                    localStorage.setItem(key, 'true');
+                }
+            } catch (error) {
+                // localStorage indisponível; mantém o comportamento padrão do card
+            }
+        })();
+    </script>
 </head>
 
 <body>
@@ -1790,6 +1932,17 @@
             <h1>Sala de <span class="text-gradient">Experimentos</span></h1>
             <h2>Onde a criatividade encontra a tecnologia.</h2>
         </header>
+
+        <section class="wsm-launch-hero" aria-label="Destaque WSM 1.0 Agent Maps">
+            <div class="wsm-launch-card">
+                <h2 class="wsm-launch-title">Apresentamos: WSM 1.0 Agent Maps</h2>
+                <div class="wsm-launch-video-wrap">
+                    <video class="wsm-launch-video" src="new.mp4" autoplay muted playsinline loop preload="auto"></video>
+                </div>
+                <p class="wsm-launch-copy">Lançamos nosso primeiro modelo agêntico grátis. Agora você pode pesquisar lugares, e saber sobre ele. Fácil, rápido, seguro e grátis.</p>
+                <a href="https://wsm-chat.vercel.app/" target="_blank" rel="noopener noreferrer" class="wsm-launch-btn">Abrir</a>
+            </div>
+        </section>
 
         <nav id="categorias-container">
             <button class="filter-btn active" onclick="filtrarPorCategoria('todos')"><i class="fa-solid fa-layer-group"></i> Todos</button>
