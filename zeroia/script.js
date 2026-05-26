@@ -3,20 +3,18 @@ const API_URL = window.location.hostname === 'localhost'
     ? 'http://localhost:3000/api/ai-detect'
     : 'https://saladeexperimentos.vercel.app/api/ai-detect';
 
-// Elementos principais do Painel do Editor (Esquerdo)
+// Elementos principais do Editor (Painel Esquerdo)
 const inputText = document.getElementById('inputText');
 const interactiveTextContainer = document.getElementById('interactiveTextContainer');
 const highlightedText = document.getElementById('highlightedText');
 const legendContainer = document.getElementById('legendContainer');
 const charCount = document.getElementById('charCount');
 const analyzeBtn = document.getElementById('analyzeBtn');
-const editBtn = document.getElementById('editBtn');
 const clearBtn = document.getElementById('clearBtn');
-const shortcutHint = document.getElementById('shortcutHint');
-const inputPanelTitle = document.getElementById('inputPanelTitle');
-const inputPanelHint = document.getElementById('inputPanelHint');
+const tabWrite = document.getElementById('tabWrite');
+const tabAnalyze = document.getElementById('tabAnalyze');
 
-// Elementos principais do Painel de Resultados (Direito)
+// Elementos principais de Análise (Painel Direito)
 const resultContainer = document.getElementById('resultContainer');
 const loadingContainer = document.getElementById('loadingContainer');
 const emptyContainer = document.getElementById('emptyContainer');
@@ -26,10 +24,10 @@ const aiPercentage = document.getElementById('aiPercentage');
 const humanPercentage = document.getElementById('humanPercentage');
 const verdictEl = document.getElementById('verdict');
 
-// Card flutuante de sugestões contextuais
+// Card flutuante
 const floatingCard = document.getElementById('floatingCard');
 
-// Containers de análise estilística (Direito)
+// Containers da barra lateral direita
 const aiSignalsContainer = document.getElementById('aiSignalsContainer');
 const aiSignals = document.getElementById('aiSignals');
 const improvementContainer = document.getElementById('improvementContainer');
@@ -41,39 +39,66 @@ const characteristics = document.getElementById('characteristics');
 
 // Estado Global
 let currentHighlights = [];
-let analyzedText = "";
+let hasBeenAnalyzed = false;
 
 // ============================================
-// EVENT LISTENERS DO EDITOR
+// SISTEMA DE ABAS DO EDITOR (✍️ Modo Escrita vs 📖 Modo Correção)
+// ============================================
+
+tabWrite.addEventListener('click', () => {
+    switchEditorMode('write');
+});
+
+tabAnalyze.addEventListener('click', () => {
+    if (hasBeenAnalyzed) {
+        switchEditorMode('analyze');
+    }
+});
+
+function switchEditorMode(mode) {
+    if (mode === 'write') {
+        tabWrite.classList.add('active');
+        tabAnalyze.classList.remove('active');
+        
+        inputText.classList.remove('hidden');
+        interactiveTextContainer.classList.add('hidden');
+        legendContainer.classList.add('hidden');
+        
+        floatingCard.classList.remove('visible');
+    } else {
+        tabWrite.classList.remove('active');
+        tabAnalyze.classList.add('active');
+        
+        inputText.classList.add('hidden');
+        interactiveTextContainer.classList.remove('hidden');
+        legendContainer.classList.remove('hidden');
+    }
+}
+
+// ============================================
+// EVENT LISTENERS DE CONTROLE
 // ============================================
 
 inputText.addEventListener('input', () => {
     charCount.textContent = inputText.value.length;
 });
 
-// Atualiza o contador de caracteres também no modo de edição direta grifada
-highlightedText.addEventListener('input', () => {
-    const textContent = highlightedText.innerText;
-    charCount.textContent = textContent.length;
-    inputText.value = textContent; // Sincroniza em segundo plano
-});
-
 clearBtn?.addEventListener('click', () => {
     inputText.value = '';
-    highlightedText.innerHTML = '';
     charCount.textContent = '0';
-    resetToEditMode();
+    hasBeenAnalyzed = false;
+    tabAnalyze.disabled = true;
+    switchEditorMode('write');
+    
     resultContainer?.classList.add('hidden');
     emptyContainer?.classList.remove('hidden');
 });
 
 analyzeBtn.addEventListener('click', async () => {
-    // Lê do input correto dependendo de qual contêiner está visível
-    const isInteractive = !interactiveTextContainer.classList.contains('hidden');
-    const txt = isInteractive ? highlightedText.innerText.trim() : inputText.value.trim();
-    
+    // Sempre analisa o texto que está no inputText atualmente
+    const txt = inputText.value.trim();
     if (!txt) {
-        alert('Cole ou digite um texto para analisar.');
+        alert('Por favor, digite ou cole um texto antes de analisar!');
         return;
     }
 
@@ -81,21 +106,19 @@ analyzeBtn.addEventListener('click', async () => {
     try {
         const data = await analyzeText(txt);
         renderResult(data, txt);
+        
+        hasBeenAnalyzed = true;
+        tabAnalyze.disabled = false;
+        switchEditorMode('analyze'); // Vai para visualização de grifos automaticamente
     } catch (err) {
         console.error(err);
-        alert('Erro ao processar análise linguística: ' + (err.message || err));
+        alert('Erro ao analisar a redação: ' + (err.message || err));
     } finally {
         hideLoading();
     }
 });
 
-// Alterna para o editor em texto plano sem formatação visual
-editBtn.addEventListener('click', () => {
-    inputText.value = highlightedText.innerText;
-    resetToEditMode();
-});
-
-// Atalho para análise rápida
+// Atalho de teclado para facilidade de uso
 document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         analyzeBtn.click();
@@ -103,15 +126,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.getElementById('reanalyzeBtn')?.addEventListener('click', () => {
-    // Dispara reanálise baseada no texto atualmente modificado pelo usuário
-    const textToAnalyze = highlightedText.innerText.trim();
-    if (textToAnalyze) {
-        inputText.value = textToAnalyze;
-        analyzeBtn.click();
-    }
+    analyzeBtn.click();
 });
 
-// Fecha o card flutuante quando o usuário clica fora
+// Fecha o card de sugestões se o clique for fora do grifo ou do card
 document.addEventListener('click', (e) => {
     if (!e.target.closest('.highlight') && !e.target.closest('.floating-card')) {
         floatingCard.classList.remove('visible');
@@ -119,36 +137,8 @@ document.addEventListener('click', (e) => {
 });
 
 // ============================================
-// CONTROLE DE INTERFAZ E ESTADOS
+// FUNÇÕES UTILITÁRIAS
 // ============================================
-
-function resetToEditMode() {
-    inputText.classList.remove('hidden');
-    interactiveTextContainer.classList.add('hidden');
-    legendContainer.classList.add('hidden');
-    
-    analyzeBtn.classList.remove('hidden');
-    editBtn.classList.add('hidden');
-    shortcutHint.classList.remove('hidden');
-    
-    inputPanelTitle.textContent = "Editor de Redação";
-    inputPanelHint.textContent = "Máximo 5000 caracteres";
-    floatingCard.classList.remove('visible');
-}
-
-function setToInteractiveMode() {
-    inputText.classList.add('hidden');
-    interactiveTextContainer.classList.remove('hidden');
-    legendContainer.classList.remove('hidden');
-    
-    // Deixamos o botão analisar ativo para permitir reanálise direta após edição
-    analyzeBtn.classList.remove('hidden');
-    editBtn.classList.remove('hidden');
-    shortcutHint.classList.add('hidden');
-    
-    inputPanelTitle.textContent = "Editor Grifado e Corrigível";
-    inputPanelHint.textContent = "Edite o texto livremente ou use as sugestões de IA";
-}
 
 function showLoading() {
     emptyContainer?.classList.add('hidden');
@@ -170,38 +160,57 @@ async function analyzeText(text) {
     });
     if (!resp.ok) {
         const err = await resp.json().catch(() => ({}));
-        throw new Error(err.error || 'Erro de resposta da API');
+        throw new Error(err.error || 'Erro interno do servidor de análise.');
     }
     return resp.json();
 }
 
 // ============================================
-// SISTEMA DE CORREÇÃO E ANÁLISE CONTEXTUAL
+// MOTOR HÍBRIDO DE CONTEXTO E GRIFOS
 // ============================================
 
-function createHighlights(text, analysis) {
+function createHighlights(text, data) {
     const highlights = [];
+    const suspiciousPhrases = data.suspicious_phrases || [];
 
-    // Conjunto de termos de IA com regras de substituição de autoria ajustadas com base no manual do Enem/Letrus
+    // 1. REGRA 1: Procura e grifa em ordem prioritária todas as frases que a IA da API considerou suspeitas
+    suspiciousPhrases.forEach(phrase => {
+        if (phrase.length < 5) return; // ignora fragmentos sem sentido
+        let index = 0;
+        // Encontra todas as ocorrências da frase suspeita gerada pela API
+        while (true) {
+            const foundIndex = text.toLowerCase().indexOf(phrase.toLowerCase(), index);
+            if (foundIndex === -1) break;
+            
+            highlights.push({
+                start: foundIndex,
+                end: foundIndex + phrase.length,
+                type: 'ai-pattern',
+                title: '🤖 Frase Padrão IA',
+                feedback: phrase,
+                suggestion: 'Este fragmento de texto apresenta perplexidade extremamente regular, idêntica ao estilo de redação das IAs.'
+            });
+            index = foundIndex + phrase.length;
+        }
+    });
+
+    // 2. REGRA 2: Verificações locais focadas na folha de autoria do ENEM (Letrus)
     const patterns = [
-        // Vocabulário Clichê / Genérico
-        { regex: /\b(A sociedade|As pessoas|A população)\s+(contemporânea|moderna|atual)/gi, type: 'linguistic', title: '🔤 Vocabulário Clichê', suggestion: 'Expressão moldura genérica muito recorrente em textos de IA. Use um agente real.' },
-        { regex: /\b(nos dias de hoje|atualmente|no mundo atual)/gi, type: 'linguistic', title: '🔤 Pleonasmo de Tempo', suggestion: 'Desnecessário para contextualização do Enem. Comece diretamente com a tese.' },
+        // Linguagem Comum clichê
+        { regex: /\b(A sociedade|As pessoas|A população)\s+(contemporânea|moderna|atual)/gi, type: 'linguistic', title: '🔤 Linguagem Comum', suggestion: 'Substitua por um agente real que defina melhor quem faz parte desse grupo.' },
+        { regex: /\b(nos dias de hoje|no mundo atual|atualmente)/gi, type: 'linguistic', title: '🔤 Pleonasmo Temporal', suggestion: 'Muito simplista. Prefira introduzir o contexto de forma direta e ativa.' },
         
-        // Frases Moldura / Transições Artificiais de IA
-        { regex: /\b(Primeiramente|Em primeiro lugar|Inicialmente|A princípio),/gi, type: 'structure', title: '📐 Abertura Mecânica', suggestion: 'Frase de transição que automatiza o parágrafo. Prefira iniciar com ideias conectadas.' },
-        { regex: /\b(Em segundo lugar|Além disso|Posteriormente|Ademais),/gi, type: 'structure', title: '📐 Conector de Transição', suggestion: 'Evite a marcação mecânica de pontos. Tente contextualizar de forma direta.' },
-        { regex: /\b(Por fim|Por último|Finalmente|Conclusão|Em suma),/gi, type: 'structure', title: '📐 Encerramento Padrão', suggestion: 'As IAs concluem pensamentos rigidamente. Use expressões mais autorais.' },
+        // Estrutura mecânica clichê
+        { regex: /\b(Primeiramente|Em primeiro lugar|Inicialmente|A princípio),/gi, type: 'structure', title: '📐 Abertura Padrão', suggestion: 'Conectivo de redação padrão de IA. Comece o parágrafo diretamente de forma autoral.' },
+        { regex: /\b(Em segundo lugar|Além disso|Posteriormente|Ademais),/gi, type: 'structure', title: '📐 Transição Rígida', suggestion: 'As IAs utilizam blocos de transição muito lineares. Evite essa marcação engessada.' },
+        { regex: /\b(Por fim|Por último|Finalmente|Conclusão|Em suma),/gi, type: 'structure', title: '📐 Conclusão Prevista', suggestion: 'Evite terminar parágrafos com conectivos de conclusão excessivamente repetitivos.' },
         
-        // Argumentação Abstrata / Vaga
-        { regex: /\b(deve se conscientizar|deve ter consciência|precisa entender|é necessário que se conscientize)/gi, type: 'argument', title: '💬 Solução Abstrata', suggestion: 'Argumento padrão de robôs. Diga COMO a conscientização será feita.' },
-        { regex: /\b(o governo|a escola|a família)\s+(deve|precisa)\s+([a-zç]+)/gi, type: 'argument', title: '💬 Proposta Genérica', suggestion: 'IA tende a não apontar responsáveis reais. Especifique Ministérios ou Secretarias.' },
+        // Proposta vaga de ação
+        { regex: /\b(deve se conscientizar|deve ter consciência|precisa entender)/gi, type: 'argument', title: '💬 Proposta Vaga', suggestion: 'Mencione ações práticas de conscientização ao invés de usar o termo abstrato.' },
+        { regex: /\b(o governo|a escola|a família)\s+(deve|precisa)\s+([a-zç]+)/gi, type: 'argument', title: '💬 Agente Indefinido', suggestion: 'Indique o ministério ou secretaria específico responsável por essa ação.' },
         
-        // Repertórios Vagos sem Base Concreta
-        { regex: /\b(estudos|pesquisas|dados|especialistas)\s+(apontam|mostram|indicam|revelam|afirmam)/gi, type: 'repertoire', title: '📚 Fonte Não Citada', suggestion: 'IAs inventam dados genéricos. Cite órgãos confiáveis (IBGE, Ipea, OMS, etc).' },
-        
-        // Estilo Autômato de IA (Uniformidade excessiva)
-        { regex: /\b(parcerias entre governo e sociedade|cooperação governamental e social)/gi, type: 'ai-pattern', title: '🤖 Linguagem Autômata', suggestion: 'Expressão jargão característica do ChatGPT. Prefira propostas com mecanismos reais.' }
+        // Repertório sem fonte confiável
+        { regex: /\b(estudos|pesquisas|dados|especialistas)\s+(apontam|mostram|indicam|revelam|afirmam)/gi, type: 'repertoire', title: '📚 Fonte Ocultada', suggestion: 'Citar dados ou pesquisas genéricas enfraquece a autoria. Cite órgãos específicos.' }
     ];
 
     patterns.forEach(pattern => {
@@ -219,7 +228,7 @@ function createHighlights(text, analysis) {
         }
     });
 
-    // Remove sobreposições ordenando por índice inicial
+    // Ordenar por ordem cronológica no texto e eliminar sobreposições para manter renderização impecável
     highlights.sort((a, b) => a.start - b.start);
     const filtered = [];
     let lastEnd = -1;
@@ -240,50 +249,43 @@ function renderHighlightedText(text, highlights) {
     let lastIndex = 0;
 
     highlights.forEach((hl, idx) => {
+        // Texto limpo antes do grifo
         if (hl.start > lastIndex) {
             html += escapeHtml(text.substring(lastIndex, hl.start));
         }
 
+        // Tag do grifo com ID mapeado para substituição única
         const highlightText = text.substring(hl.start, hl.end);
-        // Marcamos os spans de grifo com IDs fáceis de rastrear para substituição única
-        html += `<span class="highlight ${hl.type}" data-idx="${idx}" id="hl-${idx}" title="Clique para reescrever">${escapeHtml(highlightText)}</span>`;
+        html += `<span class="highlight ${hl.type}" data-idx="${idx}" id="hl-${idx}" title="Clique para avaliar">${escapeHtml(highlightText)}</span>`;
         lastIndex = hl.end;
     });
 
+    // Restante do texto
     if (lastIndex < text.length) {
         html += escapeHtml(text.substring(lastIndex));
     }
 
     highlightedText.innerHTML = html;
-    
-    // Passa o foco do painel para o editor visual interativo
-    setToInteractiveMode();
 
-    // Adiciona cliques apenas para exibição do card nas marcações ativas
-    bindHighlightClicks();
-}
-
-function bindHighlightClicks() {
+    // Vincula o evento de clique nos novos grifos gerados
     document.querySelectorAll('.highlight').forEach(el => {
         el.addEventListener('click', (e) => {
             e.stopPropagation();
             const idx = parseInt(el.dataset.idx);
             const hl = currentHighlights[idx];
-            if (hl) showFloatingCard(el, hl);
+            if (hl) {
+                showFloatingCard(el, hl);
+            }
         });
     });
 }
 
-// ============================================
-// MOTOR DE RECOMENDAÇÃO DE PALAVRAS E COERÊNCIA CONTEXTUAL
-// ============================================
-
 function showFloatingCard(element, highlightData) {
     const originalWord = element.textContent;
     
-    // Para garantir a máxima coerência sintática, obtemos o contexto da frase ao redor da palavra
-    const textContext = highlightedText.innerText;
-    const alternatives = getAlternativesWithContext(originalWord, highlightData.type, textContext);
+    // Obtém o texto total para analisar o gênero/número das palavras ao redor
+    const fullText = inputText.value;
+    const alternatives = getAlternativesWithContext(originalWord, highlightData.type, fullText, highlightData.start);
     
     document.getElementById('cardTitle').textContent = highlightData.title;
     document.getElementById('cardCategory').textContent = getCategoryFriendlyName(highlightData.type);
@@ -291,16 +293,17 @@ function showFloatingCard(element, highlightData) {
 
     let suggestionHtml = `
         <div class="card-suggestion">
-            <strong>💡 Recomendação Enem/Letrus:</strong>
+            <strong>💡 Recomendação de Autoria:</strong>
             <p>${highlightData.suggestion}</p>
         </div>
     `;
 
+    // Renderiza a lista se houver ideias contextuais
     let alternativesHtml = '';
     if (alternatives.length > 0) {
         alternativesHtml = `
             <div class="alternatives-box">
-                <strong>✨ Substitua por ideias com melhor autoria:</strong>
+                <strong>✨ Troque instantaneamente por:</strong>
                 <div class="alternatives-list">
                     ${alternatives.map(alt => `
                         <button class="alternative-btn" data-word="${alt.trim()}">
@@ -315,26 +318,27 @@ function showFloatingCard(element, highlightData) {
     const suggestionBox = document.getElementById('cardSuggestionBox');
     suggestionBox.innerHTML = suggestionHtml + alternativesHtml;
 
-    // Vincula a substituição de clique único
+    // Vincula o evento de substituição apenas para este card
     suggestionBox.querySelectorAll('.alternative-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const selectedReplacement = btn.dataset.word;
-            replaceWordWithSuccess(element, originalWord, selectedReplacement);
+            const selectedWord = btn.dataset.word;
+            replaceWord(element, originalWord, selectedWord);
             floatingCard.classList.remove('visible');
         });
     });
 
-    // Posicionamento do tooltip
+    // Posicionamento elegante do card próximo ao termo correspondente
     const rect = element.getBoundingClientRect();
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
     
     let top = rect.bottom + scrollTop + 8;
-    let left = rect.left + scrollLeft - 20;
+    let left = rect.left + scrollLeft - 15;
 
-    if (left + 320 > window.innerWidth) {
-        left = window.innerWidth - 335;
+    // Impede estouros laterais do card flutuante na viewport
+    if (left + 330 > window.innerWidth) {
+        left = window.innerWidth - 345;
     }
     if (left < 10) {
         left = 10;
@@ -347,135 +351,147 @@ function showFloatingCard(element, highlightData) {
 
 function getCategoryFriendlyName(type) {
     const names = {
-        'linguistic': 'Vocabulário Clichê',
-        'structure': 'Estrutura Padrão IA',
-        'argument': 'Argumentação Abstrata',
-        'repertoire': 'Falta de Repertório',
-        'ai-pattern': 'Estilo Autômato'
+        'linguistic': 'Linguagem Comum',
+        'structure': 'Frase de Transição',
+        'argument': 'Proposta Vaga',
+        'repertoire': 'Repertório Sem Fonte',
+        'ai-pattern': 'Estilo de IA'
     };
-    return names[type] || 'Ajuste de Autoria';
+    return names[type] || 'Estilo Geral';
 }
 
-/**
- * Função inteligente de contexto: Verifica as palavras que precedem ou sucedem
- * o termo grifado para fornecer ideias que concordem gramaticalmente com o texto original.
- */
-function getAlternativesWithContext(word, type, fullText) {
+// ============================================
+// SISTEMA DE CONCORDÂNCIA E COERÊNCIA CONTEXTUAL
+// ============================================
+
+function getAlternativesWithContext(word, type, fullText, startIndex) {
     const cleanWord = word.trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"");
     const lowerWord = cleanWord.toLowerCase();
+
+    // 1. Extração de contexto (analisa as palavras vizinhas antes e depois)
+    const wordsBefore = fullText.substring(Math.max(0, startIndex - 20), startIndex).toLowerCase().trim();
     
-    // Base inteligente de substituição com concordância
+    // Detectores de Concordância de Gênero (Masc / Fem)
+    let isFeminine = false;
+    if (wordsBefore.endsWith(' a') || wordsBefore.endsWith('as') || wordsBefore.endsWith('uma') || wordsBefore.endsWith('da') || wordsBefore.endsWith('na')) {
+        isFeminine = true;
+    }
+
+    // Mapas de ideias reais e contextualizadas para substituição instantânea (mínimo 3 de alta qualidade)
     const map = {
         'linguistic': {
-            'a sociedade': ['a coletividade de indivíduos', 'o corpo social', 'a sociedade civil', 'a comunidade'],
-            'as pessoas': ['os indivíduos', 'os cidadãos', 'os sujeitos', 'os membros da comunidade'],
-            'a população': ['o corpo social', 'os cidadãos locais', 'as comunidades afetadas', 'a sociedade'],
-            'contemporânea': ['vigente', 'da atualidade', 'de nossa época', 'moderna'],
-            'moderna': ['atual', 'presente', 'de nosso tempo', 'contemporânea'],
-            'nos dias de hoje': ['no cenário atual', 'na contemporaneidade', 'sob a ótica atual', 'de forma recente']
+            'a sociedade': ['a coletividade nacional', 'o corpo social do país', 'a comunidade civil', 'o conjunto dos cidadãos'],
+            'as pessoas': ['os indivíduos', 'os membros do corpo social', 'os cidadãos', 'os sujeitos sociais'],
+            'a população': ['o corpo civil', 'a comunidade de indivíduos', 'os cidadãos em geral', 'o conjunto social'],
+            'contemporânea': isFeminine 
+                ? ['atual', 'de nossa era', 'da atualidade', 'do presente período']
+                : ['atual', 'de nossa era', 'do presente momento', 'vigente'],
+            'moderna': isFeminine
+                ? ['vigente', 'atual', 'contemporânea', 'do presente século']
+                : ['vigente', 'atual', 'contemporâneo', 'do nosso século'],
+            'nos dias de hoje': ['na contemporaneidade', 'sob o panorama de nossa época', 'no atual cenário brasileiro', 'no presente século']
         },
         'structure': {
             'primeiramente': ['De início', 'Como ponto de partida', 'Em primeiro plano', 'A princípio'],
-            'em primeiro lugar': ['Como tese inicial', 'A princípio', 'Antes de tudo', 'Num primeiro momento'],
-            'em segundo lugar': ['Além disso', 'Ademais', 'Somado a isso', 'Outro ponto relevante é'],
-            'por fim': ['Em conclusão', 'Dessa forma', 'Por conseguinte', 'Em suma'],
-            'por último': ['Em última análise', 'Conclusivamente', 'Por derradeiro', 'Por fim'],
-            'finalmente': ['Por consequência', 'Sob essa perspectiva', 'Dessa maneira', 'Em síntese']
+            'em primeiro lugar': ['Como tese inaugural', 'A princípio', 'Antes de tudo', 'Como ponto de partida'],
+            'em segundo lugar': ['Somado a isso', 'Ademais', 'Outro fator relevante é', 'Paralelo a esse panorama'],
+            'por fim': ['Dessa forma, conclui-se', 'Por conseguinte, convém notar', 'Em suma, torna-se claro', 'Por fim, infere-se'],
+            'por último': ['Em última análise', 'Conclusivamente, é perceptível', 'Por derradeiro, faz-se útil', 'Em síntese final'],
+            'finalmente': ['Por consequência', 'Sob essa ótica', 'Com efeito', 'Dessa maneira']
         },
         'argument': {
-            'o governo deve': ['o Poder Executivo Federal precisa', 'as esferas governamentais devem', 'as secretarias de educação precisam', 'o Estado tem a obrigação de'],
-            'a escola precisa': ['as diretrizes pedagógicas escolares devem', 'as instituições de ensino precisam', 'os colégios municipais devem', 'o corpo docente pode'],
-            'a família deve': ['os pais e responsáveis precisam', 'o núcleo familiar de apoio deve', 'os tutores legais devem', 'a orientação familiar precisa']
+            'o governo deve': ['o Poder Executivo Federal deve', 'as administrações municipais necessitam', 'o Poder Público precisa', 'as pastas ministeriais devem'],
+            'a escola precisa': ['o corpo docente em conjunto com a direção escolar deve', 'as instituições públicas de ensino precisam', 'o sistema educacional deve', 'as escolas de ensino médio têm o papel de'],
+            'a família deve': ['os pais e responsáveis legais precisam', 'o núcleo familiar de apoio deve', 'os responsáveis diretos têm o papel de', 'a estrutura familiar deve']
         },
         'repertoire': {
-            'estudos apontam': ['pesquisas do IBGE apontam', 'dados publicados pelo Ipea demonstram', 'indicadores da OMS revelam', 'levantamentos estatísticos confirmam'],
-            'pesquisas indicam': ['levantamentos do Datafolha sugerem', 'artigos científicos da USP revelam', 'dados consolidados do Ministério da Saúde mostram', 'estudos acadêmicos evidenciam'],
-            'especialistas afirmam': ['pesquisadores da área destacam', 'sociólogos contemporâneos apontam', 'filósofos da modernidade explicam', 'analistas do setor defendem']
+            'estudos apontam': ['pesquisas publicadas pela USP apontam', 'dados levantados pelo IBGE demonstram', 'indicadores da OMS revelam', 'levantamentos estatísticos oficiais revelam'],
+            'pesquisas indicam': ['levantamentos do Datafolha sugerem', 'artigos científicos nacionais revelam', 'dados empíricos do Ministério da Saúde mostram', 'estudos acadêmicos da área evidenciam'],
+            'especialistas afirmam': ['pesquisadores da área destacam', 'sociólogos brasileiros apontam', 'pensadores contemporâneos explicam', 'analistas do setor defendem']
         },
         'ai-pattern': {
-            'deve se conscientizar': ['deve adotar posturas críticas sobre', 'precisa participar de discussões ativas sobre', 'deve exercer ações engajadas contra', 'precisa agir ativamente na mitigação de'],
-            'deve ter consciência': ['deve ponderar as consequências sociais de', 'precisa mobilizar esforços voltados a', 'deve fiscalizar com rigor as práticas de', 'precisa rever suas ações quanto a'],
-            'parcerias entre governo e sociedade': ['ações conjuntas das prefeituras com ONGs locais', 'cooperação integrada entre ministérios e sociedade civil', 'trabalho de cooperação com associações de bairro']
+            'deve se conscientizar': ['precisa atuar ativamente na modificação de', 'deve adotar postura reflexiva quanto a', 'precisa rever suas ações cotidianas frente a', 'deve se engajar na resolução de'],
+            'deve ter consciência': ['deve adotar posturas éticas e proativas', 'precisa ponderar os efeitos coletivos de', 'deve mobilizar esforços voltados a', 'precisa fiscalizar com rigidez os impactos de'],
+            'parcerias entre governo e sociedade': ['ações conjuntas das prefeituras com ONGs locais', 'cooperação integrada entre esferas ministeriais e sociedade', 'trabalho mútuo de cooperativas locais e cidadãos']
         }
     };
 
     const database = map[type] || {};
 
-    // Procura exata na base de concordâncias
+    // 1. Busca direta exata
     if (database[lowerWord]) {
         return database[lowerWord];
     }
 
-    // Procura por similaridade de palavra contida
+    // 2. Busca de concordância aproximada
     for (const [key, replacementList] of Object.entries(database)) {
         if (lowerWord.includes(key) || key.includes(lowerWord)) {
             return replacementList;
         }
     }
 
-    // Fallbacks inteligentes de substituição neutra e autoral
-    const defaultFallbacks = {
-        'linguistic': ['termo autoral específico', 'vocábulo preciso', 'expressão com voz ativa', 'definição clara'],
-        'structure': ['introdução orgânica', 'pontuação de transição', 'conexão livre de parágrafo', 'frase pessoal'],
-        'argument': ['medida aplicada localmente', 'proposta com ator real', 'solução prática executável', 'ação bem descrita'],
-        'repertoire': ['exemplo de fato histórico', 'dado de fonte governamental', 'referência de pensador real', 'notícia de jornal relevante'],
-        'ai-pattern': ['construção com traço pessoal', 'opinião argumentada', 'exemplo do cotidiano', 'análise analítica autônoma']
+    // Fallbacks inteligentes de alto nível para evitar desencaixe
+    const fallbacks = {
+        'linguistic': ['termo mais preciso', 'expressão autoral', 'conceito bem delineado'],
+        'structure': ['introdução orgânica', 'ponto de vista argumentado', 'parágrafo autônomo'],
+        'argument': ['medida executável clara', 'agente específico de mudança', 'proposta viável detalhada'],
+        'repertoire': ['dado oficial governamental', 'fato histórico reconhecido', 'exemplo social recente'],
+        'ai-pattern': ['traço pessoal de escrita', 'análise ativa e crítica', 'perspectiva com opinião própria']
     };
 
-    return defaultFallbacks[type] || ['ideia autoral', 'vocabulário próprio', 'expressão fluida'];
+    return fallbacks[type] || ['ideia autoral', 'termo detalhado'];
 }
 
-// Substitui a palavra grifada no editor e GARANTE QUE NÃO VOLTARÁ A SER GRIFADA
-function replaceWordWithSuccess(element, oldWord, newWord) {
-    // 1. Substituição visual direta no nó HTML correspondente
+// Substituição direta no editor visual e bloqueio do grifo (Substituição Única)
+function replaceWord(element, oldWord, newWord) {
+    // 1. Altera o texto visualmente
     element.textContent = newWord;
     
-    // 2. Remove todas as classes de grifo e remove o ID para que não possa mais abrir o card de IA
+    // 2. Transforma o nó em texto estático de sucesso (destrói o grifo de forma limpa)
     element.className = 'replaced-flash';
     element.removeAttribute('title');
     element.style.cursor = 'default';
     
-    // Desvincula o evento de clique removendo a marcação na memória de highlights ativos
+    // Desativa o evento de clique limpando o elemento correspondente do índice ativo
     const idx = parseInt(element.dataset.idx);
     if (currentHighlights[idx]) {
-        // Marcamos como resolvido para impedir reaberturas acidentais
         currentHighlights[idx] = null;
     }
 
-    // 3. Atualizar o valor oficial no textarea secreto para sincronizar dados caso façam reanálise
-    const fullTextNow = highlightedText.innerText;
-    inputText.value = fullTextNow;
-    charCount.textContent = fullTextNow.length;
+    // 3. Atualiza o textarea em segundo plano para que as correções persistam na reanálise
+    const finalNewText = highlightedText.innerText;
+    inputText.value = finalNewText;
+    charCount.textContent = finalNewText.length;
 }
 
 // ============================================
-// RENDERIZAÇÃO DE RESULTADOS & AUTORIA (DIREITO)
+// GERAÇÃO DE SINAIS E RECOMENDAÇÕES (DIREITO)
 // ============================================
 
 function generateAISignals(percentage, text) {
     const signals = [];
     if (percentage >= 75) {
         signals.push({
-            label: 'Uso Massivo de Clichês de IA',
-            detail: 'O texto utiliza sequências extremamente previsíveis, idênticas a modelos prontos do ChatGPT.'
+            label: 'Taxa Altíssima de Previsibilidade',
+            detail: 'O texto é extremamente regular em termos sintáticos, sem as oscilações típicas da escrita humana espontânea.'
         });
         signals.push({
-            label: 'Ritmo Sintático Uniforme',
-            detail: 'As frases têm comprimentos muito parecidos, sem as oscilações naturais da escrita humana.'
+            label: 'Presença Intensa de Clichês de IA',
+            detail: 'Uso repetido de "a sociedade contemporânea", "parcerias entre governo e sociedade" e "em suma".'
         });
     } else if (percentage >= 50) {
         signals.push({
-            label: 'Soluções Vazias por Conscientização',
-            detail: 'A proposta de intervenção foca em "conscientizar" sem descrever o método técnico real de execução.'
+            label: 'Propostas de Intervenção Mecânicas',
+            detail: 'Apresentação de agentes e formas genéricas de ação sem contextualização empírica detalhada.'
         });
         signals.push({
-            label: 'Parágrafos em Formas de Molde',
-            detail: 'Os parágrafos seguem rigidamente a estrutura de transição por conjunções automáticas.'
+            label: 'Parágrafos Modelados',
+            detail: 'O texto utiliza exatamente o mesmo molde e tamanho de blocos para expressar todos os argumentos.'
         });
     } else if (percentage >= 25) {
         signals.push({
-            label: 'Linguagem Polida Demais',
-            detail: 'Raras imperfeições gramaticais controladas, dando ar excessivamente acadêmico ou robotizado.'
+            label: 'Escrita Excessivamente Uniforme',
+            detail: 'Períodos com proporções muito regulares de palavras, sinalizando alto uso de corretor ortográfico pesado.'
         });
     }
     return signals;
@@ -485,31 +501,34 @@ function generateImprovements(percentage, text) {
     const improvements = [];
     if (percentage >= 40) {
         improvements.push({
-            label: 'Especifique os Atores Governamentais',
-            detail: 'Substitua o genérico "o governo" por órgãos ativos, ex: "o Ministério da Educação" ou "as prefeituras locais".'
+            label: 'Seja Específico e dê Nomes Próprios',
+            detail: 'Evite o jargão abstrato. Em vez de escrever "o governo deve", use "o Ministério da Educação" ou "o Ministério da Saúde".'
         });
         improvements.push({
-            label: 'Alterne Sentenças Curtas',
-            detail: 'Insira frases curtas e diretas entre as reflexões longas para dar vivacidade e dinâmica humana.'
+            label: 'Varie o Ritmo das Sentenças',
+            detail: 'Quebre a escrita: misture períodos deliberadamente mais curtos de uma linha com parágrafos mais longos de explicação.'
         });
         improvements.push({
-            label: 'Insira Exemplos da Realidade Social',
-            detail: 'Fale de casos observados na sua cidade, mídias sociais ou bairro, reduzindo os termos abstratos.'
+            label: 'Aporte Vivência Local Própria',
+            detail: 'Fale de problemas reais da sua escola, cidade, bairro ou observações cotidianas ao invés de ideias vagas e genéricas.'
         });
     } else {
         improvements.push({
-            label: 'Sua redação apresenta marcas autorais fortes!',
-            detail: 'Continue diversificando o vocabulário para evitar qualquer previsibilidade estrutural.'
+            label: 'Mantenha esse nível excelente!',
+            detail: 'Sua redação apresenta um tom autoral forte, com boa presença de marcas humanas personalizadas.'
         });
     }
     return improvements;
 }
 
+// ============================================
+// RENDERIZAÇÃO COMPLETA DOS RESULTADOS
+// ============================================
+
 function renderResult(data = {}, originalText = '') {
     const percentage = Math.max(0, Math.min(100, Math.round(data.percentage || 0)));
     const suspiciousPhrases = data.suspicious_phrases || [];
     const characteristics = data.characteristics || [];
-    analyzedText = originalText;
 
     // === GAUGE ===
     updateGauge(percentage);
@@ -517,7 +536,7 @@ function renderResult(data = {}, originalText = '') {
     // === VEREDITO ===
     updateVerdict(percentage);
 
-    // === RENDERIZAR GRIFOS INTERATIVOS NO PRÓPRIO EDITOR ===
+    // === PROCESSA E RENDERIZA OS GRIFOS INTERATIVOS ===
     const highlights = createHighlights(originalText, data);
     renderHighlightedText(originalText, highlights);
 
@@ -570,8 +589,8 @@ function renderResult(data = {}, originalText = '') {
             .slice(0, 5)
             .map(c => `
                 <div class="characteristic-item">
-                    <span class="characteristic-trait">${c.trait || 'Características do Texto'}</span>
-                    <span class="characteristic-evidence">${c.evidence || 'Análise de originalidade.'}</span>
+                    <span class="characteristic-trait">${c.trait || 'Análise de Ritmo'}</span>
+                    <span class="characteristic-evidence">${c.evidence || 'Verificado com sucesso.'}</span>
                 </div>
             `)
             .join('');
@@ -580,7 +599,7 @@ function renderResult(data = {}, originalText = '') {
         characteristicsContainer.classList.add('hidden');
     }
 
-    // === EXIBIR PAINEL DE RESULTADOS ===
+    // === MOSTRAR RESULTADO ===
     emptyContainer.classList.add('hidden');
     resultContainer.classList.remove('hidden');
 }
@@ -613,13 +632,13 @@ function updateVerdict(percentage) {
         vtext = '✅ Alta Autoria e Originalidade Humana';
         verdictEl.classList.add('verdict-human');
     } else if (percentage <= 30) {
-        vtext = '✔️ Baixíssima probabilidade de IA';
+        vtext = '✔️ Baixíssimo risco de automação por IA';
         verdictEl.classList.add('verdict-low');
     } else if (percentage <= 60) {
-        vtext = '⚠️ Provável polimento parcial por IA';
+        vtext = '⚠️ Indícios de polimento ou IA parcial';
         verdictEl.classList.add('verdict-medium');
     } else {
-        vtext = '🚨 Escrita com traços e jargões robóticos de IA';
+        vtext = '🚨 Padrões artificiais de escrita detectados';
         verdictEl.classList.add('verdict-high');
     }
     verdictEl.textContent = vtext;
@@ -631,4 +650,4 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-console.log('✅ ZeroIA carregado com absoluto sucesso!');
+console.log('✅ Motor ZeroIA inicializado com pleno sucesso!');
