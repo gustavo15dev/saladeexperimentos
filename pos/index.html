@@ -27,10 +27,14 @@
             display: block;
             position: absolute;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
             background-size: 100% 4px, 3px 100%;
             pointer-events: none;
             z-index: 10;
+        }
+        /* Transição suave para o painel de ajuda fixo */
+        .slide-panel {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -106,20 +110,73 @@
         </div>
 
         <!-- Painel Central: A Tela de Jogo (Canvas com Planta da Sala de Aula) -->
-        <div class="bg-slate-800 p-4 rounded-3xl border-4 border-slate-700 shadow-2xl lg:col-span-3 flex flex-col items-center justify-center relative">
+        <div id="gameContainer" class="bg-slate-800 p-4 rounded-3xl border-4 border-slate-700 shadow-2xl lg:col-span-3 flex flex-col items-center justify-center relative">
+            
             <div class="w-full flex justify-between items-center mb-3">
                 <span class="text-xs font-bold text-slate-400 flex items-center gap-2">
                     🎯 Clique em qualquer lugar para mandar caminhar!
                 </span>
-                <span class="text-xs font-bold text-slate-400 flex items-center gap-2">
-                    <input type="checkbox" id="boundary-toggle" class="rounded accent-indigo-500" checked>
-                    <span>Colisões com Paredes</span>
-                </span>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-bold text-slate-400 flex items-center gap-2">
+                        <input type="checkbox" id="boundary-toggle" class="rounded accent-indigo-500" checked>
+                        <span>Colisões</span>
+                    </span>
+                    <!-- Botão de Tela Cheia -->
+                    <button onclick="toggleFullscreen()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1 px-3 rounded-lg text-xs flex items-center gap-1 transition transform active:scale-95" title="Ativar Tela Cheia">
+                        <span>📺</span> <span class="hidden sm:inline">Tela Cheia</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Container Responsivo para o Canvas -->
-            <div class="w-full relative bg-slate-950 rounded-2xl overflow-hidden border border-slate-700 flex justify-center items-center arcade-screen shadow-inner aspect-[2/1]">
-                <canvas id="gameCanvas" width="1000" height="500" class="block cursor-crosshair w-full h-full object-contain"></canvas>
+            <!-- Área de Jogo com suporte a Painel Lateral de Comandos ao apertar H -->
+            <div class="w-full flex gap-4 items-stretch relative">
+                
+                <!-- Container Principal do Canvas -->
+                <div class="flex-1 relative bg-slate-950 rounded-2xl overflow-hidden border border-slate-700 flex justify-center items-center arcade-screen shadow-inner aspect-[2/1]">
+                    <canvas id="gameCanvas" width="1000" height="500" class="block cursor-crosshair w-full h-full object-contain"></canvas>
+                    
+                    <!-- Feedback de Tela Cheia / Dica H -->
+                    <div id="fullscreen-hint" class="hidden absolute top-4 left-4 bg-slate-900/90 border border-slate-700 px-3 py-1.5 rounded-lg text-xs text-slate-300 font-retro z-20 pointer-events-none">
+                        Aperte <span class="text-yellow-400 font-bold">H</span> para mostrar/esconder ações rápidas
+                    </div>
+                </div>
+
+                <!-- Painel Flutuante Lateral que aparece ao Apertar 'H' -->
+                <div id="sideActionPanel" class="slide-panel hidden w-80 bg-slate-900 border-2 border-indigo-500 rounded-2xl p-4 flex-col gap-3 shadow-2xl z-20 overflow-y-auto">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <h3 class="font-retro text-xl text-indigo-400 font-bold">⌨️ COMANDOS RÁPIDOS</h3>
+                        <button onclick="toggleSidePanel()" class="text-slate-400 hover:text-white font-bold px-2">✕</button>
+                    </div>
+                    
+                    <div class="text-xs text-slate-300 space-y-1 mb-2 bg-slate-950/85 p-2 rounded border border-slate-800">
+                        <p>💡 <span class="text-yellow-400 font-bold">Atalhos do Teclado:</span></p>
+                        <p>• Teclas <span class="text-indigo-400 font-bold">[1 a 6]</span>: Escolhe Aluno</p>
+                        <p>• <span class="text-indigo-400 font-bold">[WASD / Setas]</span>: Move o Aluno</p>
+                        <p>• Tecla <span class="text-indigo-400 font-bold">[H]</span>: Fecha este painel</p>
+                    </div>
+
+                    <!-- Botões de ação dentro do painel lateral da tela cheia -->
+                    <div class="flex flex-col gap-2">
+                        <button onclick="triggerSchoolBell()" class="w-full bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold py-2 px-3 rounded-lg text-sm font-retro transition">
+                            🔔 SINAL (SENTAR)
+                        </button>
+                        <button onclick="triggerRecess()" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-2 px-3 rounded-lg text-sm font-retro transition">
+                            🥤 RECREIO (CONVERSAR)
+                        </button>
+                        <button onclick="triggerWhiteboardPresentation()" class="w-full bg-indigo-500 hover:bg-indigo-400 text-white font-bold py-2 px-3 rounded-lg text-sm font-retro transition">
+                            🧑‍🏫 APRESENTAR NA LOUSA
+                        </button>
+                    </div>
+
+                    <!-- Campo de falar rápido no painel H -->
+                    <div class="mt-2 bg-slate-950/50 p-2.5 rounded-lg border border-slate-800">
+                        <label class="block text-[10px] text-slate-400 mb-1 font-bold">Fazer falar agora:</label>
+                        <div class="flex gap-1">
+                            <input type="text" id="speech-input-panel" maxlength="25" placeholder="Fala rápida..." class="bg-slate-800 text-slate-100 px-2 py-1 rounded text-xs flex-1 border border-slate-700 focus:outline-none focus:border-indigo-500 font-retro">
+                            <button onclick="makeActiveStudentSpeakFromPanel()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1 rounded text-xs font-bold font-retro transition">FALAR</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- D-pad móvel e controles para telas de toque -->
@@ -310,6 +367,7 @@
         bgImage.onerror = () => {
             // Tenta o nome alternativo caso necessário
             bgImage.src = 'image_d8e61b.png';
+            bgImage.onload = () => { bgLoaded = true; };
             bgImage.onerror = () => {
                 console.warn("Não foi possível carregar a imagem de fundo. Usando renderizador de contingência.");
             };
@@ -579,7 +637,7 @@
             // Anel indicador brilhante de seleção ao redor do estudante ativo
             if (isCurrent) {
                 ctx.strokeStyle = s.color;
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 2.5;
                 ctx.setLineDash([4, 2]);
                 ctx.strokeRect(px - 4, py - 4 + bob, size + 8, size + 8);
                 ctx.setLineDash([]);
@@ -594,42 +652,44 @@
                 ctx.fill();
             }
 
-            // Nome acima da cabeça
+            // Nome acima da cabeça - AUMENTADO PARA MELHOR LEITURA
             ctx.fillStyle = '#FFFFFF';
-            ctx.font = '12px "VT323"';
+            ctx.font = 'bold 18px "VT323", monospace'; // Aumentado consideravelmente de 12px para 18px
             ctx.textAlign = 'center';
             ctx.shadowColor = 'black';
-            ctx.shadowBlur = 4;
-            ctx.fillText(s.name, px + size / 2, py - 16 + bob);
+            ctx.shadowBlur = 5;
+            ctx.fillText(s.name, px + size / 2, py - 18 + bob);
             ctx.shadowBlur = 0; // Limpa sombra para outros desenhos
 
-            // Balão de fala retro pixel
+            // Balão de fala retro pixel - COMPLEMENTADO E AUMENTADO
             if (s.speechText && s.speechTimer > 0) {
-                const bubbleW = Math.max(80, ctx.measureText(s.speechText).width + 16);
-                const bubbleH = 22;
+                ctx.font = '16px "VT323", monospace'; // Aumentada de 11px para 16px para falas chamativas
+                const textWidth = ctx.measureText(s.speechText).width;
+                const bubbleW = Math.max(110, textWidth + 20); // Ajuste dinâmico com padding generoso
+                const bubbleH = 28; // Mais alto para abrigar a fonte maior
                 const bx = px + size/2 - bubbleW/2;
-                const by = py - 48 + bob;
+                const by = py - 56 + bob;
 
                 ctx.fillStyle = '#FFFFFF';
                 ctx.strokeStyle = s.color;
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 3; // Borda pixelizada mais grossa
+                
                 // Balão retangular pixelado
                 ctx.fillRect(bx, by, bubbleW, bubbleH);
                 ctx.strokeRect(bx, by, bubbleW, bubbleH);
 
                 // Triângulo indicador do balão
                 ctx.beginPath();
-                ctx.moveTo(px + size/2, py - 26 + bob);
-                ctx.lineTo(px + size/2 - 5, py - 32 + bob);
-                ctx.lineTo(px + size/2 + 5, py - 32 + bob);
+                ctx.moveTo(px + size/2, py - 28 + bob);
+                ctx.lineTo(px + size/2 - 7, py - 35 + bob);
+                ctx.lineTo(px + size/2 + 7, py - 35 + bob);
                 ctx.fillStyle = '#FFFFFF';
                 ctx.fill();
                 ctx.stroke();
 
-                // Texto da fala
+                // Texto da fala centralizado
                 ctx.fillStyle = '#0f172a';
-                ctx.font = '11px "VT323"';
-                ctx.fillText(s.speechText, px + size / 2, by + 14);
+                ctx.fillText(s.speechText, px + size / 2, by + 18);
             }
         }
 
@@ -852,10 +912,18 @@
             }
         });
 
-        // Suporte a teclas direcionais/WASD e números de 1-6 para trocar selecionado
+        // Suporte a teclas direcionais/WASD e números de 1-6 para trocar selecionado, mais a tecla H
         window.addEventListener('keydown', function(e) {
-            // Se estiver digitando no input de fala, ignora movimentos normais do teclado
-            if (document.activeElement === document.getElementById('speech-input')) {
+            // Se estiver digitando nos inputs de fala, ignora comandos normais do teclado
+            if (document.activeElement === document.getElementById('speech-input') || 
+                document.activeElement === document.getElementById('speech-input-panel')) {
+                return;
+            }
+
+            // Suporte para Tecla 'H' ou 'h' para Toggle do Painel de Ações
+            if (e.key === 'h' || e.key === 'H') {
+                toggleSidePanel();
+                e.preventDefault();
                 return;
             }
 
@@ -1044,7 +1112,7 @@
             });
         }
 
-        // 4. Balão de fala customizado pelo usuário
+        // 4. Balão de fala customizado pelo usuário (Input Principal)
         function makeActiveStudentSpeak() {
             const active = STUDENTS.find(s => s.id === activeStudentId);
             const textInput = document.getElementById('speech-input');
@@ -1061,22 +1129,100 @@
             }
         }
 
-        // Permite enviar fala pressionando ENTER no input
+        // 5. Balão de fala do painel de tela cheia (H)
+        function makeActiveStudentSpeakFromPanel() {
+            const active = STUDENTS.find(s => s.id === activeStudentId);
+            const textInput = document.getElementById('speech-input-panel');
+            const phrase = textInput.value.trim();
+
+            if (phrase && active) {
+                active.speechText = phrase;
+                active.speechTimer = 250; 
+                textInput.value = "";
+                
+                playRetroSound(350 + Math.random() * 200, 'sine', 0.1);
+                showToast(`${active.name} disse: "${phrase}"`);
+            }
+        }
+
+        // Permite enviar fala pressionando ENTER nos inputs
         document.getElementById('speech-input').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 makeActiveStudentSpeak();
             }
         });
+        document.getElementById('speech-input-panel').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                makeActiveStudentSpeakFromPanel();
+            }
+        });
+
+        // --- SISTEMA DE TELA CHEIA E SIDE PANEL (H) ---
+        function toggleFullscreen() {
+            const container = document.getElementById('gameContainer');
+            
+            if (!document.fullscreenElement) {
+                // Tenta entrar em modo tela cheia do container do jogo
+                container.requestFullscreen().then(() => {
+                    document.getElementById('fullscreen-hint').classList.remove('hidden');
+                    // Abre o painel automaticamente para guiar o usuário inicialmente
+                    const sidePanel = document.getElementById('sideActionPanel');
+                    sidePanel.classList.remove('hidden');
+                    sidePanel.classList.add('flex');
+                    showToast("Entrou em modo Tela Cheia! Use a tecla 'H' para abrir/comprimir o painel de ações.");
+                }).catch(err => {
+                    console.error("Erro ao ativar fullscreen:", err);
+                    showToast("Não foi possível carregar a tela cheia no seu navegador.");
+                });
+            } else {
+                // Sai do modo tela cheia
+                document.exitFullscreen();
+            }
+        }
+
+        // Escuta eventos de saída de fullscreen nativos
+        document.addEventListener('fullscreenchange', () => {
+            const container = document.getElementById('gameContainer');
+            const hint = document.getElementById('fullscreen-hint');
+            const sidePanel = document.getElementById('sideActionPanel');
+            
+            if (document.fullscreenElement) {
+                // Ajustes de layout para modo tela cheia impecável
+                container.classList.add('w-full', 'h-screen', 'p-6', 'justify-center');
+                hint.classList.remove('hidden');
+            } else {
+                // Restaura o layout normal
+                container.classList.remove('w-full', 'h-screen', 'p-6', 'justify-center');
+                hint.classList.add('hidden');
+                sidePanel.classList.add('hidden');
+                sidePanel.classList.remove('flex');
+            }
+        });
+
+        // Função para mostrar/ocultar o painel de ajuda e comprimir o canvas
+        function toggleSidePanel() {
+            const sidePanel = document.getElementById('sideActionPanel');
+            
+            if (sidePanel.classList.contains('hidden')) {
+                sidePanel.classList.remove('hidden');
+                sidePanel.classList.add('flex');
+                showToast("Painel de comandos aberto ao lado!");
+            } else {
+                sidePanel.classList.add('hidden');
+                sidePanel.classList.remove('flex');
+                showToast("Painel oculto. Pressione 'H' para reabrir.");
+            }
+        }
 
         window.onload = function() {
             // Desenha a legenda e inicia o loop do game
             renderLegend();
             gameLoop();
             
-            // Mensagem de boas vindas inicial
+            // Mensagem de boas vindas inicial com dica das novas funções
             setTimeout(() => {
                 playBellSound();
-                showToast("Bem-vindo ao Simulador Pixel! Selecione um aluno de 1-6 para começar.");
+                showToast("Bem-vindo! Use as teclas 1-6 para mover, ative 'Tela Cheia' e aperte H para ajuda!");
             }, 600);
         };
     </script>
