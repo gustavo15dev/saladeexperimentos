@@ -17,40 +17,7 @@
     <link rel="icon" type="image/png" href="imagens/logo.png">
 
     <style>
-        /* ============================================ */
-        /* CURSOR CUSTOMIZADO (VIA JAVASCRIPT)          */
-        /* ============================================ */
-        
-        /* Esconde o cursor nativo do sistema em tudo */
-        * {
-            cursor: none !important;
-        }
 
-        /* Estilo da div que vai agir como nosso mouse */
-        #custom-cursor {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 32px; /* Recomendado usar PNGs de 32x32 para boa qualidade */
-            height: 32px;
-            pointer-events: none; /* Crucial: permite que os cliques "atravessem" o cursor falso */
-            z-index: 9999999; /* Garante que o mouse fique acima de tudo */
-            background-image: url('cursor/normal.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            transform: translate(0px, 0px); 
-            will-change: left, top; /* Otimização de performance para renderização suave */
-        }
-
-        /* Container de pré-carregamento invisível para manter os cursores na memória cache */
-        #cursor-preload-container {
-            position: absolute;
-            width: 0;
-            height: 0;
-            overflow: hidden;
-            pointer-events: none;
-            opacity: 0;
-        }
 
         /* ============================================ */
         /* SEU style.css ORIGINAL                       */
@@ -1891,19 +1858,6 @@
 
 <body>
     
-    <!-- ESTE É O NOSSO MOUSE FALSO -->
-    <div id="custom-cursor"></div>
-
-    <!-- CONTAINER SECRETO DE PRÉ-CARREGAMENTO -->
-    <!-- Ele renderiza os 5 cursores no HTML de forma invisível. O navegador é forçado a mantê-los na RAM e prontos no cache! -->
-    <div id="cursor-preload-container">
-        <img src="cursor/normal.png" alt="Preload Normal">
-        <img src="cursor/aberto.png" alt="Preload Aberto">
-        <img src="cursor/botao.png" alt="Preload Botao">
-        <img src="cursor/carregando.png" alt="Preload Carregando">
-        <img src="cursor/text.png" alt="Preload Texto">
-    </div>
-
     <div class="snow-container">
         <div class="snow-layer-1"></div>
         <div class="snow-layer-2"></div>
@@ -1933,16 +1887,7 @@
             <h2>Onde a criatividade encontra a tecnologia.</h2>
         </header>
 
-        <section class="wsm-launch-hero" aria-label="Destaque WSM 1.0 Agent Maps">
-            <div class="wsm-launch-card">
-                <h2 class="wsm-launch-title">Apresentamos: WSM 1.0 Agent Maps</h2>
-                <div class="wsm-launch-video-wrap">
-                    <video class="wsm-launch-video" src="new.mp4" autoplay muted playsinline loop preload="auto"></video>
-                </div>
-                <p class="wsm-launch-copy">Lançamos nosso primeiro modelo agêntico grátis. Agora você pode pesquisar lugares, e saber sobre ele. Fácil, rápido, seguro e grátis.</p>
-                <a href="https://wsm-chat.vercel.app/" target="_blank" rel="noopener noreferrer" class="wsm-launch-btn">Abrir</a>
-            </div>
-        </section>
+
 
         <nav id="categorias-container">
             <button class="filter-btn active" onclick="filtrarPorCategoria('todos')"><i class="fa-solid fa-layer-group"></i> Todos</button>
@@ -2707,99 +2652,6 @@
             if (e.key === 'Escape') {
                 buscaDropdown.classList.remove('active');
             }
-        });
-    </script>
-
-    <!-- ============================================ -->
-    <!-- SCRIPT DO CURSOR FALSO PARA CHROMEBOOK       -->
-    <!-- ============================================ -->
-    <script>
-        // Mapeamento das imagens de cursor
-        const cursores = {
-            normal: 'cursor/normal.png',
-            aberto: 'cursor/aberto.png',
-            botao: 'cursor/botao.png',
-            carregando: 'cursor/carregando.png',
-            text: 'cursor/text.png'
-        };
-
-        // Cache dinâmico em JS para garantir resposta instantânea
-        const imagensCache = {};
-        
-        // Pré-carregamento imediato das imagens na memória via construtor Image()
-        Object.entries(cursores).forEach(([nome, caminho]) => {
-            const img = new Image();
-            img.src = caminho;
-            imagensCache[nome] = img; // Salva o objeto de imagem para manter em cache ativo
-        });
-
-        const customCursor = document.getElementById('custom-cursor');
-        let isMouseDown = false;
-
-        // Função para atualizar o cursor com cache local instantâneo
-        function mudarCursorImagem(nomeCursor) {
-            const urlCursor = `url('${cursores[nomeCursor]}')`;
-            if (customCursor.style.backgroundImage !== urlCursor) {
-                customCursor.style.backgroundImage = urlCursor;
-            }
-        }
-
-        // 1. Faz a imagem seguir o mouse real (que está invisível)
-        document.addEventListener('mousemove', (e) => {
-            customCursor.style.left = e.clientX + 'px';
-            customCursor.style.top = e.clientY + 'px';
-
-            // Se o usuário estiver segurando o clique, mantém o cursor "botao" e ignora as outras regras
-            if (isMouseDown) return;
-
-            const target = e.target;
-
-            // 2. Muda para texto se estiver em cima de barra de entrada de texto
-            if (target.matches('input, textarea')) {
-                mudarCursorImagem('text');
-                return;
-            }
-
-            // 3. Muda para "aberto" (mãozinha) se estiver em cima de algo clicável
-            if (target.closest('a, button, .filter-btn, .action-btn, .theme-btn, .busca-resultado, .header-logo, .glass-card, [role="button"]')) {
-                mudarCursorImagem('aberto');
-                return;
-            }
-
-            // 4. Cursor de carregamento (caso use a classe 'loading' em algum fluxo assíncrono)
-            if (document.body.classList.contains('loading')) {
-                mudarCursorImagem('carregando');
-                return;
-            }
-
-            // 5. Se não for nada disso, volta pro cursor padrão
-            mudarCursorImagem('normal');
-        });
-
-        // 6. Muda para "botao" quando clica e segura
-        document.addEventListener('mousedown', () => {
-            isMouseDown = true;
-            mudarCursorImagem('botao');
-        });
-
-        // 7. Quando solta o clique, recalcula em qual elemento o mouse está parado
-        document.addEventListener('mouseup', (e) => {
-            isMouseDown = false;
-            // Dispara um evento falso de movimento para o JS readaptar o cursor ao elemento sob ele
-            const event = new MouseEvent('mousemove', {
-                clientX: e.clientX,
-                clientY: e.clientY,
-                bubbles: true
-            });
-            document.dispatchEvent(event);
-        });
-
-        // Se o mouse sair da tela ou da aba ativa, oculta o cursor customizado para não travar nas bordas
-        document.addEventListener('mouseleave', () => {
-            customCursor.style.display = 'none';
-        });
-        document.addEventListener('mouseenter', () => {
-            customCursor.style.display = 'block';
         });
     </script>
 </body>
