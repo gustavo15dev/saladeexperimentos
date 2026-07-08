@@ -1896,12 +1896,47 @@
                 </div>
             </div>
 
+            <div class="glass-card" data-projeto="strike" data-categoria="jogos">
+                <div class="card-image-wrapper">
+                    <img src="imagens/strike.png" alt="Pixel Strike" onerror="this.src='https://placehold.co/600x400/111827/FFF?text=Pixel+Strike'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Pixel Strike</h3>
+                        <span class="category-icon"><i class="fa-solid fa-crosshairs"></i></span>
+                    </div>
+                    <p>Entre em uma missão tática retrô com ação intensa e desafios de FPS em pixel art.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="strike-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="strike/index.html" onclick="atualizarEstatistica('strike')" class="action-btn">Jogar Agora</a>
+                </div>
+            </div>
+
+            <div class="glass-card" data-projeto="sinuca" data-categoria="jogos">
+                <div class="card-image-wrapper">
+                    <img src="imagens/sinuca.png" alt="Pixel Pool" onerror="this.src='https://placehold.co/600x400/111827/FFF?text=Pixel+Pool'">
+                    <span class="status-tag">NOVO</span>
+                </div>
+                <div class="card-info">
+                    <div class="card-header">
+                        <h3>Pixel Pool</h3>
+                        <span class="category-icon"><i class="fa-solid fa-bowling-ball"></i></span>
+                    </div>
+                    <p>Desafie seus reflexos em uma sinuca retrô com física divertida e partidas rápidas.</p>
+                    <div class="card-meta">
+                        <span><i class="fa-regular fa-eye"></i> <span id="sinuca-count">0</span> vezes você usou</span>
+                    </div>
+                    <a href="sinuca/index.html" onclick="atualizarEstatistica('sinuca')" class="action-btn">Jogar Agora</a>
+                </div>
+            </div>
+
             <!-- Projeto: WSM Chat -->
             <div class="glass-card" data-projeto="wsm" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <span class="special-tag-gold"><i class="fa-solid fa-crown crown-jump"></i> 30º projeto</span>
                     <img src="imagens/wsm.gif" alt="WSM Chat" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=WSM+Chat'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -1920,7 +1955,6 @@
             <div class="glass-card" data-projeto="cookme" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <img src="imagens/cookme.png" alt="Cook-me" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Cook-me'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -1942,7 +1976,6 @@
             <div class="glass-card" data-projeto="datas" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="datas/img.png" alt="Calculadora de Datas" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Datas'">
-                    <span class="status-tag">NOVO</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
@@ -2503,7 +2536,7 @@
         }
 
         window.addEventListener('load', () => {
-            const projetos = ['wsm', 'cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom', 'soccer'];
+            const projetos = ['wsm', 'cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom', 'soccer', 'strike', 'sinuca'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
