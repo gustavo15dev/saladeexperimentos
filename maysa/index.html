@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Melhores Amiga ✨</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- GSAP Animations & Canvas Confetti -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            900: '#4c0519',
+                        },
+                        pinkGlow: '#ff2a85'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0d060a;
+            color: #fce7f3;
+            overflow-x: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Glassmorphism Luxury */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 182, 193, 0.12);
+            box-shadow: 0 30px 60px -12px rgba(244, 63, 94, 0.15);
+        }
+
+        .glass-card-hover {
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card-hover:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(244, 63, 94, 0.4);
+            box-shadow: 0 40px 80px -15px rgba(244, 63, 94, 0.3);
+        }
+
+        /* Custom Pink Radial Glow Ambient Background */
+        .glow-orb-1 {
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: radial-gradient(circle, rgba(244,63,94,0.18) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatGlow 12s infinite alternate ease-in-out;
+        }
+
+        .glow-orb-2 {
+            position: fixed;
+            bottom: -20%;
+            right: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(255,42,133,0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatGlow 16s infinite alternate-reverse ease-in-out;
+        }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 60px) scale(1.15); }
+        }
+
+        /* Ambient Animated Text Gradient */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #fecdd3 40%, #f43f5e 80%, #ff2a85 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-subtle {
+            background: linear-gradient(135deg, #fff1f2 0%, #fda4af 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Floating interactive cursor heart effect */
+        .heart-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.2rem;
+            animation: fadeUp 1.2s ease-out forwards;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.8) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-80px) scale(1.4) rotate(20deg); }
+        }
+
+        /* Image Frame Glow */
+        .photo-frame {
+            position: relative;
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(45deg, #f43f5e, #ff2a85, #fda4af, #e11d48);
+            border-radius: 1.75rem;
+            z-index: -1;
+            filter: blur(15px);
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+        }
+
+        .photo-frame:hover::before {
+            opacity: 1;
+            filter: blur(25px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d060a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e11d48;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="relative selection:bg-rose-500 selection:text-white">
+
+    <div class="glow-orb-1"></div>
+    <div class="glow-orb-2"></div>
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 min-h-screen flex flex-col justify-between">
+        
+        <header class="flex items-center justify-between py-6 mb-12">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-500 to-pink-400 flex items-center justify-center shadow-lg shadow-rose-500/30">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
+                </div>
+                <span class="font-semibold text-lg tracking-wider text-rose-200">BFF • MEMORIES</span>
+            </div>
+
+            <button id="surpriseBtn" onclick="triggerConfetti()" class="px-5 py-2.5 rounded-full glass-card hover:bg-rose-500/20 text-rose-200 border border-rose-400/30 text-sm font-medium transition-all duration-300 flex items-center space-x-2 group">
+                <i data-lucide="heart" class="w-4 h-4 text-rose-400 group-hover:scale-125 transition-transform"></i>
+                <span>Aperte aqui ✨</span>
+            </button>
+        </header>
+
+        <main class="space-y-24">
+            
+            <section class="text-center space-y-6 pt-6">
+                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-card border-rose-500/20 mb-2 opacity-0 hero-el">
+                    <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
+                    <span class="text-xs uppercase tracking-widest text-rose-300 font-semibold">Para uma pessoa insubstituível</span>
+                </div>
+
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight hero-el opacity-0">
+                    <span class="block">Mais que amiga,</span>
+                    <span class="font-serif italic font-normal text-gradient">uma irmã de alma.</span>
+                </h1>
+
+                <p class="max-w-2xl mx-auto text-rose-200/80 text-base sm:text-lg font-light leading-relaxed hero-el opacity-0">
+                    Criei esse cantinho especial no universo digital só pra te lembrar do quanto a nossa conexão é única, iluminada e importante pra mim.
+                </p>
+            </section>
+
+            <section class="photo-section opacity-0 my-12">
+                <div class="max-w-3xl mx-auto">
+                    <!-- 3D Tilt Card wrapper -->
+                    <div id="tiltCard" class="photo-frame rounded-3xl overflow-hidden glass-card p-4 sm:p-6 transition-transform duration-200 ease-out">
+                        
+                        <div class="relative rounded-2xl overflow-hidden group aspect-[4/3] sm:aspect-[16/10] bg-rose-950/40">
+                            
+                            <!-- 
+                                INSTRUÇÃO PARA O USUÁRIO:
+                                Substitua o link do atributo 'src' abaixo pela SUA FOTO com ela! 
+                            -->
+                            <img id="mainPhoto" 
+                                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600&auto=format&fit=crop" 
+                                 alt="Nossa Foto Juntos" 
+                                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
+                            
+                            <!-- Overlay Gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+
+                            <!-- Badges floating on image -->
+                            <div class="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-wrap gap-2">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-black/40 backdrop-blur-md text-rose-200 border border-white/10 flex items-center gap-1.5">
+                                    <i data-lucide="camera" class="w-3.5 h-3.5 text-rose-400"></i> Momento Épico
+                                </span>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/80 backdrop-blur-md text-white flex items-center gap-1">
+                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i> Favorito
+                                </span>
+                            </div>
+
+                            <!-- Photo Footer Overlay Text -->
+                            <div class="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 flex justify-between items-end">
+                                <div>
+                                    <p class="text-xs text-rose-300 uppercase tracking-widest font-semibold mb-1">Guarde esse sorriso</p>
+                                    <h3 class="text-xl sm:text-2xl font-serif text-white italic">"Juntas em qualquer aventura."</h3>
+                                </div>
+
+                                <button onclick="swapPhotoPrompt()" title="Trocar Foto" class="p-3 rounded-full bg-white/10 backdrop-blur-md hover:bg-rose-500 text-white transition-colors duration-300 border border-white/20">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Mini Photo Description -->
+                        <div class="mt-4 px-2 py-2 flex items-center justify-between text-xs text-rose-200/60 border-t border-rose-500/10">
+                            <span class="flex items-center gap-1">
+                                <i data-lucide="heart-handshake" class="w-4 h-4 text-rose-400"></i> Amizade de milhões
+                            </span>
+                            <span>Clique no botão para trocar essa foto</span>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-12">
+                <div class="text-center max-w-xl mx-auto">
+                    <h2 class="text-3xl sm:text-4xl font-serif italic text-gradient mb-3">Por que você é tão incrível?</h2>
+                    <p class="text-rose-200/70 text-sm sm:text-base">Um pequeno resumo de 4 motivos que fazem a sua existência deixar o mundo bem mais leve.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Card 1 -->
+                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                            <i data-lucide="smile" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-rose-100">Risadas Garantidas</h4>
+                        <p class="text-rose-200/70 text-sm leading-relaxed">
+                            Ninguém no mundo me faz rir de besteiras como você. As memórias mais engraçadas da minha vida com certeza têm a sua participação!
+                        </p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                            <i data-lucide="shield-check" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-rose-100">Lealdade de Verdade</h4>
+                        <p class="text-rose-200/70 text-sm leading-relaxed">
+                            Seja nos dias incríveis ou nos dias difíceis, eu sei que sempre posso contar com o seu abraço e com os seus conselhos sinceros.
+                        </p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                            <i data-lucide="sun" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-rose-100">Energia Iluminada</h4>
+                        <p class="text-rose-200/70 text-sm leading-relaxed">
+                            Sua presença tem o dom de transformar qualquer ambiente. Você ilumina tudo ao seu redor com a sua gentileza e carisma.
+                        </p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
+                            <i data-lucide="sparkle" class="w-6 h-6"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-rose-100">Parceira de Sonhos</h4>
+                        <p class="text-rose-200/70 text-sm leading-relaxed">
+                            É maravilhoso ver você crescendo, conquistando suas coisas e sabendo que ainda temos um universo de momentos lindos pra viver juntas.
+                        </p>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="py-8">
+                <div class="glass-card rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="max-w-2xl mx-auto space-y-6 relative z-10">
+                        <div class="inline-block p-4 rounded-full bg-rose-500/20 text-rose-300 mb-2 border border-rose-400/30 animate-bounce">
+                            <i data-lucide="mail-open" class="w-8 h-8"></i>
+                        </div>
+                        <h3 class="text-3xl font-serif italic text-white">Tenho uma mensagem especial pra você...</h3>
+                        <p class="text-rose-200/70 text-sm sm:text-base">Clique no botão abaixo para abrir a carta secreta que preparei de todo o meu coração.</p>
+
+                        <button onclick="toggleLetter()" class="px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold text-base shadow-lg shadow-rose-500/40 hover:shadow-rose-500/60 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center space-x-2 mx-auto">
+                            <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+                            <span id="letterBtnText">Abrir Carta Secreta</span>
+                        </button>
+
+                        <!-- Letter Content (Hidden by default) -->
+                        <div id="secretLetter" class="hidden text-left mt-8 p-6 sm:p-8 rounded-2xl bg-black/40 border border-rose-500/30 space-y-4 text-rose-100 leading-relaxed text-sm sm:text-base font-light transition-all duration-500">
+                            <p class="font-serif italic text-rose-300 text-lg">Querida amiga,</p>
+                            <p>
+                                Às vezes na correria do dia a dia a gente esquece de parar e dizer o quanto as pessoas que amamos são essenciais. Este site é só um pequeno gesto pra colocar um sorriso no seu rosto e te lembrar que você é gigante!
+                            </p>
+                            <p>
+                                Obrigado por cada conselho, por cada gargalhada sem fim, por ser exatamente quem você é. Que a vida continue te presenteando com coisas tão maravilhosas quanto o seu coração.
+                            </p>
+                            <p class="pt-4 font-semibold text-rose-300 text-right">
+                                Com todo o meu carinho e amizade ❤️
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="mt-24 pt-8 border-t border-rose-500/10 text-center text-xs text-rose-200/40 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>Feito com amor exclusivamente para você ✨</p>
+            <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                <span>Modo Especial Ativado</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // GSAP Entrance Animations
+        window.addEventListener('load', () => {
+            gsap.to('.hero-el', {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+
+            gsap.to('.photo-section', {
+                opacity: 1,
+                duration: 1.2,
+                delay: 0.6,
+                ease: 'power3.out'
+            });
+        });
+
+        // 3D Tilt Effect for Photo Card
+        const tiltCard = document.getElementById('tiltCard');
+        if (tiltCard) {
+            tiltCard.addEventListener('mousemove', (e) => {
+                const rect = tiltCard.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -8;
+                const rotateY = ((x - centerX) / centerX) * 8;
+                
+                tiltCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            tiltCard.addEventListener('mouseleave', () => {
+                tiltCard.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            });
+        }
+
+        // Particle Canvas Logic (Floating Pink Dust)
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedY = Math.random() * 0.8 + 0.2;
+                this.speedX = (Math.random() - 0.5) * 0.4;
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                if (this.y < -10) this.reset();
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(244, 63, 94, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 50; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Cursor Heart Burst Effect
+        document.addEventListener('click', (e) => {
+            createHeart(e.clientX, e.clientY);
+        });
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'heart-particle';
+            heart.innerHTML = '🌸';
+            heart.style.left = `${x - 12}px`;
+            heart.style.top = `${y - 12}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1200);
+        }
+
+        // Confetti Trigger
+        function triggerConfetti() {
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#f43f5e', '#ff2a85', '#fda4af', '#ffffff']
+            });
+        }
+
+        // Toggle Secret Letter
+        function toggleLetter() {
+            const letter = document.getElementById('secretLetter');
+            const btnText = document.getElementById('letterBtnText');
+            
+            if (letter.classList.contains('hidden')) {
+                letter.classList.remove('hidden');
+                btnText.innerText = 'Fechar Carta';
+                triggerConfetti();
+                gsap.fromTo(letter, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 });
+            } else {
+                letter.classList.add('hidden');
+                btnText.innerText = 'Abrir Carta Secreta';
+            }
+        }
+
+        // Interactive Photo Swap Helper (without alert/confirm)
+        function swapPhotoPrompt() {
+            const newUrl = prompt("Cole aqui o link/URL da imagem que você quer colocar (ou aperte Cancelar):");
+            if (newUrl && newUrl.trim() !== "") {
+                const img = document.getElementById('mainPhoto');
+                img.src = newUrl.trim();
+                triggerConfetti();
+            }
+        }
+    </script>
+</body>
+</html>
