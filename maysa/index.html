@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Minha Melhores Amiga ✨</title>
+    <title>Para Maysa Carmen Pereira ✨</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -74,7 +74,6 @@
             box-shadow: 0 40px 80px -15px rgba(244, 63, 94, 0.3);
         }
 
-        /* Custom Pink Radial Glow Ambient Background */
         .glow-orb-1 {
             position: fixed;
             top: -10%;
@@ -111,12 +110,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .text-gradient-subtle {
-            background: linear-gradient(135deg, #fff1f2 0%, #fda4af 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         /* Floating interactive cursor heart effect */
         .heart-particle {
             position: fixed;
@@ -131,7 +124,6 @@
             100% { opacity: 0; transform: translateY(-80px) scale(1.4) rotate(20deg); }
         }
 
-        /* Image Frame Glow */
         .photo-frame {
             position: relative;
         }
@@ -175,12 +167,14 @@
     <!-- MAIN CONTAINER -->
     <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 min-h-screen flex flex-col justify-between">
         
+        <!-- HEADER WITH UPDATED NAME -->
         <header class="flex items-center justify-between py-6 mb-12">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-500 to-pink-400 flex items-center justify-center shadow-lg shadow-rose-500/30">
                     <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
                 </div>
-                <span class="font-semibold text-lg tracking-wider text-rose-200">BFF • MEMORIES</span>
+                <!-- TROCADO PARA: Maysa Carmen Pereira -->
+                <span class="font-semibold text-lg sm:text-xl tracking-wider text-rose-200">Maysa Carmen Pereira</span>
             </div>
 
             <button id="surpriseBtn" onclick="triggerConfetti()" class="px-5 py-2.5 rounded-full glass-card hover:bg-rose-500/20 text-rose-200 border border-rose-400/30 text-sm font-medium transition-all duration-300 flex items-center space-x-2 group">
@@ -191,22 +185,26 @@
 
         <main class="space-y-24">
             
+            <!-- HERO SECTION WITH UPDATED TITLE & SUBTITLE -->
             <section class="text-center space-y-6 pt-6">
                 <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-card border-rose-500/20 mb-2 opacity-0 hero-el">
                     <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
-                    <span class="text-xs uppercase tracking-widest text-rose-300 font-semibold">Para uma pessoa insubstituível</span>
+                    <span class="text-xs uppercase tracking-widest text-rose-300 font-semibold">Para uma pessoa especial</span>
                 </div>
 
-                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight hero-el opacity-0">
-                    <span class="block">Mais que amiga,</span>
-                    <span class="font-serif italic font-normal text-gradient">uma irmã de alma.</span>
+                <!-- NOVO TÍTULO: Entre tantas pessoas, a vida me trouxe você. -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight hero-el opacity-0 leading-tight">
+                    <span class="block text-gradient font-serif italic">Entre tantas pessoas,</span>
+                    <span class="block text-white">a vida me trouxe você.</span>
                 </h1>
 
+                <!-- NOVO TEXTO DE BAIXO DO TÍTULO -->
                 <p class="max-w-2xl mx-auto text-rose-200/80 text-base sm:text-lg font-light leading-relaxed hero-el opacity-0">
-                    Criei esse cantinho especial no universo digital só pra te lembrar do quanto a nossa conexão é única, iluminada e importante pra mim.
+                    Criei esse cantinho especialmente para você, porque algumas pessoas merecem muito mais do que um simples “feliz aniversário”. Merecem um espaço para lembrar o quanto são importantes, e você é uma delas.
                 </p>
             </section>
 
+            <!-- PHOTO SECTION -->
             <section class="photo-section opacity-0 my-12">
                 <div class="max-w-3xl mx-auto">
                     <!-- 3D Tilt Card wrapper -->
@@ -214,57 +212,26 @@
                         
                         <div class="relative rounded-2xl overflow-hidden group aspect-[4/3] sm:aspect-[16/10] bg-rose-950/40">
                             
-                            <!-- 
-                                INSTRUÇÃO PARA O USUÁRIO:
-                                Substitua o link do atributo 'src' abaixo pela SUA FOTO com ela! 
-                            -->
+                            <!-- Imagem principal local da homenagem -->
                             <img id="mainPhoto" 
-                                 src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=1600&auto=format&fit=crop" 
-                                 alt="Nossa Foto Juntos" 
+                                 src="imagem.png" 
+                                 alt="Foto Especial" 
                                  class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
                             
                             <!-- Overlay Gradient -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500"></div>
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 group-hover:opacity-50 transition-opacity duration-500"></div>
 
-                            <!-- Badges floating on image -->
-                            <div class="absolute top-4 left-4 sm:top-6 sm:left-6 flex flex-wrap gap-2">
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-black/40 backdrop-blur-md text-rose-200 border border-white/10 flex items-center gap-1.5">
-                                    <i data-lucide="camera" class="w-3.5 h-3.5 text-rose-400"></i> Momento Épico
-                                </span>
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/80 backdrop-blur-md text-white flex items-center gap-1">
-                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i> Favorito
-                                </span>
-                            </div>
-
-                            <!-- Photo Footer Overlay Text -->
-                            <div class="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 flex justify-between items-end">
-                                <div>
-                                    <p class="text-xs text-rose-300 uppercase tracking-widest font-semibold mb-1">Guarde esse sorriso</p>
-                                    <h3 class="text-xl sm:text-2xl font-serif text-white italic">"Juntas em qualquer aventura."</h3>
-                                </div>
-
-                                <button onclick="swapPhotoPrompt()" title="Trocar Foto" class="p-3 rounded-full bg-white/10 backdrop-blur-md hover:bg-rose-500 text-white transition-colors duration-300 border border-white/20">
-                                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Mini Photo Description -->
-                        <div class="mt-4 px-2 py-2 flex items-center justify-between text-xs text-rose-200/60 border-t border-rose-500/10">
-                            <span class="flex items-center gap-1">
-                                <i data-lucide="heart-handshake" class="w-4 h-4 text-rose-400"></i> Amizade de milhões
-                            </span>
-                            <span>Clique no botão para trocar essa foto</span>
                         </div>
 
                     </div>
                 </div>
             </section>
 
+            <!-- FEATURES CARDS -->
             <section class="space-y-12">
                 <div class="text-center max-w-xl mx-auto">
                     <h2 class="text-3xl sm:text-4xl font-serif italic text-gradient mb-3">Por que você é tão incrível?</h2>
-                    <p class="text-rose-200/70 text-sm sm:text-base">Um pequeno resumo de 4 motivos que fazem a sua existência deixar o mundo bem mais leve.</p>
+                    <p class="text-rose-200/70 text-sm sm:text-base">Um pequeno resumo dos motivos que tornam a sua presença no mundo algo tão especial.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -274,9 +241,9 @@
                         <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                             <i data-lucide="smile" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-xl font-bold text-rose-100">Risadas Garantidas</h4>
+                        <h4 class="text-xl font-bold text-rose-100">Risadas Legítimas</h4>
                         <p class="text-rose-200/70 text-sm leading-relaxed">
-                            Ninguém no mundo me faz rir de besteiras como você. As memórias mais engraçadas da minha vida com certeza têm a sua participação!
+                            É impossível não sorrir perto de você. As memórias mais leves e engraçadas com certeza contam com a sua presença iluminada!
                         </p>
                     </div>
 
@@ -285,9 +252,9 @@
                         <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                             <i data-lucide="shield-check" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-xl font-bold text-rose-100">Lealdade de Verdade</h4>
+                        <h4 class="text-xl font-bold text-rose-100">Lealdade e Carinho</h4>
                         <p class="text-rose-200/70 text-sm leading-relaxed">
-                            Seja nos dias incríveis ou nos dias difíceis, eu sei que sempre posso contar com o seu abraço e com os seus conselhos sinceros.
+                            Em qualquer situação, ter a certeza do seu carinho e do seu apoio sincero faz toda a diferença do mundo.
                         </p>
                     </div>
 
@@ -296,9 +263,9 @@
                         <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                             <i data-lucide="sun" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-xl font-bold text-rose-100">Energia Iluminada</h4>
+                        <h4 class="text-xl font-bold text-rose-100">Energia que Transborda</h4>
                         <p class="text-rose-200/70 text-sm leading-relaxed">
-                            Sua presença tem o dom de transformar qualquer ambiente. Você ilumina tudo ao seu redor com a sua gentileza e carisma.
+                            Sua essência tem o poder de deixar tudo em volta mais harmonioso e leve. Seu brilho é verdadeiramente único.
                         </p>
                     </div>
 
@@ -307,15 +274,16 @@
                         <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                             <i data-lucide="sparkle" class="w-6 h-6"></i>
                         </div>
-                        <h4 class="text-xl font-bold text-rose-100">Parceira de Sonhos</h4>
+                        <h4 class="text-xl font-bold text-rose-100">Caminho Iluminado</h4>
                         <p class="text-rose-200/70 text-sm leading-relaxed">
-                            É maravilhoso ver você crescendo, conquistando suas coisas e sabendo que ainda temos um universo de momentos lindos pra viver juntas.
+                            Ver o seu crescimento e ver você alcançar seus objetivos é um orgulho imenso. Que o seu novo ciclo seja radiante!
                         </p>
                     </div>
 
                 </div>
             </section>
 
+            <!-- SECRET LETTER SECTION -->
             <section class="py-8">
                 <div class="glass-card rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
                     <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-rose-500/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -325,24 +293,24 @@
                             <i data-lucide="mail-open" class="w-8 h-8"></i>
                         </div>
                         <h3 class="text-3xl font-serif italic text-white">Tenho uma mensagem especial pra você...</h3>
-                        <p class="text-rose-200/70 text-sm sm:text-base">Clique no botão abaixo para abrir a carta secreta que preparei de todo o meu coração.</p>
+                        <p class="text-rose-200/70 text-sm sm:text-base">Clique no botão abaixo para abrir a carta secreta que preparei com todo carinho.</p>
 
                         <button onclick="toggleLetter()" class="px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-semibold text-base shadow-lg shadow-rose-500/40 hover:shadow-rose-500/60 hover:scale-105 active:scale-95 transition-all duration-300 flex items-center space-x-2 mx-auto">
                             <i data-lucide="heart-handshake" class="w-5 h-5"></i>
                             <span id="letterBtnText">Abrir Carta Secreta</span>
                         </button>
 
-                        <!-- Letter Content (Hidden by default) -->
+                        <!-- Carta Secreta -->
                         <div id="secretLetter" class="hidden text-left mt-8 p-6 sm:p-8 rounded-2xl bg-black/40 border border-rose-500/30 space-y-4 text-rose-100 leading-relaxed text-sm sm:text-base font-light transition-all duration-500">
-                            <p class="font-serif italic text-rose-300 text-lg">Querida amiga,</p>
+                            <p class="font-serif italic text-rose-300 text-lg">Querida Maysa,</p>
                             <p>
-                                Às vezes na correria do dia a dia a gente esquece de parar e dizer o quanto as pessoas que amamos são essenciais. Este site é só um pequeno gesto pra colocar um sorriso no seu rosto e te lembrar que você é gigante!
+                                Na correria do dia a dia, às vezes não paramos o tempo suficiente para demonstrar o quanto certas pessoas são preciosas na nossa vida. Este espaço foi feito com todo o carinho para colocar um sorriso no seu rosto e lembrar o quanto sua presença faz a diferença.
                             </p>
                             <p>
-                                Obrigado por cada conselho, por cada gargalhada sem fim, por ser exatamente quem você é. Que a vida continue te presenteando com coisas tão maravilhosas quanto o seu coração.
+                                Obrigado por cada conversa, por cada abraço, por cada momento inesquecível e por ser essa pessoa tão fantástica. Que o seu caminho seja sempre repleto de saúde, conquistas, alegrias imensas e muito amor!
                             </p>
                             <p class="pt-4 font-semibold text-rose-300 text-right">
-                                Com todo o meu carinho e amizade ❤️
+                                Com todo carinho e admiração ❤️
                             </p>
                         </div>
                     </div>
@@ -351,16 +319,18 @@
 
         </main>
 
+        <!-- FOOTER -->
         <footer class="mt-24 pt-8 border-t border-rose-500/10 text-center text-xs text-rose-200/40 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>Feito com amor exclusivamente para você ✨</p>
+            <p>Feito especialmente para Maysa Carmen Pereira ✨</p>
             <div class="flex items-center space-x-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Modo Especial Ativado</span>
+                <span>Modo Homenagem Ativado</span>
             </div>
         </footer>
 
     </div>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
@@ -405,7 +375,6 @@
             });
         }
 
-        // Particle Canvas Logic (Floating Pink Dust)
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -459,8 +428,9 @@
         }
         animateParticles();
 
-        // Cursor Heart Burst Effect
         document.addEventListener('click', (e) => {
+            // Prevenir o efeito ao clicar em botões ou inputs
+            if (e.target.closest('button') || e.target.closest('input')) return;
             createHeart(e.clientX, e.clientY);
         });
 
@@ -484,7 +454,6 @@
             });
         }
 
-        // Toggle Secret Letter
         function toggleLetter() {
             const letter = document.getElementById('secretLetter');
             const btnText = document.getElementById('letterBtnText');
@@ -497,16 +466,6 @@
             } else {
                 letter.classList.add('hidden');
                 btnText.innerText = 'Abrir Carta Secreta';
-            }
-        }
-
-        // Interactive Photo Swap Helper (without alert/confirm)
-        function swapPhotoPrompt() {
-            const newUrl = prompt("Cole aqui o link/URL da imagem que você quer colocar (ou aperte Cancelar):");
-            if (newUrl && newUrl.trim() !== "") {
-                const img = document.getElementById('mainPhoto');
-                img.src = newUrl.trim();
-                triggerConfetti();
             }
         }
     </script>
