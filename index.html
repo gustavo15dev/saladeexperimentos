@@ -4,1112 +4,1079 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sala de Experimentos</title>
+    <title>Sala de Experimentos — Onde a criatividade encontra o código</title>
 
     <meta name="google-site-verification" content="ErVEI6PSCLIOVNvi7emQAXDZy1ymBm5hgW7NwRxecoY" />
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="icon" type="image/png" href="imagens/logo.png">
 
     <style>
-        /* ============================================ */
-        /* SEU style.css ORIGINAL                       */
-        /* ============================================ */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-        /* ---------------------------------------------------- */
-        /* CONFIGURAÇÕES DE DESIGN SYSTEM E TEMAS */
-        /* ---------------------------------------------------- */
+        /* ==========================================================================
+           DESIGN SYSTEM & CSS VARIABLES
+           ========================================================================== */
         :root {
-            /* -- VARIÁVEIS PADRÃO (DARK / ESCURO) -- */
-            --bg-dark: #0f1014;
-            --text-main: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --text-badge: #ffffff;
+            /* Palette Padrão: Dark Void */
+            --bg-body: #08090c;
+            --bg-surface: rgba(18, 20, 29, 0.65);
+            --bg-surface-hover: rgba(28, 32, 46, 0.85);
+            --bg-glass-card: rgba(255, 255, 255, 0.025);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.2);
             
-            /* Vidro */
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-highlight: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.35);
+            --secondary: #818cf8;
             
-            /* Input Search */
-            --input-bg: rgba(0, 0, 0, 0.3);
+            --gradient-accent: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            --gradient-text: linear-gradient(135deg, #ffffff 20%, #94a3b8 100%);
+            --gradient-hero: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
             
-            /* Gradients (Orbs) */
-            --primary-gradient: linear-gradient(135deg, #FF512F 0%, #DD2476 100%);
-            --secondary-gradient: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
+            --orb-1: rgba(56, 189, 248, 0.15);
+            --orb-2: rgba(168, 85, 247, 0.12);
+            --orb-3: rgba(236, 72, 153, 0.1);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
             
-            --accent-color: #00d2ff;
-            --accent-glow: rgba(0, 210, 255, 0.18);
+            --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
             
-            /* Espaçamento */
-            --card-radius: 24px;
-            --btn-radius: 50px;
-            --font-main: 'Inter', sans-serif;
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* --- TEMA: MARINHA (MARINE) --- */
+        /* --- TEMAS COLORIDOS AVANÇADOS --- */
         [data-theme="marine"] {
-            --bg-dark: #001e2b;
-            --text-main: #e0f7fa;
-            --text-muted: rgba(224, 247, 250, 0.6);
-            --text-badge: #ffffff;
-            
-            --glass-bg: rgba(0, 40, 60, 0.4);
-            --glass-border: rgba(100, 255, 218, 0.15);
-            --glass-highlight: rgba(255, 255, 255, 0.08);
-            
-            --input-bg: rgba(11, 16, 38, 0.65);
-            
-            --primary-gradient: linear-gradient(135deg, #006994 0%, #00b4d8 100%);
-            --secondary-gradient: linear-gradient(135deg, #023e8a 0%, #0077b6 100%);
-            
-            --accent-color: #00e5ff;
-            --accent-glow: rgba(0, 229, 255, 0.18);
+            --bg-body: #02121e;
+            --bg-surface: rgba(4, 30, 48, 0.7);
+            --bg-surface-hover: rgba(6, 45, 71, 0.9);
+            --bg-glass-card: rgba(0, 229, 255, 0.03);
+            --border-subtle: rgba(0, 229, 255, 0.12);
+            --border-hover: rgba(0, 229, 255, 0.35);
+            --text-main: #f0fdfa;
+            --text-muted: #99f6e4;
+            --primary: #00e5ff;
+            --primary-glow: rgba(0, 229, 255, 0.4);
+            --secondary: #0ea5e9;
+            --gradient-accent: linear-gradient(135deg, #00e5ff 0%, #0ea5e9 100%);
+            --gradient-hero: linear-gradient(135deg, #2dd4bf 0%, #00e5ff 50%, #38bdf8 100%);
+            --orb-1: rgba(0, 229, 255, 0.2);
+            --orb-2: rgba(14, 165, 233, 0.15);
         }
 
-        /* --- TEMA: VERDE --- */
         [data-theme="green"] {
-            --bg-dark: #0f1014;
-            --text-main: #f5fff7;
-            --text-muted: rgba(217, 244, 217, 0.7);
-            --text-badge: #ecfdf5;
-            
-            --glass-bg: rgba(31, 58, 34, 0.35);
-            --glass-border: rgba(110, 231, 183, 0.18);
-            --glass-highlight: rgba(110, 231, 183, 0.12);
-            
-            --input-bg: rgba(10, 18, 14, 0.65);
-            
-            --primary-gradient: linear-gradient(135deg, #0f766e 0%, #22c55e 100%);
-            --secondary-gradient: linear-gradient(135deg, #4ade80 0%, #86efac 100%);
-            
-            --accent-color: #4ade80;
-            --accent-glow: rgba(74, 222, 128, 0.18);
+            --bg-body: #06110a;
+            --bg-surface: rgba(12, 33, 20, 0.7);
+            --bg-surface-hover: rgba(18, 48, 29, 0.9);
+            --border-subtle: rgba(74, 222, 128, 0.15);
+            --border-hover: rgba(74, 222, 128, 0.4);
+            --text-main: #f0fdf4;
+            --text-muted: #86efac;
+            --primary: #22c55e;
+            --primary-glow: rgba(34, 197, 94, 0.4);
+            --gradient-accent: linear-gradient(135deg, #4ade80 0%, #16a34a 100%);
+            --gradient-hero: linear-gradient(135deg, #86efac 0%, #22c55e 50%, #0d9488 100%);
+            --orb-1: rgba(34, 197, 94, 0.18);
+            --orb-2: rgba(20, 184, 166, 0.15);
         }
 
-        [data-theme="green"] .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #4ade80, #22c55e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* --- TEMA: ROXO --- */
         [data-theme="purple"] {
-            --bg-dark: #0f1014;
-            --text-main: #f7f3ff;
-            --text-muted: rgba(221, 214, 255, 0.7);
-            --text-badge: #ede9fe;
-            
-            --glass-bg: rgba(57, 36, 99, 0.3);
-            --glass-border: rgba(167, 139, 250, 0.18);
-            --glass-highlight: rgba(167, 139, 250, 0.12);
-            
-            --input-bg: rgba(14, 8, 25, 0.65);
-            
-            --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-            --secondary-gradient: linear-gradient(135deg, #c084fc 0%, #8b5cf6 100%);
-            
-            --accent-color: #a78bfa;
-            --accent-glow: rgba(167, 139, 250, 0.18);
+            --bg-body: #0d0918;
+            --bg-surface: rgba(29, 18, 51, 0.7);
+            --bg-surface-hover: rgba(43, 27, 77, 0.9);
+            --border-subtle: rgba(168, 85, 247, 0.15);
+            --border-hover: rgba(168, 85, 247, 0.4);
+            --text-main: #faf5ff;
+            --text-muted: #d8b4fe;
+            --primary: #c084fc;
+            --primary-glow: rgba(192, 132, 252, 0.4);
+            --gradient-accent: linear-gradient(135deg, #c084fc 0%, #7c3aed 100%);
+            --gradient-hero: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #818cf8 100%);
+            --orb-1: rgba(168, 85, 247, 0.2);
+            --orb-2: rgba(99, 102, 241, 0.15);
         }
 
-        [data-theme="purple"] .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #a855f7, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* --- TEMA: VERMELHO --- */
         [data-theme="red"] {
-            --bg-dark: #0f1014;
-            --text-main: #ffeaea;
-            --text-muted: rgba(255, 189, 189, 0.7);
-            --text-badge: #fee2e2;
-            
-            --glass-bg: rgba(80, 24, 24, 0.35);
-            --glass-border: rgba(248, 113, 113, 0.18);
-            --glass-highlight: rgba(248, 113, 113, 0.12);
-            
-            --input-bg: rgba(20, 10, 12, 0.65);
-            
-            --primary-gradient: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
-            --secondary-gradient: linear-gradient(135deg, #fb7185 0%, #fda4af 100%);
-            
-            --accent-color: #f87171;
-            --accent-glow: rgba(248, 113, 113, 0.18);
+            --bg-body: #14080a;
+            --bg-surface: rgba(43, 14, 18, 0.7);
+            --bg-surface-hover: rgba(64, 21, 27, 0.9);
+            --border-subtle: rgba(248, 113, 113, 0.15);
+            --border-hover: rgba(248, 113, 113, 0.4);
+            --text-main: #fff1f2;
+            --text-muted: #fda4af;
+            --primary: #f87171;
+            --primary-glow: rgba(248, 113, 113, 0.4);
+            --gradient-accent: linear-gradient(135deg, #fb7185 0%, #e11d48 100%);
+            --gradient-hero: linear-gradient(135deg, #fb7185 0%, #ef4444 50%, #f97316 100%);
+            --orb-1: rgba(239, 68, 68, 0.2);
+            --orb-2: rgba(249, 115, 22, 0.15);
         }
 
-        [data-theme="red"] .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #ef4444, #f97316);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* --- TEMA: CINZA --- */
         [data-theme="gray"] {
-            --bg-dark: #111316;
-            --text-main: #f2f4f7;
-            --text-muted: rgba(216, 221, 232, 0.65);
-            --text-badge: #e2e8f0;
-            
-            --glass-bg: rgba(255, 255, 255, 0.06);
-            --glass-border: rgba(148, 163, 184, 0.18);
-            --glass-highlight: rgba(255, 255, 255, 0.08);
-            
-            --input-bg: rgba(20, 24, 31, 0.65);
-            
-            --primary-gradient: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
-            --secondary-gradient: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
-            
-            --accent-color: #94a3b8;
-            --accent-glow: rgba(148, 163, 184, 0.18);
+            --bg-body: #0d0f12;
+            --bg-surface: rgba(23, 27, 34, 0.7);
+            --bg-surface-hover: rgba(33, 39, 49, 0.9);
+            --border-subtle: rgba(148, 163, 184, 0.15);
+            --border-hover: rgba(148, 163, 184, 0.35);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #94a3b8;
+            --primary-glow: rgba(148, 163, 184, 0.3);
+            --gradient-accent: linear-gradient(135deg, #cbd5e1 0%, #64748b 100%);
+            --gradient-hero: linear-gradient(135deg, #ffffff 0%, #94a3b8 50%, #475569 100%);
+            --orb-1: rgba(148, 163, 184, 0.12);
+            --orb-2: rgba(71, 85, 105, 0.15);
         }
 
-        [data-theme="gray"] .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #9ca3af, #6b7280);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        [data-theme="newyear"] {
+            --bg-body: #04091a;
+            --bg-surface: rgba(10, 24, 56, 0.7);
+            --bg-surface-hover: rgba(16, 38, 87, 0.9);
+            --border-subtle: rgba(250, 204, 21, 0.2);
+            --border-hover: rgba(250, 204, 21, 0.5);
+            --text-main: #ffffff;
+            --text-muted: #fef08a;
+            --primary: #facc15;
+            --primary-glow: rgba(250, 204, 21, 0.4);
+            --gradient-accent: linear-gradient(135deg, #fde047 0%, #ca8a04 100%);
+            --gradient-hero: linear-gradient(135deg, #93c5fd 0%, #facc15 50%, #f43f5e 100%);
+            --orb-1: rgba(250, 204, 21, 0.18);
+            --orb-2: rgba(59, 130, 246, 0.18);
         }
 
-        * {
+        /* ==========================================================================
+           RESET & GLOBAL BASE
+           ========================================================================== */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.5s ease, color 0.3s ease, border-color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
         }
 
         body {
-            font-family: var(--font-main);
-            background-color: var(--bg-dark);
+            font-family: var(--font-sans);
+            background-color: var(--bg-body);
             color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        html {
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE 10+ */
+        ::selection {
+            background: var(--primary);
+            color: #000;
         }
 
-        html::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-            background: transparent;
-        }
-
-        /* ---------------------------------------------------- */
-        /* THEME SWITCHER (Liquid Glass) */
-        /* ---------------------------------------------------- */
-        .theme-switcher {
+        /* Ambient Glow Mesh & Noise */
+        .ambient-mesh {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            
-            background: rgba(150, 150, 150, 0.1);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-            
-            padding: 6px;
-            border-radius: 50px;
-            display: flex;
-            gap: 5px;
-            
-            animation: fadeInDown 1s ease;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
         }
 
-        .theme-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            position: relative; /* Importante para o tooltip */
-        }
-
-        .theme-btn:hover {
-            color: var(--text-main);
-            background: rgba(255,255,255, 0.1);
-        }
-
-        .theme-btn.active {
-            background: var(--text-main);
-            color: var(--bg-dark);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transform: scale(1.05);
-        }
-
-        /* --- TOOLTIP NO HOVER (APARECE EMBAIXO) --- */
-        .theme-btn::after {
-            content: attr(data-tooltip); /* Pega o texto do HTML */
+        .ambient-orb {
             position: absolute;
-            top: 135%; /* Empurra para baixo do botão */
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.6;
+            transition: background 1s ease;
+            animation: orbFloat 18s infinite alternate ease-in-out;
+            will-change: transform;
+        }
+
+        .orb-top-left {
+            width: 50vw;
+            height: 50vw;
+            max-width: 600px;
+            max-height: 600px;
+            background: var(--orb-1);
+            top: -15%;
+            left: -10%;
+        }
+
+        .orb-bottom-right {
+            width: 45vw;
+            height: 45vw;
+            max-width: 550px;
+            max-height: 550px;
+            background: var(--orb-2);
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -5s;
+        }
+
+        .orb-center {
+            width: 35vw;
+            height: 35vw;
+            max-width: 400px;
+            max-height: 400px;
+            background: var(--orb-3);
+            top: 40%;
+            left: 30%;
+            animation-delay: -9s;
+        }
+
+        @keyframes orbFloat {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(40px, 30px, 0) scale(1.08); }
+            100% { transform: translate3d(-30px, 50px, 0) scale(0.95); }
+        }
+
+        /* Subtle Noise Overlay for Texture */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* ==========================================================================
+           HEADER ULTRA-MODERNO (Glass Floating Bar)
+           ========================================================================== */
+        .site-header {
+            position: fixed;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
-            
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 6px 10px;
-            border-radius: 6px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            white-space: nowrap;
-            
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            
-            backdrop-filter: blur(4px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: all 0.2s ease;
-            z-index: 1001;
+            width: min(94%, 1240px);
+            height: 68px;
+            padding: 0 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            background: rgba(13, 16, 23, 0.7);
+            backdrop-filter: blur(24px) saturate(190%);
+            -webkit-backdrop-filter: blur(24px) saturate(190%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
         }
 
-        /* Efeito ao passar o mouse */
-        .theme-btn:hover::after {
-            opacity: 1;
-            visibility: visible;
-            top: 125%; /* Leve animação subindo */
-        }
-
-        /* ---------------------------------------------------- */
-        /* FUNDO ANIMADO */
-        /* ---------------------------------------------------- */
-        .background-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            z-index: -1;
-            opacity: 0.4;
-            animation: float 10s infinite ease-in-out;
-            transition: background 1s ease;
-        }
-
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--primary-gradient);
-            top: -100px;
-            left: -100px;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: var(--secondary-gradient);
-            bottom: -150px;
-            right: -100px;
-            animation-delay: 2s;
-        }
-
-        @keyframes float {
-            0% { transform: translate(0, 0); }
-            50% { transform: translate(20px, 40px); }
-            100% { transform: translate(0, 0); }
-        }
-
-        /* ---------------------------------------------------- */
-        /* LAYOUT PRINCIPAL */
-        /* ---------------------------------------------------- */
-        .main-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 50px;
-            animation: fadeInDown 0.8s ease;
-            position: relative;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            background: var(--glass-highlight);
-            color: var(--text-badge);
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border: 1px solid var(--glass-border);
-        }
-
-        h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            line-height: 1.1;
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
             color: var(--text-main);
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+            cursor: pointer;
+            flex-shrink: 0;
         }
 
-        h2 {
-            font-size: 1.2rem;
-            font-weight: 300;
-            color: var(--text-muted);
+        .logo-badge {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--gradient-accent);
+            display: grid;
+            place-items: center;
+            font-size: 0.95rem;
+            color: #000;
+            box-shadow: 0 0 18px var(--primary-glow);
         }
 
         .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #ff9966, #ff5e62);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-        }
-        [data-theme="marine"] .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
+            background: var(--gradient-hero);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .text-highlight {
-            color: var(--accent-color);
-            font-weight: 600;
+        /* Header Search Input */
+        .header-search {
+            position: relative;
+            flex: 1;
+            max-width: 480px;
         }
 
-        /* ---------------------------------------------------- */
-        /* NAVEGAÇÃO E FILTROS */
-        /* ---------------------------------------------------- */
-        #categorias-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 40px;
-        }
-
-        .filter-btn {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-muted);
-            padding: 12px 24px;
-            border-radius: var(--btn-radius);
-            font-family: var(--font-main);
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+        .search-input-box {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(5px);
-        }
-
-        .filter-btn i { font-size: 0.9rem; }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--text-main);
-            color: var(--bg-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .filter-btn.special {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* ---------------------------------------------------- */
-        /* BARRA DE BUSCA */
-        /* ---------------------------------------------------- */
-        #busca-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 50px;
-        }
-
-        .input-wrapper {
-            position: relative;
             width: 100%;
-            max-width: 500px;
         }
 
-        .input-wrapper i {
+        .search-input-box i.search-icon {
             position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
+            left: 16px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            pointer-events: none;
+            transition: var(--transition);
         }
 
         #busca-input {
             width: 100%;
-            padding: 16px 20px 16px 50px;
-            border-radius: var(--btn-radius);
-            background: var(--input-bg);
-            border: 1px solid var(--glass-border);
+            height: 42px;
+            padding: 0 52px 0 42px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
             color: var(--text-main);
-            font-family: var(--font-main);
-            font-size: 1rem;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            font-weight: 500;
             outline: none;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+        }
+
+        #busca-input::placeholder {
+            color: var(--text-dim);
+            font-weight: 400;
         }
 
         #busca-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
         }
 
+        .search-shortcut {
+            position: absolute;
+            right: 12px;
+            padding: 2px 7px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-weight: 600;
+            pointer-events: none;
+        }
 
-        /* ---------------------------------------------------- */
-        /* CARDS (GLASSMORPHISM) */
-        /* ---------------------------------------------------- */
+        /* Header Actions & Theme Switcher */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .theme-dock {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+        }
+
+        .theme-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            display: grid;
+            place-items: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .theme-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .theme-btn.active {
+            background: var(--text-main);
+            color: var(--bg-body);
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+        }
+
+        .theme-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 130%;
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(10, 12, 18, 0.95);
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+            z-index: 1002;
+        }
+
+        .theme-btn:hover::after {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Autocomplete Dropdown */
+        .busca-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 0;
+            right: 0;
+            background: rgba(13, 16, 23, 0.96);
+            backdrop-filter: blur(28px) saturate(200%);
+            -webkit-backdrop-filter: blur(28px) saturate(200%);
+            border: 1px solid var(--border-hover);
+            border-radius: var(--radius-md);
+            max-height: 420px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+            z-index: 1001;
+            padding: 8px;
+        }
+
+        .busca-dropdown.active {
+            display: block;
+            animation: dropdownFade 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes dropdownFade {
+            from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .busca-resultado {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            color: var(--text-main);
+            transition: var(--transition);
+        }
+
+        .busca-resultado:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(4px);
+        }
+
+        .busca-resultado-img {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .busca-resultado-titulo {
+            font-weight: 600;
+            font-size: 0.92rem;
+            margin-bottom: 2px;
+        }
+
+        .busca-resultado-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 320px;
+        }
+
+        /* ==========================================================================
+           MAIN CONTENT WRAPPER
+           ========================================================================== */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 140px 24px 80px;
+        }
+
+        /* ==========================================================================
+           HERO SECTION
+           ========================================================================== */
+        .hero-section {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .hero-pill-badge .dot-live {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+            animation: pulseDot 2s infinite;
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw + 1rem, 4.4rem);
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: -0.03em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.05rem, 1.2vw, 1.25rem);
+            font-weight: 400;
+            color: var(--text-muted);
+            max-width: 620px;
+            line-height: 1.6;
+            margin-bottom: 36px;
+            animation: fadeInDown 1s ease;
+        }
+
+        /* Quick Stats Grid */
+        .hero-metrics {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            backdrop-filter: blur(10px);
+            animation: fadeInDown 1.1s ease;
+        }
+
+        .metric-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .metric-item strong {
+            font-family: var(--font-display);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .metric-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--border-subtle);
+        }
+
+        /* ==========================================================================
+           CATEGORIAS / SEGMENTED FILTER BAR
+           ========================================================================== */
+        .filter-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            position: sticky;
+            top: 100px;
+            z-index: 100;
+        }
+
+        #categorias-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px;
+            background: rgba(15, 18, 26, 0.8);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-full);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            max-width: 100%;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        #categorias-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .filter-btn i {
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-btn.active {
+            background: var(--text-main);
+            color: var(--bg-body);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+        }
+
+        .filter-btn.active i {
+            color: var(--bg-body);
+        }
+
+        .filter-btn.special {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .filter-btn.special:hover {
+            background: var(--gradient-accent);
+            color: #000;
+            border-color: transparent;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* ==========================================================================
+           GRID DE CARDS (BENTO GLASS SYSTEM)
+           ========================================================================== */
         #container-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 24px;
         }
 
         .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--card-radius);
+            position: relative;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                        background 0.4s ease;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        /* Spotlight glow hover effect */
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.08), transparent 40%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 3;
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
         }
 
         .glass-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--glass-highlight);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px);
+            border-color: var(--border-hover);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px -10px var(--primary-glow);
+            background: var(--bg-surface-hover);
         }
 
+        /* Card Image Container */
         .card-image-wrapper {
-            height: 180px;
-            width: 100%;
             position: relative;
+            width: 100%;
+            height: 190px;
             overflow: hidden;
+            background: #000;
         }
 
         .card-image-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.5s ease;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+            filter: brightness(0.92) contrast(1.05);
         }
 
         .glass-card:hover .card-image-wrapper img {
-            transform: scale(1.1);
+            transform: scale(1.08);
+            filter: brightness(1.02) contrast(1.1);
         }
 
+        /* Smooth Bottom Shadow Blend for Image */
+        .card-image-wrapper::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(13, 16, 23, 0.95) 100%);
+            pointer-events: none;
+        }
+
+        /* Badges & Tags */
         .status-tag {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #ffcc00;
+            top: 14px;
+            right: 14px;
+            background: rgba(10, 12, 18, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #38bdf8;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
             padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: bold;
+            border-radius: var(--radius-full);
             text-transform: uppercase;
-            backdrop-filter: blur(4px);
+            z-index: 4;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
         }
 
+        .status-tag.dev {
+            color: #fbbf24;
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .special-tag-gold {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #000;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.4);
+            z-index: 4;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f1f5f9;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            transition: var(--transition);
+        }
+
+        .author-badge:hover {
+            background: var(--text-main);
+            color: #000;
+        }
+
+        /* Card Content Area */
         .card-info {
-            padding: 25px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            position: relative;
+            z-index: 2;
         }
 
         .card-header {
             display: flex;
+            align-items: flex-start;
             justify-content: space-between;
-            align-items: center;
+            gap: 12px;
             margin-bottom: 12px;
         }
 
+        .card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
         .card-header h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
             color: var(--text-main);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
         }
 
         .category-icon {
-            color: var(--text-muted);
-            font-size: 1.2rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-subtle);
+            display: grid;
+            place-items: center;
+            color: var(--primary);
+            font-size: 0.95rem;
+            flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .glass-card:hover .category-icon {
+            background: var(--primary);
+            color: #000;
+            transform: rotate(-6deg) scale(1.05);
+            box-shadow: 0 0 16px var(--primary-glow);
         }
 
         .card-info p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text-muted);
             line-height: 1.6;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             flex-grow: 1;
+            display: -webkit-box;
+            line-clamp: 3;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
+        /* Card Metadata & Telemetry */
         .card-meta {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            border-top: 1px solid var(--glass-border);
-            padding-top: 15px;
-        }
-
-        .action-btn {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: var(--text-main);
-            color: var(--bg-dark);
-            padding: 12px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s ease;
-        }
-
-        .action-btn:hover {
-            background: var(--accent-color);
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
-        }
-
-        /* ---------------------------------------------------- */
-        /* HERO WSM LAUNCH */
-        /* ---------------------------------------------------- */
-        .wsm-launch-hero {
-            margin-bottom: 34px;
-        }
-
-        .wsm-launch-card {
-            position: relative;
-            overflow: hidden;
-            padding: 28px;
-            min-height: min(72vh, 780px);
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
-                rgba(12, 14, 21, 0.88);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 18px;
-            text-align: center;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            padding: 12px 0 16px;
+            border-top: 1px solid var(--border-subtle);
         }
 
-        .wsm-launch-card::before {
-            content: '';
-            position: absolute;
-            inset: -30% auto auto -15%;
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 210, 255, 0.24), transparent 65%);
-            pointer-events: none;
-        }
-
-        .wsm-launch-title {
-            font-size: clamp(2rem, 1.5rem + 1.6vw, 2.9rem);
-            line-height: 1.05;
-            font-weight: 800;
-            color: var(--text-main);
-            max-width: 860px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .wsm-launch-video-wrap {
-            position: relative;
-            width: min(100%, 1100px);
-            min-height: 320px;
-            flex: 1 1 auto;
-            border-radius: 22px;
-            overflow: hidden;
-            background: #000;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 55px rgba(0, 0, 0, 0.38);
-            z-index: 1;
-        }
-
-        .wsm-launch-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .wsm-launch-copy {
-            max-width: 760px;
-            color: var(--text-muted);
-            font-size: 1.02rem;
-            line-height: 1.7;
-            position: relative;
-            z-index: 1;
-        }
-
-        .wsm-launch-btn {
+        .card-meta span {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 13px 30px;
-            border-radius: 999px;
-            background: linear-gradient(135deg, #00d2ff 0%, #3a7bfd 100%);
-            color: #03131b;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1rem;
-            box-shadow: 0 16px 40px rgba(58, 123, 253, 0.32);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            position: relative;
-            z-index: 1;
+            gap: 6px;
         }
 
-        .wsm-launch-btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 20px 46px rgba(58, 123, 253, 0.42);
+        .card-meta span i {
+            color: var(--primary);
         }
 
-        @media (max-width: 768px) {
-            .wsm-launch-card {
-                min-height: auto;
-                padding: 20px 16px;
-                gap: 16px;
-            }
-
-            .wsm-launch-title {
-                font-size: 1.9rem;
-            }
-
-            .wsm-launch-video-wrap {
-                min-height: 240px;
-            }
-
-            .wsm-launch-copy {
-                font-size: 0.98rem;
-                line-height: 1.6;
-            }
-        }
-
-
-        /* ---------------------------------------------------- */
-        /* FEATURED CARD (ZapWrapped) */
-        /* ---------------------------------------------------- */
-        .featured-card-wrapper {
-            width: 100%;
-            margin-bottom: 40px;
-            padding: 0 5px;
-        }
-
-        .featured-card {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 24px;
-            padding: 28px 32px;
-            background: var(--glass-bg);
-            border: 2px solid #ff4444;
-            border-radius: var(--card-radius);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            overflow: visible;
-            transition: all 0.4s ease;
-            height: 160px;
-        }
-
-        .featured-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255, 68, 68, 0.05) 0%, transparent 100%);
-            pointer-events: none;
-        }
-
-        .featured-card:hover {
-            border-color: #ff6b6b;
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(255, 68, 68, 0.25);
-        }
-
-        .featured-fire-icon {
-            position: absolute;
-            top: -24px;
-            right: -24px;
-            font-size: 48px;
-            color: #ff4444;
-            opacity: 0.9;
-            animation: float 1.5s ease-in-out infinite;
-            z-index: 10;
-            filter: drop-shadow(0 4px 12px rgba(255, 68, 68, 0.5));
-            width: 56px;
-            height: 56px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-dark);
-            border-radius: 50%;
-        }
-
-        .featured-content {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-            z-index: 2;
-        }
-
-        .featured-image {
-            width: 120px;
-            height: 120px;
-            flex-shrink: 0;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 2px solid rgba(255, 68, 68, 0.3);
-            background: var(--glass-bg);
-        }
-
-        .featured-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .featured-card:hover .featured-image img {
-            transform: scale(1.08);
-        }
-
-        .featured-text {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .featured-title {
-            font-size: 1.8rem;
-            font-weight: 700;
+        .card-meta strong {
             color: var(--text-main);
-            margin-bottom: 8px;
         }
 
-        .featured-description {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-            max-width: 300px;
-        }
-
-        .featured-btn {
+        /* Action Button */
+        .action-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 12px 28px;
-            background: linear-gradient(135deg, #ff4444 0%, #ff6b6b 100%);
-            color: white;
-            border: none;
-            border-radius: var(--btn-radius);
-            font-size: 1rem;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            box-shadow: 0 8px 24px rgba(255, 68, 68, 0.35);
-            z-index: 3;
-        }
-
-        .featured-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 36px rgba(255, 68, 68, 0.45);
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8888 100%);
-        }
-
-        .featured-btn i {
-            font-size: 0.95rem;
-            transition: transform 0.3s ease;
-        }
-
-        .featured-btn:hover i {
-            transform: translateX(4px);
-        }
-
-        /* Responsive Featured Card */
-        @media (max-width: 768px) {
-            .featured-card {
-                flex-direction: column;
-                height: auto;
-                padding: 24px 20px;
-                gap: 16px;
-            }
-            
-            .featured-image {
-                width: 100px;
-                height: 100px;
-            }
-            
-            .featured-title {
-                font-size: 1.4rem;
-            }
-            
-            .featured-description {
-                font-size: 0.9rem;
-                max-width: 100%;
-            }
-            
-            .featured-fire-icon {
-                top: 8px;
-                right: 12px;
-                font-size: 36px;
-            }
-            
-            .featured-btn {
-                width: 100%;
-                padding: 14px 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .featured-card {
-                flex-direction: column;
-                height: auto;
-                padding: 20px 16px;
-                gap: 14px;
-                border-radius: 18px;
-            }
-            
-            .featured-image {
-                width: 90px;
-                height: 90px;
-            }
-            
-            .featured-title {
-                font-size: 1.2rem;
-            }
-            
-            .featured-description {
-                font-size: 0.85rem;
-            }
-            
-            .featured-fire-icon {
-                font-size: 36px;
-                top: -18px;
-                right: -18px;
-            }
-            
-            .featured-btn {
-                width: 100%;
-                padding: 12px 20px;
-                font-size: 0.95rem;
-            }
-        }
-
-        /* ---------------------------------------------------- */
-        /* ANIMAÇÕES E RESPONSIVIDADE (MEDIA QUERIES) */
-        /* ---------------------------------------------------- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Telas Pequenas (Celular) */
-        @media (max-width: 480px) {
-            /* Centralizar o Theme Switcher no topo */
-            .theme-switcher {
-                top: 15px;
-                right: auto;
-                left: 50%;
-                transform: translateX(-50%);
-                width: max-content;
-            }
-
-            /* Empurrar o título para baixo para não bater no Switcher */
-            header {
-                margin-top: 40px; 
-            }
-
-            h1 { font-size: 2rem; }
-            h2 { font-size: 1rem; }
-            .main-wrapper { padding: 20px 12px; }
-            #container-cards { grid-template-columns: 1fr; gap: 18px; }
-            .card-image-wrapper { height: 140px; }
-            .card-info { padding: 18px; }
-            .filter-btn { padding: 8px 12px; font-size: 0.82rem; }
-            #busca-input { padding: 12px 16px 12px 44px; font-size: 0.95rem; }
-        }
-
-        /* Tablet / Telas médias */
-        @media (min-width: 481px) and (max-width: 768px) {
-            /* Centralizar também em tablets menores se preferir, ou manter fixo */
-            .theme-switcher {
-                top: 20px;
-                right: 20px; /* Mantém na direita em tablets para ter mais espaço */
-            }
-
-            h1 { font-size: 2.4rem; }
-            h2 { font-size: 1.05rem; }
-            .main-wrapper { padding: 28px 18px; }
-            #container-cards { grid-template-columns: 1fr; gap: 22px; }
-            .card-image-wrapper { height: 160px; }
-            .filter-btn { padding: 10px 14px; font-size: 0.88rem; }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-            h1 { font-size: 3rem; }
-            #container-cards { grid-template-columns: repeat(2, 1fr); gap: 26px; }
-            .card-image-wrapper { height: 200px; }
-        }
-
-        @media (min-width: 1025px) and (max-width: 1400px) {
-            .main-wrapper { max-width: 1000px; }
-            h1 { font-size: 3.4rem; }
-            #container-cards { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
-        }
-
-        @media (min-width: 1401px) {
-            .main-wrapper { max-width: 1400px; padding: 50px 24px; }
-            h1 { font-size: 4rem; }
-            #container-cards { grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 36px; }
-        }
-
-        /* ---------------------------------------------------- */
-        /* TEMA: ANO NOVO (NEW YEAR / SNOW) */
-        /* ---------------------------------------------------- */
-        [data-theme="newyear"] {
-            /* Fundo azul noturno profundo */
-            --bg-dark: #0b1026; 
-            --text-main: #ffffff;
-            --text-muted: #b8c6db;
-            
-            /* Vidro "Congelado" */
-            --glass-bg: rgba(200, 220, 255, 0.1);
-            --glass-border: rgba(166, 207, 255, 0.25);
-            --glass-highlight: rgba(255, 255, 255, 0.3);
-            
-            --input-bg: rgba(11, 16, 38, 0.6);
-            
-            /* Gradientes Gélidos e Dourados (Festivo) */
-            --primary-gradient: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-            --secondary-gradient: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%);
-            
-            --accent-color: #ffd700; /* Dourado para o Ano Novo */
-        }
-
-        [data-theme="newyear"] .text-gradient {
-            display: inline-block;
-            background: linear-gradient(to right, #a1c4fd, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        /* Oculta os orbs originais neste tema para focar na neve (opcional, mas fica mais limpo) */
-        [data-theme="newyear"] .background-orb {
-            opacity: 0.2;
-            filter: blur(100px);
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0) 70%);
-        }
-
-        /* ---------------------------------------------------- */
-        /* ANIMAÇÃO DE NEVE (CSS PURO) */
-        /* ---------------------------------------------------- */
-        .snow-container {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999; /* Fica acima do fundo, mas abaixo do conteúdo interativo */
-            display: none; /* Escondido por padrão */
+            height: 46px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: var(--transition);
+            letter-spacing: -0.01em;
+            position: relative;
             overflow: hidden;
         }
 
-        /* Mostra a neve apenas quando o tema for newyear */
+        .action-btn i {
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--text-main);
+            color: #000;
+            border-color: var(--text-main);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .action-btn:hover i {
+            transform: translateX(4px) translateY(-2px);
+        }
+
+        /* Empty Search State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+            display: none;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--text-dim);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================================================
+           FOOTER MODERNO
+           ========================================================================== */
+        footer {
+            margin-top: 100px;
+            padding: 40px 0 20px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .footer-copy {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* ==========================================================================
+           SNOW ANIMATION (TEMA ANO NOVO)
+           ========================================================================== */
+        .snow-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 999;
+            display: none;
+            overflow: hidden;
+        }
+
         [data-theme="newyear"] .snow-container {
             display: block;
         }
 
-        .snow {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            filter: blur(1px);
-            animation: fall linear infinite;
-        }
-
-        /* Gerando 3 camadas de neve usando box-shadow para performance */
         .snow-layer-1, .snow-layer-2, .snow-layer-3 {
             position: absolute;
             top: -100px;
-            left: 0;
+            inset-inline: 0;
             bottom: 0;
-            right: 0;
             background-image: 
                 radial-gradient(4px 4px at 100px 50px, #fff, transparent),
                 radial-gradient(6px 6px at 200px 150px, #fff, transparent),
-                radial-gradient(3px 3px at 300px 250px, #fff 50%, transparent),
-                radial-gradient(4px 4px at 400px 350px, #fff 50%, transparent),
-                radial-gradient(6px 6px at 500px 100px, #fff 50%, transparent),
-                radial-gradient(3px 3px at 600px 400px, #fff 50%, transparent),
-                radial-gradient(4px 4px at 800px 500px, #fff 50%, transparent);
+                radial-gradient(3px 3px at 300px 250px, #fff, transparent),
+                radial-gradient(5px 5px at 500px 100px, #fff, transparent),
+                radial-gradient(4px 4px at 800px 500px, #fff, transparent);
             background-size: 800px 800px;
-            animation: snowFall 10s linear infinite;
+            animation: snowFall 12s linear infinite;
         }
 
         .snow-layer-2 {
-            background-image: 
-                radial-gradient(4px 4px at 150px 300px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(6px 6px at 350px 500px, rgba(255,255,255,0.8), transparent),
-                radial-gradient(3px 3px at 550px 200px, rgba(255,255,255,0.8), transparent);
             background-size: 600px 600px;
-            animation-duration: 15s;
-            animation-direction: normal;
-            filter: blur(2px);
+            animation-duration: 18s;
+            filter: blur(1.5px);
         }
 
         .snow-layer-3 {
-            background-image: 
-                radial-gradient(2px 2px at 50px 400px, rgba(255,255,255,0.6), transparent),
-                radial-gradient(2px 2px at 250px 100px, rgba(255,255,255,0.6), transparent);
             background-size: 400px 400px;
-            animation-duration: 20s;
-            filter: blur(4px);
+            animation-duration: 24s;
+            filter: blur(3px);
         }
 
         @keyframes snowFall {
@@ -1117,767 +1084,162 @@
             100% { transform: translateY(800px); }
         }
 
-        /* Estilo para a Tag de Ouro do 30º Projeto */
-        .special-tag-gold {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffae00 100%);
-            color: #1a1a1a;
-            padding: 5px 12px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            box-shadow: 0 4px 12px rgba(255, 174, 0, 0.4);
-            z-index: 10;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-transform: uppercase;
-        }
-        .crown-jump {
-            animation: crownJump 1.2s infinite ease-in-out;
-        }
-        @keyframes crownJump {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-
-        /* ---------------------------------------------------- */
-        /* MODAL DE CONTROLE VIRTUAL NEURAL */
-        /* ---------------------------------------------------- */
-
-        /* ---------------------------------------------------- */
-        /* RETROSPECTIVA UI */
-        /* ---------------------------------------------------- */
-        #retro-trigger {
-            display: none; /* Começa invisível (só aparece após 1h) */
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 9990;
-            align-items: center;
-            gap: 10px;
-            background: rgba(20, 20, 20, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 10px 18px;
-            border-radius: 50px;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        #retro-trigger:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-            border-color: rgba(255, 255, 255, 0.3);
-        }
-
-        /* Botão Mobile (Dentro do Theme Switcher) */
-        .theme-btn.retro-mobile {
-            display: none; /* Invisível em Desktop */
-            color: #a855f7; /* Roxo destaque */
-            border: 1px solid rgba(168, 85, 247, 0.3);
-        }
-
-        .retro-hidden {
-            opacity: 0;
-            pointer-events: none;
-            visibility: hidden;
-        }
-
-        #retro-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.3s ease, visibility 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .retro-backdrop {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-
-        .retro-card {
-            position: relative;
-            width: 90%;
-            max-width: 420px;
-            background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(10, 10, 10, 0.98));
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 24px;
-            padding: 32px;
-            padding-bottom: 20px;
-            color: white;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            transform: scale(0.95);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        #retro-overlay:not(.retro-hidden) .retro-card {
-            transform: scale(1);
-        }
-
-        /* Animações de Entrada dos Elementos */
-        @keyframes retroSlideUp {
-            from { opacity: 0; transform: translateY(30px); }
+        /* ==========================================================================
+           ANIMAÇÕES E RESPONSIVIDADE
+           ========================================================================== */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-16px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .retro-anim-enter {
-            animation: retroSlideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        .crown-jump {
+            animation: crownJump 1.4s infinite ease-in-out;
         }
-
-        .retro-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        #retro-icon-wrapper svg {
-            width: 56px;
-            height: 56px;
-            color: #a855f7;
-            filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
-            margin-bottom: 16px;
-        }
-
-        #retro-card-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.7);
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .retro-content {
-            text-align: center;
-            min-height: 140px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .retro-highlight {
-            font-size: 3.5rem; /* Bem grande estilo Wrapped */
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 12px;
-            color: #fff;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        .retro-text {
-            font-size: 1.1rem;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.9);
-            margin: 0;
-            font-weight: 500;
-        }
-
-        /* Estilo para Lista (Top 5) */
-        .retro-list {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 16px;
-            padding: 10px 20px;
-            margin-top: 10px;
-            text-align: left;
-        }
-
-        .retro-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .retro-list-item:last-child {
-            border-bottom: none;
-        }
-
-        .retro-rank {
-            color: rgba(255,255,255,0.6);
-            margin-right: 10px;
-            font-weight: 400;
-        }
-
-        .retro-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .retro-footer button {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: background 0.2s;
-        }
-
-        .retro-footer button:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .retro-footer button:disabled {
-            opacity: 0.3;
-        }
-
-        #retro-btn-next, #retro-btn-close {
-            background: #fff;
-            color: #000;
-            border: none;
-        }
-
-        #retro-btn-next:hover, #retro-btn-close:hover {
-            background: #e0e0e0;
-        }
-
-        .retro-dots-container {
-            display: flex;
-            gap: 6px;
-        }
-
-        .retro-dot {
-            width: 6px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-
-        .retro-dot.active {
-            background: #a855f7;
-            transform: scale(1.3);
-        }
-
-        /* MEDIA QUERIES PARA O BOTÃO RETRO */
-        @media (max-width: 480px) {
-            /* No celular, esconde o flutuante e mostra o do menu (se tiver tempo suficiente) */
-            #retro-trigger {
-                display: none !important;
-            }
-            .theme-btn.retro-mobile.unlocked {
-                display: flex;
-            }
-        }
-
-        /* ================================================= */
-        /* MODAL DE APRESENTAÇÃO - RETROSPECTIVA */
-        /* ================================================= */
-
-        .welcome-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 10000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
-            animation: fadeInWelcome 0.5s ease;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .welcome-overlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-            animation: fadeOutWelcome 0.4s ease;
-        }
-
-        @keyframes fadeInWelcome {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeOutWelcome {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
-        .welcome-backdrop {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        .welcome-card {
-            position: relative;
-            width: 90%;
-            max-width: 480px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 32px;
-            padding: 48px 32px 40px;
-            color: var(--text-main);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25),
-                        0 0 1px 0 rgba(255, 255, 255, 0.05) inset;
-            animation: slideUpWelcome 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 10001;
-        }
-
-        @keyframes slideUpWelcome {
-            from {
-                opacity: 0;
-                transform: translateY(60px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .welcome-close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .welcome-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(90deg);
-        }
-
-        .welcome-icon {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #FF512F 0%, #DD2476 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 4px 12px rgba(255, 81, 47, 0.3));
-            animation: bounceIcon 2s ease-in-out infinite;
-        }
-
-        @keyframes bounceIcon {
+        @keyframes crownJump {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-3px); }
         }
 
-        .welcome-title {
-            font-size: 2rem;
-            font-weight: 700;
-            text-align: center;
-            margin: 0 0 8px 0;
-            background: linear-gradient(135deg, #FF512F 0%, #DD2476 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .welcome-subtitle {
-            font-size: 0.95rem;
-            text-align: center;
-            color: var(--text-muted);
-            margin: 0 0 28px 0;
-            font-weight: 500;
-        }
-
-        .welcome-content {
-            margin-bottom: 32px;
-        }
-
-        .welcome-content > p {
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-main);
-            margin: 0 0 24px 0;
-            font-weight: 400;
-        }
-
-        .welcome-feature {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            margin-bottom: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.95rem;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-        }
-
-        .welcome-feature:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateX(4px);
-        }
-
-        .welcome-feature i {
-            font-size: 1.2rem;
-            color: var(--accent-color);
-            flex-shrink: 0;
-        }
-
-        .welcome-feature strong {
-            color: var(--accent-color);
-            font-weight: 600;
-        }
-
-        .welcome-btn {
-            width: 100%;
-            padding: 14px 28px;
-            background: linear-gradient(135deg, #FF512F 0%, #DD2476 100%);
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 0 4px 15px rgba(255, 81, 47, 0.3);
-            font-family: 'Inter', sans-serif;
-        }
-
-        .welcome-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 81, 47, 0.4);
-        }
-
-        .welcome-btn:active {
-            transform: translateY(0);
-        }
-
-        /* Responsivo para temas */
-        [data-theme="marine"] .welcome-card {
-            background: rgba(0, 30, 43, 0.5);
-            border-color: rgba(100, 255, 218, 0.1);
-        }
-
-        /* Responsivo para mobile */
-        @media (max-width: 600px) {
-            .welcome-card {
-                width: 95%;
-                max-width: none;
-                padding: 40px 24px 32px;
-                border-radius: 24px;
-            }
-
-            .welcome-title {
-                font-size: 1.6rem;
-            }
-
-            .welcome-icon {
-                font-size: 2.5rem;
-                margin-bottom: 16px;
-            }
-
-            .welcome-content > p {
-                font-size: 0.95rem;
-            }
-
-            .welcome-feature {
-                padding: 12px 14px;
-                font-size: 0.9rem;
-            }
-        }
-
-        /* ============================================ */
-        /* CABEÇALHO FIXO COM BARRA DE PESQUISA         */
-        /* (DO ARQUIVO INDEX ORIGINAL)                  */
-        /* ============================================ */
-        .site-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            padding: 0 40px;
-            height: 70px;
-            background: rgba(15, 16, 20, 0.6);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-            transition: background 0.5s ease, border-color 0.3s ease;
-        }
-
-        [data-theme="marine"] .site-header {
-            background: rgba(0, 30, 43, 0.7);
-            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-        }
-
-        [data-theme="newyear"] .site-header {
-            background: rgba(11, 16, 38, 0.7);
-        }
-
-        .site-header .header-logo {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-main);
-            white-space: nowrap;
-            opacity: 0.95;
-            letter-spacing: -0.3px;
-        }
-
-        .site-header .header-search {
-            flex: 0 1 560px;
-            max-width: 560px;
-            position: relative;
-        }
-
-        .site-header .header-logo span {
-            background: linear-gradient(to right, #ff9966, #ff5e62);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        [data-theme="marine"] .site-header .header-logo span {
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            -webkit-background-clip: text;
-            background-clip: text;
-        }
-
-        .site-header .header-search {
-            flex: 1;
-            max-width: 560px;
-            position: relative;
-        }
-
-        .site-header .header-search i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 0.85rem;
-        }
-
-        .site-header #busca-input {
-            width: 100%;
-            padding: 10px 16px 10px 40px;
-            border-radius: var(--btn-radius);
-            background: var(--input-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-            font-family: var(--font-main);
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .site-header #busca-input:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
-        }
-
-        /* Empurra o conteúdo principal para baixo do header fixo */
-        .main-wrapper {
-            padding-top: 90px !important;
-        }
-
-        /* ============================================ */
-        /* MOBILE: esconde header, centraliza switcher */
-        /* ============================================ */
-        @media (max-width: 600px) {
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
             .site-header {
-                display: none !important;
+                top: 10px;
+                height: 60px;
+                padding: 0 14px;
             }
 
-            /* O main-wrapper não precisa de padding extra no mobile */
+            .header-search {
+                display: none; /* No mobile a busca pode ficar na hero */
+            }
+
             .main-wrapper {
-                padding-top: 0 !important;
+                padding: 100px 16px 60px;
             }
 
-            /* O header original (título) fica no main-wrapper normalmente */
-        }
-
-        /* Ajuste do theme-switcher para não sobrepor o header */
-        @media (min-width: 601px) {
-            .theme-switcher {
-                top: 12px !important;
+            .hero-section {
+                margin-bottom: 40px;
             }
-        }
 
-        /* ============================================ */
-        /* DROPDOWN DE BUSCA COM AUTOCOMPLETE */
-        /* ============================================ */
-        .header-search {
-            position: relative;
-        }
+            .hero-metrics {
+                flex-wrap: wrap;
+                gap: 16px;
+                padding: 12px 20px;
+                border-radius: var(--radius-lg);
+            }
 
-        .busca-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            margin-top: 8px;
-            background: rgba(20, 20, 30, 0.95);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 999;
-            display: none;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
+            .filter-wrapper {
+                top: 80px;
+                margin-bottom: 30px;
+            }
 
-        .busca-dropdown::-webkit-scrollbar {
-            display: none;
-        }
-
-        .busca-dropdown.active {
-            display: block;
-        }
-
-        .busca-resultado {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .busca-resultado:last-child {
-            border-bottom: none;
-        }
-
-        .busca-resultado:hover {
-            background: rgba(255, 255, 255, 0.08);
-            padding-left: 20px;
-        }
-
-        .busca-resultado-img {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-
-        .busca-resultado-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .busca-resultado-titulo {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: var(--text-main);
-            margin-bottom: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .busca-resultado-desc {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        html[data-wsm-hero-seen="true"] .wsm-launch-hero {
-            display: none !important;
+            #container-cards {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
         }
     </style>
-
 </head>
 
 <body>
+    <!-- Neve Dinâmica para Tema Novo Ano -->
     <div class="snow-container">
         <div class="snow-layer-1"></div>
         <div class="snow-layer-2"></div>
         <div class="snow-layer-3"></div>
     </div>
 
-    <div class="background-orb orb-1"></div>
-    <div class="background-orb orb-2"></div>
+    <!-- Textura & Luz Ambiente -->
+    <div class="ambient-mesh">
+        <div class="ambient-orb orb-top-left"></div>
+        <div class="ambient-orb orb-bottom-right"></div>
+        <div class="ambient-orb orb-center"></div>
+    </div>
+    <div class="noise-overlay"></div>
 
-    <!-- CABEÇALHO FIXO (desktop only) -->
+    <!-- CABEÇALHO FLUTUANTE ULTRA SLICK -->
     <header class="site-header">
         <div class="header-logo" role="banner" onclick="window.location.href='index.html'">
-            Sala de <span class="text-gradient">Experimentos</span>
+            <div class="logo-badge">
+                <i class="fa-solid fa-flask-vial"></i>
+            </div>
+            <span>Sala de <span class="text-gradient">Experimentos</span></span>
         </div>
+
+        <!-- Barra de Busca com Tecla de Atalho -->
         <div class="header-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="busca-input" placeholder="O que você procura hoje?">
+            <div class="search-input-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" id="busca-input" placeholder="Buscar ferramentas, jogos, IA..." autocomplete="off">
+                <span class="search-shortcut">/</span>
+            </div>
             <div id="busca-dropdown" class="busca-dropdown"></div>
+        </div>
+
+        <!-- Theme Switcher & Ações -->
+        <div class="header-actions">
+            <div class="theme-dock">
+                <button class="theme-btn" data-theme="dark" onclick="mudarTema('dark', true)" data-tooltip="Dark Void"><i class="fa-solid fa-moon"></i></button>
+                <button class="theme-btn" data-theme="marine" onclick="mudarTema('marine', true)" data-tooltip="Marine Cyan"><i class="fa-solid fa-water"></i></button>
+                <button class="theme-btn" data-theme="green" onclick="mudarTema('green', true)" data-tooltip="Emerald Forest"><i class="fa-solid fa-leaf"></i></button>
+                <button class="theme-btn" data-theme="purple" onclick="mudarTema('purple', true)" data-tooltip="Nebula Purple"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+                <button class="theme-btn" data-theme="red" onclick="mudarTema('red', true)" data-tooltip="Crimson Red"><i class="fa-solid fa-fire"></i></button>
+                <button class="theme-btn" data-theme="gray" onclick="mudarTema('gray', true)" data-tooltip="Slate Monochrome"><i class="fa-solid fa-circle-half-stroke"></i></button>
+                <button class="theme-btn" data-theme="newyear" onclick="mudarTema('newyear', true)" data-tooltip="Aurora Festiva"><i class="fa-regular fa-snowflake"></i></button>
+            </div>
         </div>
     </header>
 
     <div class="main-wrapper">
 
-        <!-- Título (visível em todas as telas) -->
-        <header style="text-align:center; margin-bottom: 50px; animation: fadeInDown 0.8s ease;">
-            <h1>Sala de <span class="text-gradient">Experimentos</span></h1>
-            <h2>Onde a criatividade encontra a tecnologia.</h2>
-        </header>
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+            <div class="hero-pill-badge">
+                <span class="dot-live"></span>
+                <span>Hub de Projetos Interativos</span>
+            </div>
 
-        <nav id="categorias-container">
-            <button class="filter-btn active" onclick="filtrarPorCategoria('todos')"><i class="fa-solid fa-layer-group"></i> Todos</button>
-            <button class="filter-btn" onclick="filtrarPorCategoria('ferramentas')"><i class="fa-solid fa-screwdriver-wrench"></i> Ferramentas</button>
-            <button class="filter-btn" onclick="filtrarPorCategoria('jogos')"><i class="fa-solid fa-gamepad"></i> Jogos</button>
-            <button class="filter-btn" onclick="filtrarPorCategoria('ia')"><i class="fa-solid fa-robot"></i> IA</button>
-            <button class="filter-btn" onclick="filtrarPorCategoria('diversao')"><i class="fa-regular fa-face-laugh-beam"></i> Diversão</button>
-            <button class="filter-btn special" onclick="window.location.href='equipe/equipe.html'"><i class="fa-solid fa-users"></i> Equipe</button>
-        </nav>
+            <h1 class="hero-title">
+                Onde a imaginação se transforma em <span class="text-gradient">código.</span>
+            </h1>
 
+            <p class="hero-subtitle">
+                Explore uma galeria curada de experimentos em Inteligência Artificial, jogos retro pixelados, utilitários velozes e criações interativas.
+            </p>
+
+            <div class="hero-metrics">
+                <div class="metric-item">
+                    <i class="fa-solid fa-microchip" style="color: var(--primary);"></i>
+                    <span><strong>33+</strong> Experimentos</span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric-item">
+                    <i class="fa-solid fa-layer-group" style="color: #a855f7;"></i>
+                    <span><strong>4</strong> Categorias</span>
+                </div>
+                <div class="metric-divider"></div>
+                <div class="metric-item">
+                    <i class="fa-solid fa-bolt" style="color: #eab308;"></i>
+                    <span><strong>100%</strong> Interativo</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FILTROS POR CATEGORIA -->
+        <div class="filter-wrapper">
+            <nav id="categorias-container">
+                <button class="filter-btn active" onclick="filtrarPorCategoria('todos')"><i class="fa-solid fa-layer-group"></i> Todos</button>
+                <button class="filter-btn" onclick="filtrarPorCategoria('ferramentas')"><i class="fa-solid fa-screwdriver-wrench"></i> Ferramentas</button>
+                <button class="filter-btn" onclick="filtrarPorCategoria('jogos')"><i class="fa-solid fa-gamepad"></i> Jogos</button>
+                <button class="filter-btn" onclick="filtrarPorCategoria('ia')"><i class="fa-solid fa-robot"></i> IA</button>
+                <button class="filter-btn" onclick="filtrarPorCategoria('diversao')"><i class="fa-regular fa-face-laugh-beam"></i> Diversão</button>
+                <button class="filter-btn special" onclick="window.location.href='equipe/equipe.html'"><i class="fa-solid fa-users"></i> Equipe</button>
+            </nav>
+        </div>
+
+        <!-- GRID DE EXPERIMENTOS -->
         <div id="container-cards">
+            
+            <!-- E-Soccer Pixel -->
             <div class="glass-card" data-projeto="soccer" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/soccer.png" alt="E-Soccer Pixel" onerror="this.src='https://placehold.co/600x400/111827/FFF?text=E-Soccer+Pixel'">
@@ -1885,17 +1247,23 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>E-Soccer Pixel</h3>
+                        <div class="card-title-group">
+                            <h3>E-Soccer Pixel</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-futbol"></i></span>
                     </div>
                     <p>Jogue com sua seleção favorita a copa do mundo 2026 e divirta-se nesse jogo cabuloso!</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="soccer-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="soccer-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="soccer/index.html" onclick="atualizarEstatistica('soccer')" class="action-btn">Jogar Agora</a>
+                    <a href="soccer/index.html" onclick="atualizarEstatistica('soccer')" class="action-btn">
+                        Jogar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Pixel Strike -->
             <div class="glass-card" data-projeto="strike" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/strike.png" alt="Pixel Strike" onerror="this.src='https://placehold.co/600x400/111827/FFF?text=Pixel+Strike'">
@@ -1903,17 +1271,23 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Pixel Strike</h3>
+                        <div class="card-title-group">
+                            <h3>Pixel Strike</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-crosshairs"></i></span>
                     </div>
                     <p>Entre em uma missão tática retrô com ação intensa e desafios de FPS em pixel art.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="strike-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="strike-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="strike/index.html" onclick="atualizarEstatistica('strike')" class="action-btn">Jogar Agora</a>
+                    <a href="strike/index.html" onclick="atualizarEstatistica('strike')" class="action-btn">
+                        Jogar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Pixel Pool -->
             <div class="glass-card" data-projeto="sinuca" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/sinuca.png" alt="Pixel Pool" onerror="this.src='https://placehold.co/600x400/111827/FFF?text=Pixel+Pool'">
@@ -1921,18 +1295,23 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Pixel Pool</h3>
+                        <div class="card-title-group">
+                            <h3>Pixel Pool</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-bowling-ball"></i></span>
                     </div>
                     <p>Desafie seus reflexos em uma sinuca retrô com física divertida e partidas rápidas.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="sinuca-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="sinuca-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="sinuca/index.html" onclick="atualizarEstatistica('sinuca')" class="action-btn">Jogar Agora</a>
+                    <a href="sinuca/index.html" onclick="atualizarEstatistica('sinuca')" class="action-btn">
+                        Jogar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Projeto: WSM Chat -->
+            <!-- WSM Chat -->
             <div class="glass-card" data-projeto="wsm" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <span class="special-tag-gold"><i class="fa-solid fa-crown crown-jump"></i> 30º projeto</span>
@@ -1940,432 +1319,559 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>WSM Chat</h3>
+                        <div class="card-title-group">
+                            <h3>WSM Chat</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-robot"></i></span>
                     </div>
                     <p>Plataforma de chat inteligente para comunicação rápida e eficiente, integrada com tecnologias de IA.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="wsm-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="wsm-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-brain"></i> IA</span>
                     </div>
-                    <a href="https://wsm-chat.vercel.app/" onclick="atualizarEstatistica('wsm')" class="action-btn">Acessar Chat</a>
+                    <a href="https://wsm-chat.vercel.app/" onclick="atualizarEstatistica('wsm')" class="action-btn">
+                        Acessar Chat <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Projeto: Cook-me -->
+            <!-- Cook-me -->
             <div class="glass-card" data-projeto="cookme" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <img src="imagens/cookme.png" alt="Cook-me" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Cook-me'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="card-title-group">
                             <h3>Cook-me</h3>
-                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Heloíse</a>
+                            <a href="equipe/equipe.html" class="author-badge"><i class="fa-solid fa-user-ninja"></i> By Heloíse</a>
                         </div>
                         <span class="category-icon"><i class="fa-solid fa-utensils"></i></span>
                     </div>
                     <p>O Cook-me analisa fotos dos ingredientes da sua geladeira e usa inteligência artificial para criar receitas gourmet exclusivas de forma instantânea.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="cookme-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="cookme-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-brain"></i> IA</span>
                     </div>
-                    <a href="https://mecookme.vercel.app/" onclick="atualizarEstatistica('cookme')" class="action-btn">Criar Receita</a>
+                    <a href="https://mecookme.vercel.app/" onclick="atualizarEstatistica('cookme')" class="action-btn">
+                        Criar Receita <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Projeto: Calculadora de Datas -->
+            <!-- Calculadora de Datas -->
             <div class="glass-card" data-projeto="datas" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="datas/img.png" alt="Calculadora de Datas" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Datas'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Calculadora de Datas</h3>
+                        <div class="card-title-group">
+                            <h3>Calculadora de Datas</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-calendar-days"></i></span>
                     </div>
                     <p>Contagem regressiva, cálculo de prazos corporativos, dias úteis e intervalos temporais.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="datas-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="datas-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="datas/data.html" onclick="atualizarEstatistica('datas')" class="action-btn">Calcular Datas</a>
+                    <a href="datas/data.html" onclick="atualizarEstatistica('datas')" class="action-btn">
+                        Calcular Datas <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Projeto: Mega Sorteador -->
+            <!-- Mega Sorteador -->
             <div class="glass-card" data-projeto="sorteador" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="sorteador/img.png" alt="Sorteador" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Sorteador'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Mega Sorteador</h3>
+                        <div class="card-title-group">
+                            <h3>Mega Sorteador</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-clover"></i></span>
                     </div>
                     <p>Sorteios customizados de números, nomes, grupos e roleta com suspense e efeitos.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="sorteador-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="sorteador-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="sorteador/sorteador.html" onclick="atualizarEstatistica('sorteador')" class="action-btn">Sortear Agora</a>
+                    <a href="sorteador/sorteador.html" onclick="atualizarEstatistica('sorteador')" class="action-btn">
+                        Sortear Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- Projeto: Laboratório de Texto -->
+            <!-- Laboratório de Texto -->
             <div class="glass-card" data-projeto="textlab" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="textlab/img.png" alt="TextLab" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=TextLab'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Laboratório de Texto</h3>
+                        <div class="card-title-group">
+                            <h3>Laboratório de Texto</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-font"></i></span>
                     </div>
                     <p>Tratamento, limpeza e formatação inteligente de dados e textos em tempo real.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="textlab-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="textlab-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="textlab/index.html" onclick="atualizarEstatistica('textlab')" class="action-btn">Processar Texto</a>
+                    <a href="textlab/index.html" onclick="atualizarEstatistica('textlab')" class="action-btn">
+                        Processar Texto <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- NÃO CLIQUE AQUI -->
             <div class="glass-card" data-projeto="nao-clique" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="NAO_CLIQUE/vava.png" alt="NÃO CLIQUE AQUI" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=N%C3%83O+CLIQUE'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>NÃO CLIQUE AQUI</h3>
+                        <div class="card-title-group">
+                            <h3>NÃO CLIQUE AQUI</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-ban"></i></span>
                     </div>
                     <p>Só entre nesse site se você for muito teimoso e curioso — não diga que eu não avisei.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="nao-clique-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="nao-clique-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="NAO_CLIQUE/raff-louco.html" onclick="atualizarEstatistica('nao-clique')" class="action-btn">Entrar (não clique)</a>
+                    <a href="NAO_CLIQUE/raff-louco.html" onclick="atualizarEstatistica('nao-clique')" class="action-btn">
+                        Entrar (não clique) <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
+
+            <!-- OpenImage -->
             <div class="glass-card" data-projeto="openimg" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="openimg/image.png" alt="OpenImage" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=OpenImage'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>OpenImage</h3>
+                        <div class="card-title-group">
+                            <h3>OpenImage</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-image"></i></span>
                     </div>
                     <p>Explore imagens criativas e inspiração visual diretamente do OpenImage.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="openimg-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="openimg-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="openimg/img.html" onclick="atualizarEstatistica('openimg')" class="action-btn">Abrir OpenImage</a>
+                    <a href="openimg/img.html" onclick="atualizarEstatistica('openimg')" class="action-btn">
+                        Abrir OpenImage <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- ZeroIA -->
             <div class="glass-card" data-projeto="zeroia" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <img src="imagens/ia.png" alt="ZeroIA" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=ZeroIA'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>ZeroIA</h3>
+                        <div class="card-title-group">
+                            <h3>ZeroIA</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-brain"></i></span>
                     </div>
                     <p>Detector de textos gerados por IA. Analise se um texto foi escrito por inteligência artificial.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="zeroia-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="zeroia-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-brain"></i> IA</span>
                     </div>
-                    <a href="zeroia/index.html" onclick="atualizarEstatistica('zeroia')" class="action-btn">Detectar IA</a>
+                    <a href="zeroia/index.html" onclick="atualizarEstatistica('zeroia')" class="action-btn">
+                        Detectar IA <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Piano Virtual -->
             <div class="glass-card" data-projeto="piano" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/piano.png" alt="Piano Virtual" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Piano+Virtual'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Piano Virtual</h3>
+                        <div class="card-title-group">
+                            <h3>Piano Virtual</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-music"></i></span>
                     </div>
                     <p>Toque piano virtualmente e crie melodias incríveis com este instrumento digital.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="piano-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="piano-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="piano/piano.html" onclick="atualizarEstatistica('piano')" class="action-btn">Tocar Piano</a>
+                    <a href="piano/piano.html" onclick="atualizarEstatistica('piano')" class="action-btn">
+                        Tocar Piano <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Quiz Animal Marinho -->
             <div class="glass-card" data-projeto="marinho" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/marinho.png" alt="Animal Marinho" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Animal+Marinho'">
+                    <span class="status-tag dev">Destaque</span>
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="card-title-group">
                             <h3>Quiz Animal Marinho</h3>
-                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Heloíse</a>
-                                                <span class="status-tag dev">DESTAQUE NOVAMENTE</span>
-
+                            <a href="equipe/equipe.html" class="author-badge"><i class="fa-solid fa-user-ninja"></i> By Heloíse</a>
                         </div>
                         <span class="category-icon"><i class="fa-solid fa-fish"></i></span>
                     </div>
                     <p>Descubra qual criatura do mar melhor representa sua personalidade.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="marinho-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="marinho-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="marinho/marinho.html" onclick="atualizarEstatistica('marinho')" class="action-btn">Descobrir</a>
+                    <a href="marinho/marinho.html" onclick="atualizarEstatistica('marinho')" class="action-btn">
+                        Descobrir <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Booom Music Player -->
             <div class="glass-card" data-projeto="booom" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/booom.png" alt="Booom Music Player" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Booom+Music+Player'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Booom Music Player</h3>
+                        <div class="card-title-group">
+                            <h3>Booom Music Player</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-music"></i></span>
                     </div>
                     <p>Player de música sem anúncios, para ouvir música sem limites.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="booom-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="booom-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="booom/index.html" onclick="atualizarEstatistica('booom')" class="action-btn">Ouvir Música</a>
+                    <a href="booom/index.html" onclick="atualizarEstatistica('booom')" class="action-btn">
+                        Ouvir Música <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- SkyDash -->
             <div class="glass-card" data-projeto="skydash" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/skydash.png" alt="SkyDash" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=SkyDash'">
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>SkyDash — Paper Plane Adventure</h3>
+                        <div class="card-title-group">
+                            <h3>SkyDash</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-paper-plane"></i></span>
                     </div>
-                    <p>Pilote um avião de papel pelos céus! Desvie de obstáculos e recolha moedas nesta aventura aérea envolvente.</p>
+                    <p>Pilote um avião de papel pelos céus! Desvie de obstáculos e recolha moedas nesta aventura aérea.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="skydash-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="skydash-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="aviao/jogo.html" onclick="atualizarEstatistica('skydash')" class="action-btn">Decolar Agora</a>
+                    <a href="aviao/jogo.html" onclick="atualizarEstatistica('skydash')" class="action-btn">
+                        Decolar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Halibu Space -->
             <div class="glass-card" data-projeto="halibuspace" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/halibu.png" alt="Halibu Space" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Halibu+Space'">
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Halibu Space</h3>
+                        <div class="card-title-group">
+                            <h3>Halibu Space</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-rocket"></i></span>
                     </div>
                     <p>Embarque em uma aventura intergaláctica! Explore o espaço e viva experiências incríveis.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="halibuspace-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="halibuspace-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="halibuspace/index.html" onclick="atualizarEstatistica('halibuspace')" class="action-btn">Explorar</a>
+                    <a href="halibuspace/index.html" onclick="atualizarEstatistica('halibuspace')" class="action-btn">
+                        Explorar <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Hand Sculpt 3D -->
             <div class="glass-card" data-projeto="hacker" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="imagens/hacker.png" alt="Terminal Neural" onerror="this.src='https://placehold.co/600x400/000/0F0?text=Terminal+Neural'">
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Hand Sculpt 3D</h3>
+                        <div class="card-title-group">
+                            <h3>Hand Sculpt 3D</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-terminal"></i></span>
                     </div>
-                    <p>Experiência de imersão total: manipule formas geométricas em ambiente 100% virtual por meio de comandos gestuais, sem necessidade de toque.</p>
+                    <p>Experiência de imersão total: manipule formas geométricas em ambiente 100% virtual por meio de gestos.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="hacker-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="hacker-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="hacker/hacker.html" onclick="atualizarEstatistica('hacker')" class="action-btn">Acessar Terminal</a>
+                    <a href="hacker/hacker.html" onclick="atualizarEstatistica('hacker')" class="action-btn">
+                        Acessar Terminal <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
+
+            <!-- ZapWrapped -->
             <div class="glass-card" data-projeto="zapwrapped" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="zapwrapped/logo.png" alt="ZapWrapped" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=ZapWrapped'">
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>ZapWrapped</h3>
+                        <div class="card-title-group">
+                            <h3>ZapWrapped</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-brands fa-whatsapp"></i></span>
                     </div>
                     <p>Descubra quem manda mais áudio, quem some e quem é o inimigo do fim de semana.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="zapwrapped-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="zapwrapped-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="zapwrapped/index.html" onclick="atualizarEstatistica('zapwrapped')" class="action-btn">Acessar</a>
+                    <a href="zapwrapped/index.html" onclick="atualizarEstatistica('zapwrapped')" class="action-btn">
+                        Acessar ZapWrapped <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
+
+            <!-- Drive Mad -->
             <div class="glass-card" data-projeto="drive-mad" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/drive-mad.png" alt="Drive Mad" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Drive+Mad'">
                     <span class="status-tag dev">Tendência</span>
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="card-title-group">
                             <h3>Drive Mad</h3>
-                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Coding Stella</a>
+                            <a href="equipe/equipe.html" class="author-badge"><i class="fa-solid fa-code"></i> By Coding Stella</a>
                         </div>
                         <span class="category-icon"><i class="fa-solid fa-car"></i></span>
                     </div>
                     <p>Desafie a física em pistas insanas! Você consegue chegar à linha de chegada sem capotar?</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="drive-mad-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="drive-mad-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="drive-mad/index.html" onclick="atualizarEstatistica('drive-mad')" class="action-btn">Jogar Agora</a>
+                    <a href="drive-mad/index.html" onclick="atualizarEstatistica('drive-mad')" class="action-btn">
+                        Jogar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Escape Road -->
             <div class="glass-card" data-projeto="escape-road" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/escape-road.png" alt="Escape Road" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Escape+Road'">
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="card-title-group">
                             <h3>Escape Road</h3>
-                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Coding Stella</a>
+                            <a href="equipe/equipe.html" class="author-badge"><i class="fa-solid fa-code"></i> By Coding Stella</a>
                         </div>
                         <span class="category-icon"><i class="fa-solid fa-road"></i></span>
                     </div>
                     <p>Fuja da perseguição em alta velocidade! Sobreviva o máximo que puder nas estradas perigosas.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="escape-road-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="escape-road-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="escape-road/escape-road.html" onclick="atualizarEstatistica('escape-road')" class="action-btn">Fugir Agora</a>
+                    <a href="escape-road/escape-road.html" onclick="atualizarEstatistica('escape-road')" class="action-btn">
+                        Fugir Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Canvas -->
             <div class="glass-card" data-projeto="canvas" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
-                <img src="imagens/canvas.png" alt="Canvas" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Canvas'">
-                
-            </div>
+                    <img src="imagens/canvas.png" alt="Canvas" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Canvas'">
+                </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Canvas - Coding Stella</h3>
+                        <div class="card-title-group">
+                            <h3>Canvas</h3>
+                            <span class="author-badge"><i class="fa-solid fa-code"></i> By Coding Stella</span>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-pencil"></i></span>
                     </div>
                     <p>Uma plataforma para soltar sua imaginação e criar artes digitais incríveis.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="canvas-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="canvas-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="canvas/canvas.html" onclick="atualizarEstatistica('canvas')" class="action-btn">Criar Agora</a>
+                    <a href="canvas/canvas.html" onclick="atualizarEstatistica('canvas')" class="action-btn">
+                        Criar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Conversor de Moedas -->
             <div class="glass-card" data-projeto="converter" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="imagens/converter.png" alt="Conversor de Moedas" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Converter'">
-                    
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Conversor de Moedas</h3>
+                        <div class="card-title-group">
+                            <h3>Conversor de Moedas</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-coins"></i></span>
                     </div>
                     <p>Converta valores entre diferentes moedas globais com taxas atualizadas.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="converter-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="converter-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="converter/converter.html" onclick="atualizarEstatistica('converter')" class="action-btn">Converter</a>
+                    <a href="converter/converter.html" onclick="atualizarEstatistica('converter')" class="action-btn">
+                        Converter <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Dino Game -->
             <div class="glass-card" data-projeto="dino" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="dino/dino.png" alt="Dino Game" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Dino'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Dino Game</h3>
+                        <div class="card-title-group">
+                            <h3>Dino Game</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-gamepad"></i></span>
                     </div>
                     <p>O clássico jogo do dinossauro do Chrome para jogar a qualquer momento.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="dino-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="dino-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="dino/dino.html" onclick="atualizarEstatistica('dino')" class="action-btn">Jogar Agora</a>
+                    <a href="dino/dino.html" onclick="atualizarEstatistica('dino')" class="action-btn">
+                        Jogar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Gerador de Cores -->
             <div class="glass-card" data-projeto="gerador-cores" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="imagens/cor.png" alt="Gerador de Cores" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Gerador+de+Cores'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Gerador de Cores</h3>
+                        <div class="card-title-group">
+                            <h3>Gerador de Cores</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-palette"></i></span>
                     </div>
                     <p>Gere paletas perfeitas respondendo perguntas simples — design inteligente e exportável.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="gerador-cores-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="gerador-cores-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="gerador-cores/cor.html" onclick="atualizarEstatistica('gerador-cores')" class="action-btn">Acessar Projeto</a>
+                    <a href="gerador-cores/cor.html" onclick="atualizarEstatistica('gerador-cores')" class="action-btn">
+                        Acessar Projeto <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Agenda Interativa -->
             <div class="glass-card" data-projeto="agenda" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="imagens/agenda.png" alt="Agenda Interativa" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Agenda'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Agenda Interativa</h3>
+                        <div class="card-title-group">
+                            <h3>Agenda Interativa</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-calendar"></i></span>
                     </div>
                     <p>Organize seus compromissos e tarefas com uma agenda elegante e funcional.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="agenda-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="agenda-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="agenda/agenda.html" onclick="atualizarEstatistica('agenda')" class="action-btn">Acessar Agenda</a>
+                    <a href="agenda/agenda.html" onclick="atualizarEstatistica('agenda')" class="action-btn">
+                        Acessar Agenda <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Gerador de Senhas -->
             <div class="glass-card" data-projeto="senha" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="imagens/senha.png" alt="Gerador de Senha" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Gerador+de+Senha'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Gerador de Senhas</h3>
+                        <div class="card-title-group">
+                            <h3>Gerador de Senhas</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-lock"></i></span>
                     </div>
                     <p>Crie senhas fortes e seguras com customização completa de caracteres.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="senha-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="senha-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="senha/senha.html" onclick="atualizarEstatistica('senha')" class="action-btn">Gerar Senha</a>
+                    <a href="senha/senha.html" onclick="atualizarEstatistica('senha')" class="action-btn">
+                        Gerar Senha <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Tempo para 2027 -->
             <div class="glass-card" data-projeto="2027" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="2027/2027.png" alt="Tempo para 2027" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=2027'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Tempo para 2027</h3>
+                        <div class="card-title-group">
+                            <h3>Tempo para 2027</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-clock"></i></span>
                     </div>
                     <p>Conta regressiva emocionante para o ano de 2027. Veja quanto tempo falta!</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="2027-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="2027-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="2027/2027.html" onclick="atualizarEstatistica('2027')" class="action-btn">Ver Contagem</a>
+                    <a href="2027/2027.html" onclick="atualizarEstatistica('2027')" class="action-btn">
+                        Ver Contagem <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Lumi AI 1.2 -->
             <div class="glass-card" data-projeto="conversa" data-categoria="ia">
                 <div class="card-image-wrapper">
                     <img src="hahaha1.png" alt="Lumi AI 1.2" onerror="this.src='https://placehold.co/600x400/4b0082/FFF?text=Lumi+AI'">
@@ -2373,111 +1879,159 @@
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Lumi AI 1.2</h3>
+                        <div class="card-title-group">
+                            <h3>Lumi AI 1.2</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-brain"></i></span>
                     </div>
-                    <p>Nova inteligência artificial, cada dia mais inteligente.</p>
+                    <p>Nova inteligência artificial, cada dia mais inteligente e conversacional.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="conversa-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="conversa-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-brain"></i> IA</span>
                     </div>
-                    <a href="Lhama-AI/conversa.html" onclick="atualizarEstatistica('conversa')" class="action-btn">Conversar</a>
+                    <a href="Lhama-AI/conversa.html" onclick="atualizarEstatistica('conversa')" class="action-btn">
+                        Conversar <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Compre como Elon Musk -->
             <div class="glass-card" data-projeto="bilionario" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/elon-musk.png" alt="Bilionário" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Bilionario'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Compre como Elon Musk</h3>
+                        <div class="card-title-group">
+                            <h3>Compre como Elon Musk</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-rocket"></i></span>
                     </div>
-                    <p>O que você faria com quase 500 bilhões de Dólares?</p>
+                    <p>O que você faria com quase 500 bilhões de Dólares? Simule gastar fortunas astronômicas.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="bilionario-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="bilionario-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="bilionário/bilionario.html" onclick="atualizarEstatistica('bilionario')" class="action-btn">Simular Vida Luxuosa</a>
+                    <a href="bilionário/bilionario.html" onclick="atualizarEstatistica('bilionario')" class="action-btn">
+                        Simular Fortuna <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Daily Motivation -->
             <div class="glass-card" data-projeto="frases" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/frases.png" alt="Frases" onerror="this.src='https://placehold.co/600x400/ff6b6b/FFF?text=Motivacao'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="card-title-group">
                             <h3>Daily Motivation</h3>
-                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Rafaela</a>
                         </div>
                         <span class="category-icon"><i class="fa-solid fa-bolt"></i></span>
                     </div>
-                    <p>Gerador de doses diárias de energia e sabedoria para começar o seu dia.</p>
+                    <p>Gerador de doses diárias de energia, sabedoria e reflexão para começar o seu dia.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="frases-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="frases-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="frases/frases.html" onclick="atualizarEstatistica('frases')" class="action-btn">Inspirar-se</a>
+                    <a href="frases/frases.html" onclick="atualizarEstatistica('frases')" class="action-btn">
+                        Inspirar-se <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Contador de Mosquitos -->
             <div class="glass-card" data-projeto="mosquito" data-categoria="diversao">
                 <div class="card-image-wrapper">
                     <img src="imagens/mosquito.png" alt="Mosquito" onerror="this.src='https://placehold.co/600x400/333/FFF?text=Mosquito'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="card-title-group">
                             <h3>Contador de Mosquitos</h3>
-                            <a href="equipe/equipe.html" style="background: #ffcc00; color: #000; padding: 2px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; text-decoration: none; text-transform: uppercase; white-space: nowrap;">By Rafaela</a>
                         </div>
                         <span class="category-icon"><i class="fa-solid fa-crosshairs"></i></span>
                     </div>
-                    <p>Ferramenta essencial para rastrear vitórias contra insetos locais.</p>
+                    <p>Ferramenta essencial e bem humorada para rastrear suas vitórias contra os insetos locais.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="mosquito-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="mosquito-count">0</span> acessos</span>
+                        <span><i class="fa-regular fa-face-laugh-beam"></i> Diversão</span>
                     </div>
-                    <a href="contar_mosquitos/contar-mosquitos.html" onclick="atualizarEstatistica('mosquito')" class="action-btn">Iniciar Caçada</a>
+                    <a href="contar_mosquitos/contar-mosquitos.html" onclick="atualizarEstatistica('mosquito')" class="action-btn">
+                        Iniciar Caçada <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Relógio Universal -->
             <div class="glass-card" data-projeto="relogio" data-categoria="ferramentas">
                 <div class="card-image-wrapper">
                     <img src="imagens/relogio.png" alt="Relógio Digital" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Relogio'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Relógio Universal</h3>
+                        <div class="card-title-group">
+                            <h3>Relógio Universal</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-globe"></i></span>
                     </div>
-                    <p>Monitoramento global de fusos horários em tempo real.</p>
+                    <p>Monitoramento global de fusos horários em tempo real com precisão absoluta.</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="relogio-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="relogio-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-toolbox"></i> Ferramentas</span>
                     </div>
-                    <a href="relógio/relogio.html" onclick="atualizarEstatistica('relogio')" class="action-btn">Acessar Projeto</a>
+                    <a href="relógio/relogio.html" onclick="atualizarEstatistica('relogio')" class="action-btn">
+                        Acessar Relógio <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
 
+            <!-- Adivinho de Famosos -->
             <div class="glass-card" data-projeto="advinhar" data-categoria="jogos">
                 <div class="card-image-wrapper">
                     <img src="imagens/advinhar.png" alt="Adivinhar Quem" onerror="this.src='https://placehold.co/600x400/1a1a1a/FFF?text=Adivinhar'">
                 </div>
                 <div class="card-info">
                     <div class="card-header">
-                        <h3>Adivinho de Famosos</h3>
+                        <div class="card-title-group">
+                            <h3>Adivinho de Famosos</h3>
+                        </div>
                         <span class="category-icon"><i class="fa-solid fa-brain"></i></span>
                     </div>
-                    <p>Pense em um famoso e eu tentarei adivinhar quem é através de perguntas!</p>
+                    <p>Pense em um famoso e eu tentarei adivinhar quem é através de perguntas inteligentes!</p>
                     <div class="card-meta">
-                        <span><i class="fa-regular fa-eye"></i> <span id="advinhar-count">0</span> vezes você usou</span>
+                        <span><i class="fa-regular fa-eye"></i> <span id="advinhar-count">0</span> acessos</span>
+                        <span><i class="fa-solid fa-gamepad"></i> Jogos</span>
                     </div>
-                    <a href="advinhar/advinhar.html" onclick="atualizarEstatistica('advinhar')" class="action-btn">Jogar Agora</a>
+                    <a href="advinhar/advinhar.html" onclick="atualizarEstatistica('advinhar')" class="action-btn">
+                        Jogar Agora <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
                 </div>
             </div>
+
+            <!-- Empty Search State Placeholder -->
+            <div class="empty-state" id="empty-state">
+                <i class="fa-solid fa-compass-drafting"></i>
+                <h3>Nenhum experimento encontrado</h3>
+                <p>Tente buscar por outros termos ou explore todas as categorias.</p>
+            </div>
+
         </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-brand">
+                Sala de <span class="text-gradient">Experimentos</span>
+            </div>
+            <p class="footer-copy">© 2026 Sala de Experimentos. Todos os direitos reservados. Feito com paixão pela comunidade.</p>
+        </footer>
+
     </div>
 
-    <!-- SCRIPTS ORIGINAIS DA PÁGINA -->
+    <!-- ==========================================================================
+       JAVASCRIPT REFINADO (LÓGICA COMPLETA PRESERVADA)
+       ========================================================================== -->
     <script>
         const themeCycle = ['dark', 'marine', 'green', 'purple', 'red', 'gray', 'newyear'];
 
@@ -2497,7 +2051,6 @@
             }, msUntilMidnight);
         }
 
-        // Modificado para garantir que a classe 'loading' troque o cursor imediatamente no applyTheme se necessário
         function applyTheme(tema, persist = false) {
             document.documentElement.setAttribute('data-theme', tema);
             atualizarBotoesTema(tema);
@@ -2535,8 +2088,9 @@
             if (el) el.textContent = formatarNumero(valor);
         }
 
+        // Inicialização de Contadores e Temas
         window.addEventListener('load', () => {
-            const projetos = ['wsm', 'cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom', 'soccer', 'strike', 'sinuca'];
+            const projetos = ['wsm', 'cookme', 'datas', 'sorteador', 'textlab', 'nao-clique', 'zeroia', 'zapwrapped', 'drive-mad', 'escape-road', 'canvas', 'converter', 'dino', 'gerador-cores', 'senha', 'bilionario', 'conversa', 'frases', 'mosquito', 'relogio', 'agenda', 'advinhar', 'marinho', 'hacker', 'halibuspace', 'booom', 'soccer', 'strike', 'sinuca', '2027', 'openimg', 'skydash'];
             
             projetos.forEach(proj => {
                 let count = localStorage.getItem(proj) || 0;
@@ -2551,32 +2105,44 @@
             scheduleThemeRotation();
         });
 
-        document.getElementById('busca-input').addEventListener('input', function (e) {
-            const termo = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.glass-card');
-            cards.forEach(card => {
-                const texto = card.innerText.toLowerCase();
-                card.style.display = texto.includes(termo) ? 'flex' : 'none';
-            });
-        });
-
+        // Filtro por Categoria
         function filtrarPorCategoria(categoria) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            if(event) event.currentTarget.classList.add('active');
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
 
             const cards = document.querySelectorAll('.glass-card');
+            let visiveis = 0;
+
             cards.forEach(card => {
                 const cardCat = card.getAttribute('data-categoria');
                 if (categoria === 'todos' || cardCat === categoria) {
                     card.style.display = 'flex';
+                    visiveis++;
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) {
+                emptyState.style.display = visiveis === 0 ? 'block' : 'none';
+            }
         }
 
+        // Spotlight Mouse Hover Effect nos Cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.glass-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Tempo Gasto no Site (Analytics local)
         let totalSeconds = parseInt(localStorage.getItem('site-time-spent') || 0);
-        
         setInterval(() => {
             totalSeconds++;
             localStorage.setItem('site-time-spent', totalSeconds);
@@ -2588,17 +2154,14 @@
                 localStorage.setItem('site-hour-stats', JSON.stringify(hourStats));
             }
         }, 1000);
-    </script>
 
-    <script>
         // ============================================
-        // BUSCA COM AUTOCOMPLETE
+        // BUSCA COM AUTOCOMPLETE & FILTRO INSTANTÂNEO
         // ============================================
         const buscaInput = document.getElementById('busca-input');
         const buscaDropdown = document.getElementById('busca-dropdown');
         const containerCards = document.getElementById('container-cards');
 
-        // Extrair dados dos projetos
         function extrairProjetos() {
             const projetos = [];
             const cards = containerCards.querySelectorAll('.glass-card');
@@ -2624,7 +2187,6 @@
             return projetos;
         }
 
-        // Buscar projetos relevantes
         function buscarProjetos(termo) {
             if (!termo.trim()) {
                 buscaDropdown.classList.remove('active');
@@ -2634,16 +2196,13 @@
             const projetos = extrairProjetos();
             const termoLower = termo.toLowerCase();
 
-            const resultados = projetos.filter(p => 
+            return projetos.filter(p => 
                 p.titulo.toLowerCase().includes(termoLower) || 
                 p.descricao.toLowerCase().includes(termoLower) ||
                 p.categoria.toLowerCase().includes(termoLower)
-            ).slice(0, 8); // Limite de 8 resultados
-
-            return resultados;
+            ).slice(0, 6);
         }
 
-        // Renderizar dropdown
         function renderizarResultados(resultados) {
             if (resultados.length === 0) {
                 buscaDropdown.classList.remove('active');
@@ -2652,10 +2211,10 @@
 
             buscaDropdown.innerHTML = resultados.map(r => `
                 <a href="${r.link}" onclick="atualizarEstatistica('${r.projeto}')" class="busca-resultado">
-                    <img src="${r.imagem}" alt="${r.titulo}" class="busca-resultado-img" onerror="this.src='https://placehold.co/48x48/1a1a1a/FFF?text=${encodeURIComponent(r.titulo.substring(0,3))}'">
+                    <img src="${r.imagem}" alt="${r.titulo}" class="busca-resultado-img" onerror="this.src='https://placehold.co/44x44/1a1a1a/FFF?text=${encodeURIComponent(r.titulo.substring(0,3))}'">
                     <div class="busca-resultado-info">
                         <div class="busca-resultado-titulo">${r.titulo}</div>
-                        <div class="busca-resultado-desc">${r.descricao.substring(0, 50)}...</div>
+                        <div class="busca-resultado-desc">${r.descricao}</div>
                     </div>
                 </a>
             `).join('');
@@ -2663,11 +2222,29 @@
             buscaDropdown.classList.add('active');
         }
 
-        // Event listener para input
+        // Live Filter nos Cards ao Digitar
         buscaInput.addEventListener('input', (e) => {
-            const termo = e.target.value;
+            const termo = e.target.value.toLowerCase().trim();
             const resultados = buscarProjetos(termo);
             renderizarResultados(resultados);
+
+            const cards = document.querySelectorAll('.glass-card');
+            let visiveis = 0;
+
+            cards.forEach(card => {
+                const texto = card.innerText.toLowerCase();
+                if (texto.includes(termo)) {
+                    card.style.display = 'flex';
+                    visiveis++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            const emptyState = document.getElementById('empty-state');
+            if (emptyState) {
+                emptyState.style.display = visiveis === 0 ? 'block' : 'none';
+            }
         });
 
         // Fechar dropdown ao clicar fora
@@ -2677,10 +2254,14 @@
             }
         });
 
-        // Fechar dropdown ao pressionar Escape
+        // Tecla de atalho "/" ou "Escape"
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
+            if (e.key === '/' && document.activeElement !== buscaInput) {
+                e.preventDefault();
+                buscaInput.focus();
+            } else if (e.key === 'Escape') {
                 buscaDropdown.classList.remove('active');
+                buscaInput.blur();
             }
         });
     </script>
