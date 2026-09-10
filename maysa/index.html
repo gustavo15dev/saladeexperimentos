@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Maysa Carmen Pereira ✨</title>
+    <title>Feliz Aniversário fofaaa</title>
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,6 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -145,6 +146,19 @@
             filter: blur(25px);
         }
 
+        #maysa3d {
+            width: min(78vw, 580px);
+            height: clamp(105px, 16vw, 180px);
+            margin: 0 auto;
+            cursor: crosshair;
+        }
+
+        #maysa3d canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -174,12 +188,12 @@
                     <i data-lucide="sparkles" class="w-5 h-5 text-white"></i>
                 </div>
                 <!-- TROCADO PARA: Maysa Carmen Pereira -->
-                <span class="font-semibold text-lg sm:text-xl tracking-wider text-rose-200">Maysa Carmen Pereira</span>
+                <span class="font-semibold text-lg sm:text-xl tracking-wider text-rose-200">Maysa</span>
             </div>
 
             <button id="surpriseBtn" onclick="triggerConfetti()" class="px-5 py-2.5 rounded-full glass-card hover:bg-rose-500/20 text-rose-200 border border-rose-400/30 text-sm font-medium transition-all duration-300 flex items-center space-x-2 group">
                 <i data-lucide="heart" class="w-4 h-4 text-rose-400 group-hover:scale-125 transition-transform"></i>
-                <span>Aperte aqui ✨</span>
+                <span>Aperte aqui</span>
             </button>
         </header>
 
@@ -187,20 +201,19 @@
             
             <!-- HERO SECTION WITH UPDATED TITLE & SUBTITLE -->
             <section class="text-center space-y-6 pt-6">
-                <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full glass-card border-rose-500/20 mb-2 opacity-0 hero-el">
-                    <span class="w-2 h-2 rounded-full bg-rose-400 animate-pulse"></span>
-                    <span class="text-xs uppercase tracking-widest text-rose-300 font-semibold">Para uma pessoa especial</span>
-                </div>
-
                 <!-- NOVO TÍTULO: Entre tantas pessoas, a vida me trouxe você. -->
                 <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight hero-el opacity-0 leading-tight">
-                    <span class="block text-gradient font-serif italic">Entre tantas pessoas,</span>
-                    <span class="block text-white">a vida me trouxe você.</span>
+                    <span class="block text-gradient font-serif italic">Feliz Aniversário,</span>
+                    <span id="maysa3d" class="block" aria-label="Maysa"></span>
                 </h1>
+
+                <p class="text-[10px] text-rose-200/50 font-light tracking-wide -mt-4">
+                    passe o mouse sobre o texto
+                </p>
 
                 <!-- NOVO TEXTO DE BAIXO DO TÍTULO -->
                 <p class="max-w-2xl mx-auto text-rose-200/80 text-base sm:text-lg font-light leading-relaxed hero-el opacity-0">
-                    Criei esse cantinho especialmente para você, porque algumas pessoas merecem muito mais do que um simples “feliz aniversário”. Merecem um espaço para lembrar o quanto são importantes, e você é uma delas.
+                    Para a pessoa mais incrível da minha vida. 
                 </p>
             </section>
 
@@ -227,62 +240,6 @@
                 </div>
             </section>
 
-            <!-- FEATURES CARDS -->
-            <section class="space-y-12">
-                <div class="text-center max-w-xl mx-auto">
-                    <h2 class="text-3xl sm:text-4xl font-serif italic text-gradient mb-3">Por que você é tão incrível?</h2>
-                    <p class="text-rose-200/70 text-sm sm:text-base">Um pequeno resumo dos motivos que tornam a sua presença no mundo algo tão especial.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- Card 1 -->
-                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                            <i data-lucide="smile" class="w-6 h-6"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-rose-100">Risadas Legítimas</h4>
-                        <p class="text-rose-200/70 text-sm leading-relaxed">
-                            É impossível não sorrir perto de você. As memórias mais leves e engraçadas com certeza contam com a sua presença iluminada!
-                        </p>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                            <i data-lucide="shield-check" class="w-6 h-6"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-rose-100">Lealdade e Carinho</h4>
-                        <p class="text-rose-200/70 text-sm leading-relaxed">
-                            Em qualquer situação, ter a certeza do seu carinho e do seu apoio sincero faz toda a diferença do mundo.
-                        </p>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                            <i data-lucide="sun" class="w-6 h-6"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-rose-100">Energia que Transborda</h4>
-                        <p class="text-rose-200/70 text-sm leading-relaxed">
-                            Sua essência tem o poder de deixar tudo em volta mais harmonioso e leve. Seu brilho é verdadeiramente único.
-                        </p>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div class="glass-card glass-card-hover p-8 rounded-3xl space-y-4">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                            <i data-lucide="sparkle" class="w-6 h-6"></i>
-                        </div>
-                        <h4 class="text-xl font-bold text-rose-100">Caminho Iluminado</h4>
-                        <p class="text-rose-200/70 text-sm leading-relaxed">
-                            Ver o seu crescimento e ver você alcançar seus objetivos é um orgulho imenso. Que o seu novo ciclo seja radiante!
-                        </p>
-                    </div>
-
-                </div>
-            </section>
-
             <!-- SECRET LETTER SECTION -->
             <section class="py-8">
                 <div class="glass-card rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden">
@@ -302,15 +259,27 @@
 
                         <!-- Carta Secreta -->
                         <div id="secretLetter" class="hidden text-left mt-8 p-6 sm:p-8 rounded-2xl bg-black/40 border border-rose-500/30 space-y-4 text-rose-100 leading-relaxed text-sm sm:text-base font-light transition-all duration-500">
-                            <p class="font-serif italic text-rose-300 text-lg">Querida Maysa,</p>
+                            <p class="font-serif italic text-rose-300 text-lg">Feliz aniversárioooooooooo, Maysa!! 🥳🥳🥳🥳🥳</p>
                             <p>
-                                Na correria do dia a dia, às vezes não paramos o tempo suficiente para demonstrar o quanto certas pessoas são preciosas na nossa vida. Este espaço foi feito com todo o carinho para colocar um sorriso no seu rosto e lembrar o quanto sua presença faz a diferença.
+                                Hoje é seu dia, mas eu queria aproveitar pra te lembrar de uma coisa que talvez eu não fale o suficiente: eu sou muito feliz por ter vc na minha vida.
                             </p>
                             <p>
-                                Obrigado por cada conversa, por cada abraço, por cada momento inesquecível e por ser essa pessoa tão fantástica. Que o seu caminho seja sempre repleto de saúde, conquistas, alegrias imensas e muito amor!
+                                É engraçado pensar em como, em tão pouco tempo, você se tornou uma pessoa tão importante pra mim. Agnt passou de simplesmente conversar e fazer trabalho junto pra compartilhar praticamente tudo: risadas, fofocas, surtos, piadas que só nós entendemos, desenhos, momentos aleatórios e 1 milhão de coisas que nem fazem sentido pra outras pessoas KKKKKK
+                            </p>
+                            <p>
+                                E acho que é justamente isso que eu mais gosto na nossa amizade. Ela é mt nossa, do nosso jeito, com nossas brincadeiras.
+                            </p>
+                            <p>
+                                Eu espero q esse novo ano da sua vida seja cheio de momentos que façam você olhar pra trás e pensar: caramba, que ano bom! Q vc consiga realizar aquilo que deseja, descubra coisas novas, continue desenhando, continue sendo essa pessoa tão especial e, principalmente, que nunca faltem motivos pra vc sorrir, seu jeitinho é único, e eu amo vc do jeito q vc é.
+                            </p>
+                            <p>
+                                Que Deus te abençoe muito, cuide de você em cada passo e permita que você viva muitos e muitos anos, cercada de pessoas que realmente te querem bem.
+                            </p>
+                            <p>
+                                E, sinceramente, obrigado por ter aparecido na minha vida e por ter se tornado essa pessoa tãaaaaaao importante pra mim, não tenho palavras pra te agradecer, te amo.
                             </p>
                             <p class="pt-4 font-semibold text-rose-300 text-right">
-                                Com todo carinho e admiração ❤️
+                                Feliz 16 anos, Maysa!! ❤️❤️❤️❤️❤️❤️
                             </p>
                         </div>
                     </div>
@@ -318,15 +287,6 @@
             </section>
 
         </main>
-
-        <!-- FOOTER -->
-        <footer class="mt-24 pt-8 border-t border-rose-500/10 text-center text-xs text-rose-200/40 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p>Feito especialmente para Maysa Carmen Pereira ✨</p>
-            <div class="flex items-center space-x-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                <span>Modo Homenagem Ativado</span>
-            </div>
-        </footer>
 
     </div>
 
@@ -352,6 +312,149 @@
                 ease: 'power3.out'
             });
         });
+
+        // Texto 3D interativo do título
+        const maysaContainer = document.getElementById('maysa3d');
+        if (maysaContainer && window.THREE) {
+            const maysaScene = new THREE.Scene();
+            const maysaCamera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+            maysaCamera.position.set(0, 8, 8);
+            maysaCamera.lookAt(0, 0, 0);
+
+            const maysaRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            maysaRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            maysaRenderer.setClearColor(0x000000, 0);
+            maysaContainer.appendChild(maysaRenderer.domElement);
+
+            const textureCanvas = document.createElement('canvas');
+            textureCanvas.width = 2048;
+            textureCanvas.height = 768;
+            const textureContext = textureCanvas.getContext('2d');
+            const textGradient = textureContext.createLinearGradient(0, 0, textureCanvas.width, 0);
+            textGradient.addColorStop(0, '#ffffff');
+            textGradient.addColorStop(0.5, '#fecdd3');
+            textGradient.addColorStop(1, '#ff2a85');
+            textureContext.fillStyle = textGradient;
+            textureContext.font = '900 520px Arial Black, Impact, sans-serif';
+            textureContext.textAlign = 'center';
+            textureContext.textBaseline = 'middle';
+            textureContext.fillText('MAYSA', textureCanvas.width / 2, textureCanvas.height / 2 + 20);
+
+            const maysaTexture = new THREE.CanvasTexture(textureCanvas);
+            maysaTexture.minFilter = THREE.LinearFilter;
+            maysaTexture.magFilter = THREE.LinearFilter;
+            maysaTexture.generateMipmaps = false;
+
+            const maysaMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    uTexture: { value: maysaTexture },
+                    uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+                    uHover: { value: 0 },
+                    uRadius: { value: 0.28 },
+                    uStrength: { value: 2.4 },
+                    uAspect: { value: 12 / 4.5 }
+                },
+                vertexShader: `
+                    varying vec2 vUv;
+                    uniform vec2 uMouse;
+                    uniform float uHover;
+                    uniform float uRadius;
+                    uniform float uStrength;
+                    uniform float uAspect;
+
+                    void main() {
+                        vUv = uv;
+                        vec3 transformed = position;
+                        vec2 correctedUv = uv;
+                        vec2 correctedMouse = uMouse;
+                        correctedUv.x *= uAspect;
+                        correctedMouse.x *= uAspect;
+                        float distanceToMouse = distance(correctedUv, correctedMouse);
+                        float bump = exp(-(distanceToMouse * distanceToMouse) / (uRadius * uRadius * 0.5));
+                        transformed.z += bump * uStrength * uHover;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec2 vUv;
+                    uniform sampler2D uTexture;
+
+                    void main() {
+                        vec4 color = texture2D(uTexture, vUv);
+                        if (color.a < 0.01) discard;
+                        gl_FragColor = color;
+                    }
+                `,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+
+            const maysaPlane = new THREE.Mesh(
+                new THREE.PlaneGeometry(12, 4.5, 256, 96),
+                maysaMaterial
+            );
+            maysaPlane.rotation.x = -Math.PI / 2;
+            maysaPlane.rotation.z = Math.PI / 24;
+            maysaScene.add(maysaPlane);
+
+            const maysaRaycaster = new THREE.Raycaster();
+            const maysaPointer = new THREE.Vector2();
+            const targetMaysaMouse = new THREE.Vector2(0.5, 0.5);
+            const currentMaysaMouse = new THREE.Vector2(0.5, 0.5);
+            let targetMaysaHover = 0;
+            let currentMaysaHover = 0;
+
+            function resizeMaysaScene() {
+                const width = maysaContainer.clientWidth;
+                const height = maysaContainer.clientHeight;
+                maysaCamera.aspect = width / height;
+                maysaCamera.updateProjectionMatrix();
+                maysaRenderer.setSize(width, height);
+            }
+
+            function updateMaysaPointer(clientX, clientY) {
+                const bounds = maysaContainer.getBoundingClientRect();
+                maysaPointer.x = ((clientX - bounds.left) / bounds.width) * 2 - 1;
+                maysaPointer.y = -((clientY - bounds.top) / bounds.height) * 2 + 1;
+                maysaRaycaster.setFromCamera(maysaPointer, maysaCamera);
+                const intersections = maysaRaycaster.intersectObject(maysaPlane);
+
+                if (intersections.length) {
+                    targetMaysaMouse.copy(intersections[0].uv);
+                    targetMaysaHover = 1;
+                }
+            }
+
+            maysaContainer.addEventListener('mousemove', (event) => {
+                updateMaysaPointer(event.clientX, event.clientY);
+            });
+            maysaContainer.addEventListener('mouseleave', () => {
+                targetMaysaHover = 0;
+            });
+            maysaContainer.addEventListener('touchmove', (event) => {
+                if (event.touches.length) {
+                    event.preventDefault();
+                    updateMaysaPointer(event.touches[0].clientX, event.touches[0].clientY);
+                }
+            }, { passive: false });
+            maysaContainer.addEventListener('touchend', () => {
+                targetMaysaHover = 0;
+            });
+
+            window.addEventListener('resize', resizeMaysaScene);
+            resizeMaysaScene();
+
+            function animateMaysa() {
+                requestAnimationFrame(animateMaysa);
+                currentMaysaMouse.lerp(targetMaysaMouse, 0.12);
+                currentMaysaHover += (targetMaysaHover - currentMaysaHover) * 0.08;
+                maysaMaterial.uniforms.uMouse.value.copy(currentMaysaMouse);
+                maysaMaterial.uniforms.uHover.value = currentMaysaHover;
+                maysaRenderer.render(maysaScene, maysaCamera);
+            }
+
+            animateMaysa();
+        }
 
         // 3D Tilt Effect for Photo Card
         const tiltCard = document.getElementById('tiltCard');
