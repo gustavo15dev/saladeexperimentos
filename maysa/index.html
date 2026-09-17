@@ -159,6 +159,39 @@
             height: 100%;
         }
 
+        .letter-audio {
+            margin-top: 2rem;
+            padding: 1rem;
+            border: 1px solid rgba(244, 63, 94, 0.28);
+            border-radius: 1rem;
+            background: linear-gradient(135deg, rgba(244, 63, 94, 0.12), rgba(255, 42, 133, 0.06));
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 30px rgba(244, 63, 94, 0.08);
+        }
+
+        .letter-audio-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            color: #fecdd3;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .letter-audio-duration {
+            color: rgba(254, 205, 211, 0.55);
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+
+        .letter-audio audio {
+            display: block;
+            width: 100%;
+            height: 42px;
+            accent-color: #f43f5e;
+        }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -281,6 +314,17 @@
                             <p class="pt-4 font-semibold text-rose-300 text-right">
                                 Feliz 16 anos, Maysa!! ❤️❤️❤️❤️❤️❤️
                             </p>
+
+                            <div class="letter-audio" aria-label="Mensagem de áudio">
+                                <div class="letter-audio-heading">
+                                    <span class="flex items-center gap-2"><i data-lucide="headphones" class="w-4 h-4"></i> Dá play, mas prepara o coração 🥹</span>
+                                    <span class="letter-audio-duration">1:25</span>
+                                </div>
+                                <audio controls preload="auto">
+                                    <source src="record.mp3" type="audio/mpeg">
+                                    Seu navegador não suporta a reprodução de áudio.
+                                </audio>
+                            </div>
                         </div>
                     </div>
                 </div>
